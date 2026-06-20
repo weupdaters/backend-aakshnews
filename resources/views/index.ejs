@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Aakash News 24 - Always Ahead। हिंदी न्यूज़ पोर्टल। देश, दुनिया, खेल, राजनीति, बिजनेस और टेक्नोलॉजी की ताज़ा ख़बरें।">
+    <title>Aakash News 24 | Always Ahead | Hindi News Portal</title>
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <!-- 1. Top Bar -->
+
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <span><i class="far fa-calendar-alt"></i>
+                    <%= dateString %>
+                </span>
+                <span class="weather"><i class="fas fa-sun" style="color: #f6ad55;"></i> 32°C नई दिल्ली</span>
+            </div>
+
+            <div class="top-bar-ticker">
+                <span class="ticker-badge">Breaking</span>
+                <div class="ticker-text-wrapper">
+                    <span class="ticker-text">
+                        <%= breakingNews.join(" &nbsp;&nbsp;•&nbsp;&nbsp; ") %>
+                    </span>
+                </div>
+            </div>
+
+            <div class=" top-bar-right">
+                            <div class="font-controls">
+                                <button class="font-btn" id="font-minus" title="फ़ॉन्ट छोटा करें">A-</button>
+                                <button class="font-btn" id="font-reset" title="फ़ॉन्ट रीसेट करें">A</button>
+                                <button class="font-btn" id="font-plus" title="फ़ॉन्ट बड़ा करें">A+</button>
+                            </div>
+                            <button class="theme-toggle" id="theme-toggle-btn" title="थीम बदलें">
+                                <i class="fas fa-moon"></i>
+                            </button>
+                            <a href="#" class="login-link"><i class="far fa-user"></i> लॉगिन / साइनअप</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Main Header -->
+        <header class="main-header">
+            <div class="container header-grid">
+                <div class="logo-area">
+                    <a href="/" class="logo" style="display: flex; align-items: center; gap: 10px;">
+                        <img src="/images/logo.png" alt="Aakash News 24"
+                            style="height: 48px; width: 48px; border-radius: 50%; object-fit: cover;" />
+                        <div style="display: flex; flex-direction: column; line-height: 1.1;">
+                            <div style="display: flex; align-items: center;">
+                                <span
+                                    style="color: var(--text-main); font-weight: 900; font-size: 1.4rem; letter-spacing: 0.5px;">AAKASH</span>
+                                <span
+                                    style="color: #e53e3e; font-weight: 900; font-size: 1.4rem; letter-spacing: 0.5px; margin-left: 6px;">NEWS
+                                    24</span>
+                            </div>
+                            <span class="tagline"
+                                style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; margin-top: 2px;">Always
+                                Ahead</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="खबर खोजें..." id="search-input">
+                    <i class="fas fa-search search-icon" id="search-btn"></i>
+                </div>
+
+                <div class="header-actions">
+                    <div class="header-action-item">
+                        <i class="far fa-newspaper"></i>
+                        <span>ई-पेपर</span>
+                    </div>
+                    <div class="header-action-item">
+                        <i class="fas fa-video"></i>
+                        <span>वीडियो</span>
+                    </div>
+                    <div class="header-action-item">
+                        <i class="fas fa-cog"></i>
+                        <span>सेटिंग्स</span>
+                    </div>
+                    <button class="bookmark-btn">
+                        <i class="far fa-bookmark"></i>
+                        <span>बुकमार्क</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- 3. Navigation Bar -->
+        <nav class="nav-bar">
+            <div class="container nav-container">
+                <button class="hamburger-btn" id="hamburger-btn" title="मेन्यू खोलें">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-links">
+                    <li class="nav-item active"><a href="/">होम</a></li>
+                    <li class="nav-item"><a href="#">देश</a></li>
+                    <li class="nav-item"><a href="#">राज्य</a></li>
+                    <li class="nav-item"><a href="#">राजनीति</a></li>
+                    <li class="nav-item"><a href="#">खेल</a></li>
+                    <li class="nav-item"><a href="#">बिजनेस</a></li>
+                    <li class="nav-item"><a href="#">टेक्नोलॉजी</a></li>
+                    <li class="nav-item"><a href="#">मनोरंजन</a></li>
+                    <li class="nav-item"><a href="#">लाइफस्टाइल</a></li>
+                    <li class="nav-item"><a href="#">एजुकेशन</a></li>
+                    <li class="nav-item"><a href="#">दुनिया</a></li>
+                    <li class="nav-item dropdown">
+                        <a href="#">और <i class="fas fa-chevron-down"
+                                style="font-size: 0.8rem; margin-left: 2px;"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">करियर</a></li>
+                            <li><a href="#">धर्म / धर्म-कर्म</a></li>
+                            <li><a href="#">फोटो गैलरी</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Mobile Sidebar Drawer -->
+        <div class="mobile-sidebar" id="mobile-sidebar">
+            <div class="mobile-sidebar-header">
+                <a href="/" class="logo" style="display: flex; align-items: center; gap: 8px;">
+                    <img src="/images/logo.png" alt="Aakash News 24"
+                        style="height: 36px; width: 36px; border-radius: 50%;" />
+                    <span style="color: var(--text-main); font-weight: 900; font-size: 1.25rem;">AAKASH <span
+                            style="color: #e53e3e;">NEWS 24</span></span>
+                </a>
+                <button class="mobile-sidebar-close" id="sidebar-close">&times;</button>
+            </div>
+            <ul class="mobile-nav-links">
+                <li class="active"><a href="/">होम</a></li>
+                <li><a href="#">देश</a></li>
+                <li><a href="#">राज्य</a></li>
+                <li><a href="#">राजनीति</a></li>
+                <li><a href="#">खेल</a></li>
+                <li><a href="#">बिजनेस</a></li>
+                <li><a href="#">टेक्नोलॉजी</a></li>
+                <li><a href="#">मनोरंजन</a></li>
+                <li><a href="#">लाइफस्टाइल</a></li>
+                <li><a href="#">एजुकेशन</a></li>
+                <li><a href="#">दुनिया</a></li>
+                <li><a href="#">फोटो गैलरी</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <!-- 4. Breaking News Sub-Ticker -->
+        <div class="breaking-ticker-bar">
+            <div class="container breaking-container">
+                <span class="breaking-label"><i class="fas fa-bolt"></i> ब्रेकिंग न्यूज़</span>
+                <div class="breaking-slider-wrapper">
+                    <% breakingNews.forEach((news, idx)=> { %>
+                        <div class="breaking-slide <%= idx === 0 ? 'active' : '' %>">
+                            • <%= news %>
+                        </div>
+                        <% }) %>
+                </div>
+                <div class="breaking-nav-btns">
+                    <button class="breaking-nav-btn" id="breaking-prev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="breaking-nav-btn" id="breaking-next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portal Main 3-Column Layout Wrapper -->
+        <div class="portal-main-layout">
+
+            <!-- Left Sidebar Sticky Navigation Menu -->
+            <aside class="portal-left-col">
+                <div class="vertical-nav-menu">
+                    <ul class="vertical-nav-links">
+                        <li class="active"><a href="/"><i class="fas fa-home"></i> <span>होम</span></a></li>
+                        <li><a href="#"><i class="fas fa-flag"></i> <span>देश</span></a></li>
+                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> <span>राज्य</span></a></li>
+                        <li><a href="#"><i class="fas fa-landmark"></i> <span>राजनीति</span></a></li>
+                        <li><a href="#"><i class="fas fa-running"></i> <span>खेल</span></a></li>
+                        <li><a href="#"><i class="fas fa-briefcase"></i> <span>बिजनेस</span></a></li>
+                        <li><a href="#"><i class="fas fa-microchip"></i> <span>टेक्नोलॉजी</span></a></li>
+                        <li><a href="#"><i class="fas fa-film"></i> <span>मनोरंजन</span></a></li>
+                        <li><a href="#"><i class="fas fa-heartbeat"></i> <span>लाइफस्टाइल</span></a></li>
+                        <li><a href="#"><i class="fas fa-graduation-cap"></i> <span>एजुकेशन</span></a></li>
+                        <li><a href="#"><i class="fas fa-globe"></i> <span>दुनिया</span></a></li>
+                        <li><a href="#"><i class="fas fa-images"></i> <span>फोटो गैलरी</span></a></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Middle Column: Scrollable Content Feed -->
+            <div class="portal-middle-col">
+
+                <!-- 5. Hero Section (Grid Layout) -->
+                <section class="hero-section hero-grid">
+
+                    <!-- Left Large Card -->
+                    <div class="hero-large-card">
+                        <div class="card-img-wrapper">
+                            <img src="<%= heroMain.image %>" alt="<%= heroMain.title %>" loading="lazy">
+                        </div>
+                        <div class="hero-large-content">
+                            <span class="tag tag-देश">
+                                <%= heroMain.category %>
+                            </span>
+                            <h2 class="hero-large-title">
+                                <%= heroMain.title %>
+                            </h2>
+                            <p class="hero-large-desc">
+                                <%= heroMain.description %>
+                            </p>
+                            <div class="hero-card-footer">
+                                <div class="hero-card-meta">
+                                    <span><i class="far fa-clock"></i>
+                                        <%= heroMain.time %>
+                                    </span>
+                                    <span><i class="far fa-eye"></i>
+                                        <%= heroMain.views %>
+                                    </span>
+                                </div>
+                                <button class="bookmark-icon-btn"><i class="far fa-bookmark"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Middle Stack -->
+                    <div class="hero-middle-stack">
+                        <% heroMiddleStack.forEach(card=> { %>
+                            <div class="middle-stack-card">
+                                <div class="middle-stack-img">
+                                    <img src="<%= card.image %>" alt="<%= card.title %>" loading="lazy">
+                                </div>
+                                <div class="middle-stack-content">
+                                    <span class="tag tag-<%= card.category %>">
+                                        <%= card.category %>
+                                    </span>
+                                    <h3 class="middle-stack-title">
+                                        <%= card.title %>
+                                    </h3>
+                                    <span class="middle-stack-time"><i class="far fa-clock"></i>
+                                        <%= card.time %>
+                                    </span>
+                                </div>
+                            </div>
+                            <% }) %>
+                    </div>
+                </section>
+
+                <!-- Regional & User Post Desks Row -->
+                <section class="regional-desks-row"
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 25px 0;">
+                    <!-- Card 1: English News -->
+                    <div
+                        style="display: flex; align-items: center; gap: 15px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                        <div
+                            style="width: 50px; height: 50px; border-radius: 50%; background: #2e4ead; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 1.2rem; flex-shrink: 0;">
+                            EN
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--text-main);">
+                                ENGLISH NEWS</h4>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">Stay Updated</span>
+                            <span style="font-size: 0.75rem; color: #2e4ead; font-weight: 600;">Latest English
+                                News</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Hindi News -->
+                    <div
+                        style="display: flex; align-items: center; gap: 15px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                        <div
+                            style="width: 50px; height: 50px; border-radius: 50%; background: #e53e3e; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 0.9rem; flex-shrink: 0;">
+                            हिंदी
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--text-main);">हिंदी
+                                समाचार</h4>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">ताज़ा अपडेट</span>
+                            <span style="font-size: 0.75rem; color: #e53e3e; font-weight: 600;">हिंदी में पढ़ें</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Punjabi News -->
+                    <div
+                        style="display: flex; align-items: center; gap: 15px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                        <div
+                            style="width: 50px; height: 50px; border-radius: 50%; background: #dd6b20; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 1.1rem; flex-shrink: 0;">
+                            ਪੰ
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--text-main);">ਪੰਜਾਬੀ
+                                ਖ਼ਬਰਾਂ</h4>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">पंजाबी भाषा न्यूज़</span>
+                            <span style="font-size: 0.75rem; color: #dd6b20; font-weight: 600;">पंजाबी विच पढ़ें</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: User Post News -->
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); position: relative; overflow: hidden;">
+                        <div style="display: flex; flex-direction: column; gap: 4px; z-index: 2;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span
+                                    style="width: 8px; height: 8px; border-radius: 50%; background: #e53e3e; display: inline-block;"></span>
+                                <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--text-main);">
+                                    पंजाब की आवाज</h4>
+                            </div>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">अपनी खबर हमें भेजें</span>
+                            <button
+                                onclick="document.getElementById('reader-corner')?.scrollIntoView({ behavior: 'smooth' })"
+                                style="background: #e53e3e; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; margin-top: 4px; transition: background-color 0.2s;"
+                                onmouseenter="this.style.backgroundColor='#c53030'"
+                                onmouseleave="this.style.backgroundColor='#e53e3e'">
+                                User Post News
+                            </button>
+                            <span
+                                style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; cursor: pointer; text-decoration: underline;"
+                                onclick="document.getElementById('reader-corner')?.scrollIntoView({ behavior: 'smooth' })">
+                                Share Your News +
+                            </span>
+                        </div>
+                        <div
+                            style="width: 45px; height: 75px; position: relative; flex-shrink: 0; opacity: 0.9; z-index: 1;">
+                            <div
+                                style="width: 100%; height: 100%; border: 3px solid #333; border-radius: 6px; background: #fff; position: relative; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                                <div
+                                    style="height: 12px; background: #e53e3e; width: 100%; display: flex; align-items: center; justify-content: center;">
+                                    <span style="font-size: 4px; color: #fff; font-weight: 800;">NEWS</span>
+                                </div>
+                                <div
+                                    style="flex-grow: 1; padding: 3px; display: flex; flex-direction: column; gap: 2px;">
+                                    <div style="height: 3px; background: #eee; width: 80%;"></div>
+                                    <div style="height: 15px; background: #f5f5f5; border-radius: 2px;"></div>
+                                    <div style="height: 2px; background: #ddd; width: 90%;"></div>
+                                    <div style="height: 2px; background: #ddd; width: 70%;"></div>
+                                    <div
+                                        style="height: 10px; background: #e53e3e; border-radius: 2px; width: 100%; margin-top: auto;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. Section "ताजा खबरें" -->
+                <section class="section-wrapper">
+                    <div class="section-title-bar">
+                        <h3 class="section-title">ताजा खबरें</h3>
+                        <a href="#" class="section-view-all">सभी देखें <i class="fas fa-chevron-right"
+                                style="font-size: 0.75rem;"></i></a>
+                    </div>
+
+                    <div class="latest-grid">
+                        <% latestNews.forEach(news=> { %>
+                            <div class="news-card">
+                                <div class="news-card-img">
+                                    <img src="<%= news.image %>" alt="<%= news.title %>" loading="lazy">
+                                    <span class="tag tag-<%= news.category %>">
+                                        <%= news.category %>
+                                    </span>
+                                </div>
+                                <div class="news-card-body">
+                                    <h4 class="news-card-title">
+                                        <%= news.title %>
+                                    </h4>
+                                    <div class="news-card-footer">
+                                        <span><i class="far fa-clock"></i>
+                                            <%= news.time %>
+                                        </span>
+                                        <i class="far fa-bookmark" style="cursor: pointer;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }) %>
+                    </div>
+                </section>
+
+                <!-- 7. Section "वीडियो न्यूज़" -->
+                <section class="section-wrapper">
+                    <div class="section-title-bar">
+                        <h3 class="section-title">वीडियो न्यूज़</h3>
+                        <a href="#" class="section-view-all">सभी देखें <i class="fas fa-chevron-right"
+                                style="font-size: 0.75rem;"></i></a>
+                    </div>
+
+                    <div class="video-grid">
+                        <% videoNews.forEach(video=> { %>
+                            <div class="video-card">
+                                <div class="video-card-thumb">
+                                    <img src="<%= video.image %>" alt="<%= video.title %>" loading="lazy">
+                                    <div class="video-overlay">
+                                        <div class="play-icon">
+                                            <i class="fas fa-play"></i>
+                                        </div>
+                                    </div>
+                                    <span class="video-duration">
+                                        <%= video.duration %>
+                                    </span>
+                                </div>
+                                <h4 class="video-title">
+                                    <%= video.title %>
+                                </h4>
+                                <div class="video-meta">
+                                    <span><i class="far fa-clock"></i>
+                                        <%= video.time %>
+                                    </span>
+                                    <span><i class="far fa-eye"></i>
+                                        <%= video.views %>
+                                    </span>
+                                </div>
+                            </div>
+                            <% }) %>
+                    </div>
+                </section>
+
+                <!-- Instagram Videos Section -->
+                <section class="section-wrapper">
+                    <div class="section-title-bar">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fab fa-instagram" style="font-size: 1.8rem; color: #e1306c;"></i>
+                            <h3 class="section-title" style="margin-bottom: 0;">इन्स्टाग्राम वीडियो & रील्स</h3>
+                        </div>
+                    </div>
+
+                    <div class="instagram-grid" id="instagram-videos-container">
+                        <% if (typeof instagramVideos !=='undefined' && instagramVideos.length> 0) { %>
+                            <% instagramVideos.forEach((video, idx)=> { %>
+                                <div class="instagram-card" data-idx="<%= idx %>" data-embed="<%= video.embed_url %>"
+                                    data-title="<%= video.title || 'इन्स्टाग्राम वीडियो' %>" data-url="<%= video.url %>"
+                                    data-category="मनोरंजन"
+                                    style="background: var(--bg-card); border-radius: 12px; box-shadow: var(--box-shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
+                                    <div style="position: relative; width: 100%; padding-top: 120%; background: #000;">
+                                        <!-- Click interceptor overlay with play button -->
+                                        <div class="instagram-card-overlay"
+                                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; display: flex; align-items: center; justify-content: center;">
+                                            <div class="play-btn-overlay"
+                                                style="width: 60px; height: 60px; border-radius: 50%; background: rgba(225, 48, 108, 0.95); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.8rem; box-shadow: 0 8px 15px rgba(0,0,0,0.3); opacity: 0; transition: transform 0.3s, opacity 0.3s;">
+                                                <i class="fas fa-play" style="margin-left: 6px;"></i>
+                                            </div>
+                                        </div>
+                                        <iframe src="<%= video.embed_url %>"
+                                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+                                            allowtransparency="true" allow="encrypted-media" scrolling="no"></iframe>
+                                    </div>
+                                    <div
+                                        style="padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
+                                        <div>
+                                            <div
+                                                style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+                                                <h4
+                                                    style="font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; color: var(--text-main); flex-grow: 1; line-height: 1.4;">
+                                                    <%= video.title || 'इन्स्टाग्राम वीडियो' %>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                        <span style="font-size: 0.8rem; color: var(--text-muted);"><i
+                                                class="far fa-clock"></i>
+                                            <%= video.timeAgo || '3 दिन पहले' %>
+                                        </span>
+                                    </div>
+                                </div>
+                                <% }) %>
+                                    <% } else { %>
+                                        <div id="no-instagram-videos"
+                                            style="grid-column: 1 / -1; text-align: center; padding: 40px; background: var(--bg-card); border-radius: 12px; color: var(--text-muted);">
+                                            <i class="fab fa-instagram"
+                                                style="font-size: 3rem; color: #ddd; margin-bottom: 10px; display: block;"></i>
+                                            <span>अभी तक कोई इंस्टाग्राम वीडियो नहीं जोड़ा गया है।</span>
+                                        </div>
+                                        <% } %>
+                    </div>
+                </section>
+
+                <!-- 8. Section "खबरें श्रेणी अनुसार" -->
+                <section class="section-wrapper">
+                    <div class="section-title-bar">
+                        <h3 class="section-title">खबरें श्रेणी अनुसार</h3>
+                        <a href="#" class="section-view-all">सभी देखें <i class="fas fa-chevron-right"
+                                style="font-size: 0.75rem;"></i></a>
+                    </div>
+
+                    <div class="category-grid">
+                        <% categoriesNews.forEach(cat=> { %>
+                            <div class="category-card <%= cat.class %>">
+                                <div class="category-card-header">
+                                    <div class="category-icon">
+                                        <i class="fas <%= cat.icon %>"></i>
+                                    </div>
+                                    <span>
+                                        <%= cat.name %>
+                                    </span>
+                                </div>
+                                <div class="category-card-img">
+                                    <img src="<%= cat.image %>" alt="<%= cat.name %>" loading="lazy">
+                                </div>
+                                <ul class="category-news-list">
+                                    <% cat.items.forEach((item, idx)=> { %>
+                                        <li class="category-news-item">
+                                            <span class="category-bullet">
+                                                <%= idx + 1 %>
+                                            </span>
+                                            <span>
+                                                <%= item %>
+                                            </span>
+                                        </li>
+                                        <% }) %>
+                                </ul>
+                                <button class="panel-more-btn">और देखें</button>
+                            </div>
+                            <% }) %>
+                    </div>
+                </section>
+
+                <!-- Google Ads Horizontal Banner -->
+                <div
+                    style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px 20px; margin: 25px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); position: relative;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <svg viewBox="0 0 40 40" width="24" height="24" style="flex-shrink: 0;">
+                                <polygon points="5,25 25,5 35,15 15,35" fill="#4285f4" />
+                                <polygon points="5,25 15,35 5,35" fill="#34a853" />
+                                <polygon points="25,5 35,15 35,5" fill="#fabc05" />
+                            </svg>
+                            <span
+                                style="font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: 700;">Advertisement</span>
+                        </div>
+                        <div style="width: 1px; height: 25px; background: var(--border-color);"></div>
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-main);">Reach Your
+                                Target Audience</span>
+                            <span style="font-size: 0.78rem; color: var(--text-muted);">Grow your business with Google
+                                Ads. Start advertising today!</span>
+                        </div>
+                    </div>
+                    <a href="https://ads.google.com" target="_blank" rel="noopener noreferrer"
+                        style="background: #4285f4; color: #fff; text-decoration: none; padding: 8px 18px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; transition: background-color 0.2s; display: inline-flex; align-items: center; gap: 5px;"
+                        onmouseenter="this.style.backgroundColor='#357ae8'"
+                        onmouseleave="this.style.backgroundColor='#4285f4'">
+                        Learn More <i class="fas fa-external-link-alt" style="font-size: 0.75rem;"></i>
+                    </a>
+                </div>
+
+                <!-- 9. Section "फोटो गैलरी" -->
+                <section class="section-wrapper" style="position: relative; margin-bottom: 20px;">
+                    <div class="section-title-bar">
+                        <h3 class="section-title">फोटो गैलरी</h3>
+                        <a href="#" class="section-view-all">सभी देखें <i class="fas fa-chevron-right"
+                                style="font-size: 0.75rem;"></i></a>
+                    </div>
+
+                    <div class="gallery-carousel-wrapper">
+                        <button class="gallery-control-btn gallery-control-prev" id="gallery-prev">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div class="gallery-carousel" id="gallery-carousel">
+                            <% photoGallery.forEach(photo=> { %>
+                                <div class="gallery-item">
+                                    <img src="<%= photo.image %>" alt="<%= photo.name %>" loading="lazy">
+                                    <div class="gallery-overlay">
+                                        <%= photo.name %>
+                                    </div>
+                                </div>
+                                <% }) %>
+                        </div>
+                        <button class="gallery-control-btn gallery-control-next" id="gallery-next">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Author Card (visible on mobile/tablet only) -->
+                <div class="author-card middle-col-author-card">
+                    <div class="author-content">
+                        <div class="author-avatar-container">
+                            <img src="/images/author_avatar.png" alt="Jashir Singh"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <h4 class="author-name">Jashir Singh</h4>
+                        <span class="author-designation">(Chief Editor)</span>
+                        <div class="author-divider">
+                            <div class="line-long"></div>
+                            <div class="line-short"></div>
+                        </div>
+                        <div class="author-phone">9315529139</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column Sticky Sidebar -->
+            <aside class="portal-right-col">
+                <!-- Google Ads Vertical Sidebar Banner -->
+                <div
+                    style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); position: relative;">
+                    <div
+                        style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 12px;">
+                        <svg viewBox="0 0 40 40" width="20" height="20" style="flex-shrink: 0;">
+                            <polygon points="5,25 25,5 35,15 15,35" fill="#4285f4" />
+                            <polygon points="5,25 15,35 5,35" fill="#34a853" />
+                            <polygon points="25,5 35,15 35,5" fill="#fabc05" />
+                        </svg>
+                        <span
+                            style="font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: 600;">Advertisement</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+                        <div
+                            style="width: 100%; height: 150px; display: flex; align-items: center; justify-content: center; position: relative;">
+                            <svg viewBox="0 0 100 100" style="width: 100px; height: 100px;">
+                                <circle cx="50" cy="50" r="45" fill="#e8f0fe" />
+                                <circle cx="50" cy="50" r="35" fill="none" stroke="#4285f4" stroke-width="6" />
+                                <circle cx="50" cy="50" r="25" fill="none" stroke="#ea4335" stroke-width="6" />
+                                <circle cx="50" cy="50" r="15" fill="none" stroke="#fabc05" stroke-width="6" />
+                                <circle cx="50" cy="50" r="5" fill="#34a853" />
+                                <line x1="85" y1="15" x2="55" y2="45" stroke="#333" stroke-width="4"
+                                    stroke-linecap="round" />
+                                <polygon points="52,48 50,42 58,40" fill="#333" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4
+                                style="font-size: 0.95rem; font-weight: 700; margin: 0 0 5px 0; color: var(--text-main);">
+                                Grow Your Business</h4>
+                            <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0;">Advertise with Google
+                                Ads</p>
+                        </div>
+                        <a href="https://ads.google.com" target="_blank" rel="noopener noreferrer"
+                            style="display: inline-block; width: 100%; background: #4285f4; color: #fff; text-decoration: none; padding: 10px 0; border-radius: 6px; font-size: 0.85rem; font-weight: 700; transition: background-color 0.2s;"
+                            onmouseenter="this.style.backgroundColor='#357ae8'"
+                            onmouseleave="this.style.backgroundColor='#4285f4'">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Short Video Widget -->
+                <div class="sidebar-panel short-video-widget" style="margin-bottom: 20px;">
+                    <div class="panel-header" style="border-bottom: none; margin-bottom: 10px;">
+                        <i class="fas fa-video video-icon" style="color: #e1306c;"></i>
+                        <span>शॉर्ट वीडियोज़</span>
+                    </div>
+                    <% let sidebarShort=(typeof videoNews !=='undefined' && videoNews.length> 0) ? videoNews[0] : {
+                        embed_url: 'https://www.youtube.com/embed/5K1yN9tG4C0?enablejsapi=1',
+                        title: 'दिल्ली-एनसीआर में मौसम की दस्तक',
+                        url: 'https://www.youtube.com/shorts/5K1yN9tG4C0',
+                        time: '1 घंटे पहले',
+                        category: 'दिल्ली',
+                        image: '/images/video_delhi_rain.png',
+                        views: '12K व्यूज'
+                        };
+                        %>
+                        <div class="short-video-card news-video-trigger" data-idx="0"
+                            data-embed="<%= sidebarShort.embed_url %>" data-title="<%= sidebarShort.title %>"
+                            data-url="<%= sidebarShort.url %>" data-time="<%= sidebarShort.time %>"
+                            data-category="<%= sidebarShort.category %>"
+                            style="position: relative; width: 100%; border-radius: 12px; overflow: hidden; background: #000; cursor: pointer; aspect-ratio: 9/16; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                            <img src="<%= sidebarShort.image %>" alt="Short Video"
+                                style="width: 100%; height: 100%; object-fit: cover; opacity: 0.85;">
+                            <div
+                                style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%); display: flex; flex-direction: column; justify-content: space-between; padding: 15px;">
+                                <div
+                                    style="align-self: flex-end; background: rgba(225, 48, 108, 0.9); color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                                    LIVE
+                                </div>
+                                <div>
+                                    <h4
+                                        style="color: #fff; font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; line-height: 1.4; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
+                                        <%= sidebarShort.title %>
+                                    </h4>
+                                    <div
+                                        style="display: flex; align-items: center; gap: 8px; color: #ccc; font-size: 0.8rem;">
+                                        <span><i class="far fa-eye"></i>
+                                            <%= sidebarShort.views %>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; border-radius: 50%; background: rgba(225,48,108,0.9); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                                <i class="fas fa-play" style="margin-left: 4px;"></i>
+                            </div>
+                        </div>
+                </div>
+
+                <!-- Author Card -->
+                <div class="author-card" style="margin-bottom: 20px;">
+                    <div class="author-content">
+                        <div class="author-avatar-container">
+                            <img src="/images/author_avatar.png" alt="Jashir Singh"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <h4 class="author-name">Jashir Singh</h4>
+                        <span class="author-designation">(Chief Editor)</span>
+                        <div class="author-divider">
+                            <div class="line-long"></div>
+                            <div class="line-short"></div>
+                        </div>
+                        <div class="author-phone">9315529139</div>
+                    </div>
+                </div>
+
+                <!-- Panel 1: Trending News -->
+                <div class="sidebar-panel" style="margin-bottom: 20px;">
+                    <div class="panel-header">
+                        <i class="fas fa-chart-line trending-icon"></i>
+                        <span>ट्रेडिंग न्यूज़</span>
+                    </div>
+                    <ul class="panel-list">
+                        <% trendingNews.forEach((news, idx)=> { %>
+                            <li class="panel-item">
+                                <span class="panel-number">
+                                    <%= idx + 1 %>
+                                </span>
+                                <div class="panel-item-content">
+                                    <h4 class="panel-item-title">
+                                        <%= news.title %>
+                                    </h4>
+                                    <span class="panel-item-meta">
+                                        <%= news.time %>
+                                    </span>
+                                </div>
+                            </li>
+                            <% }) %>
+                    </ul>
+                    <button class="panel-more-btn">और देखें</button>
+                </div>
+
+                <!-- Panel 2: Most Read -->
+                <div class="sidebar-panel" style="margin-bottom: 20px;">
+                    <div class="panel-header">
+                        <i class="fas fa-fire read-icon"></i>
+                        <span>सबसे ज्यादा पढ़ी गई</span>
+                    </div>
+                    <ul class="panel-list">
+                        <% mostRead.forEach((news, idx)=> { %>
+                            <li class="panel-item">
+                                <span class="panel-number">
+                                    <%= idx + 1 %>
+                                </span>
+                                <div class="panel-item-content">
+                                    <h4 class="panel-item-title">
+                                        <%= news.title %>
+                                    </h4>
+                                    <span class="panel-item-meta">
+                                        <%= news.views %>
+                                    </span>
+                                </div>
+                            </li>
+                            <% }) %>
+                    </ul>
+                    <button class="panel-more-btn">और देखें</button>
+                </div>
+
+                <!-- Premium Support Ad Panel -->
+                <div class="sidebar-ad-card"
+                    style="margin-top: 20px; background: linear-gradient(135deg, #f53d3d, #c92222); padding: 25px; border-radius: 12px; color: #fff; text-align: center; box-shadow: 0 4px 15px rgba(229,62,62,0.2);">
+                    <h4 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 8px;">AAKASH NEWS 24 प्रीमियम</h4>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 15px; line-height: 1.4;">निष्पक्ष
+                        पत्रकारिता का समर्थन करें। आज ही सदस्यता लें।</p>
+                    <button
+                        style="background: #fff; color: #e53e3e; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: transform 0.2s;">अभी
+                        सदस्यता लें</button>
+                </div>
+            </aside>
+        </div>
+
+        <!-- 10. Newsletter Subscription Bar -->
+        <section class="newsletter-bar">
+            <div class="container newsletter-container">
+                <div class="newsletter-left">
+                    <div class="newsletter-icon-wrapper">
+                        <i class="far fa-envelope-open"></i>
+                    </div>
+                    <div class="newsletter-text">
+                        <h3>लेटेस्ट खबरों, ब्रेकिंग न्यूज़ और एक्सक्लूसिव स्टोरीज के लिए न्यूज़लेटर सब्सक्राइब करें</h3>
+                    </div>
+                </div>
+                <form class="newsletter-form" id="newsletter-form">
+                    <input type="email" class="newsletter-input" placeholder="अपना ईमेल पता लिखें" required>
+                    <button type="submit" class="newsletter-submit">सब्सक्राइब करें</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Custom Dialog/Modal for success notification -->
+        <div class="subscribed-modal" id="subscribed-modal">
+            <div class="modal-icon">
+                <i class="fas fa-circle-check"></i>
+            </div>
+            <h3 style="font-size: 1.3rem; margin-bottom: 10px; font-weight: 700;">सफलता!</h3>
+            <p id="subscribed-modal-message" style="font-size: 0.95rem; color: var(--text-muted);"></p>
+            <button class="modal-close-btn" id="subscribed-modal-close">ठीक है</button>
+        </div>
+
+        <!-- 11. Footer -->
+        <footer>
+            <div class="container footer-grid">
+                <div class="footer-logo-col">
+                    <a href="/" class="footer-logo"
+                        style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                        <img src="/images/logo.png" alt="Aakash News 24"
+                            style="height: 40px; width: 40px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);" />
+                        <span style="color: #fff; font-weight: 900; font-size: 1.35rem;">AAKASH <span
+                                style="color: #e53e3e;">NEWS 24</span></span>
+                    </a>
+                    <p>Always Ahead। हम आपको प्रदान करते हैं देश और दुनिया की ताज़ा और विश्वसनीय ख़बरें सबसे पहले।</p>
+                    <div class="social-links">
+                        <a href="#" class="social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-btn" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-btn" aria-label="Youtube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4>एक्सप्लोर</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">होम</a></li>
+                        <li><a href="#">देश</a></li>
+                        <li><a href="#">राज्य</a></li>
+                        <li><a href="#">दुनिया</a></li>
+                        <li><a href="#">वीडियो</a></li>
+                        <li><a href="#">फोटो गैलरी</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4>कैटेगरी</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">राजनीति</a></li>
+                        <li><a href="#">खेल</a></li>
+                        <li><a href="#">बिजनेस</a></li>
+                        <li><a href="#">टेक्नोलॉजी</a></li>
+                        <li><a href="#">मनोरंजन</a></li>
+                        <li><a href="#">लाइफस्टाइल</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4>सहायता</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">हमारे बारे में</a></li>
+                        <li><a href="#">संपर्क करें</a></li>
+                        <li><a href="#">गोपनीयता नीति</a></li>
+                        <li><a href="#">नियम & शर्तें</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-app-col">
+                    <h4>मोबाइल ऐप डाउनलोड करें</h4>
+                    <div class="app-badges">
+                        <div class="app-badge-btn">
+                            <i class="fab fa-google-play"></i>
+                            <div>
+                                <span>GET IT ON</span>
+                                <strong>Google Play</strong>
+                            </div>
+                        </div>
+                        <div class="app-badge-btn">
+                            <i class="fab fa-apple"></i>
+                            <div>
+                                <span>Download on the</span>
+                                <strong>App Store</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright-bar">
+                &copy; 2026 Aakash News 24. सभी अधिकार सुरक्षित।
+            </div>
+        </footer>
+
+        <!-- Reels Viewer Overlay (Dainik Bhaskar Style) -->
+        <div id="reels-viewer-overlay" class="reels-viewer-overlay" style="display: none;">
+            <button id="reels-close-btn" class="reels-close-btn" title="बंद करें">
+                &times;
+            </button>
+
+            <div class="reels-container-wrapper">
+                <!-- Previous Button -->
+                <button id="reels-nav-prev" class="reels-nav-arrow prev" title="पिछला वीडियो (Arrow Up)">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
+
+                <!-- Central Reels Scroll Viewport -->
+                <div id="reels-scroll-container" class="reels-scroll-container"></div>
+
+                <!-- Next Button -->
+                <button id="reels-nav-next" class="reels-nav-arrow next" title="अगला वीडियो (Arrow Down)">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+
+                <!-- Floating Share Actions on the Right -->
+                <div class="reels-sidebar-actions">
+                    <a id="reels-share-fb" href="#" target="_blank" rel="noopener noreferrer"
+                        class="reels-action-circle facebook" title="फेसबुक पर शेयर करें">
+                        <i class="fab fa-facebook-f"></i>
+                        <span>फेसबुक</span>
+                    </a>
+                    <a id="reels-share-tw" href="#" target="_blank" rel="noopener noreferrer"
+                        class="reels-action-circle twitter" title="ट्विटर पर शेयर करें">
+                        <i class="fab fa-twitter"></i>
+                        <span>ट्विटर</span>
+                    </a>
+                    <button id="reels-copy-btn" class="reels-action-circle copy-link" title="लिंक कॉपी करें">
+                        <i class="fas fa-link"></i>
+                        <span>कॉपी लिंक</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom Caption matching Bhaskar.com design -->
+            <div id="reels-bottom-caption" class="reels-bottom-caption-bar">
+                <span class="reels-caption-highlight">वीडियो: </span>
+                <span id="reels-active-caption-text">इंस्टाग्राम वीडियो</span>
+            </div>
+        </div>
+
+        <!-- Reels Viewer Script -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const overlay = document.getElementById('reels-viewer-overlay');
+                const closeBtn = document.getElementById('reels-close-btn');
+                const scrollContainer = document.getElementById('reels-scroll-container');
+                const prevBtn = document.getElementById('reels-nav-prev');
+                const nextBtn = document.getElementById('reels-nav-next');
+                const shareFb = document.getElementById('reels-share-fb');
+                const shareTw = document.getElementById('reels-share-tw');
+                const copyBtn = document.getElementById('reels-copy-btn');
+                const captionText = document.getElementById('reels-active-caption-text');
+
+                const instagramCards = document.querySelectorAll('.instagram-card');
+                const videoNewsCards = document.querySelectorAll('.news-video-trigger');
+
+                let instagramDataset = [];
+                let videoNewsDataset = [];
+
+                // Extract Instagram dataset
+                instagramCards.forEach(card => {
+                    const clockIcon = card.querySelector('.far.fa-clock');
+                    const timeText = clockIcon ? clockIcon.parentNode.textContent.trim() : 'अभी-अभी';
+                    instagramDataset.push({
+                        embed_url: card.getAttribute('data-embed'),
+                        title: card.getAttribute('data-title'),
+                        url: card.getAttribute('data-url'),
+                        time: timeText,
+                        category: card.getAttribute('data-category') || 'मनोरंजन'
+                    });
+                });
+
+                // Extract Video News dataset
+                videoNewsCards.forEach(card => {
+                    videoNewsDataset.push({
+                        embed_url: card.getAttribute('data-embed'),
+                        title: card.getAttribute('data-title'),
+                        url: card.getAttribute('data-url'),
+                        time: card.getAttribute('data-time') || 'अभी-अभी',
+                        category: card.getAttribute('data-category') || 'न्यूज़'
+                    });
+                });
+
+                let activeDataset = [];
+                let activeIdx = 0;
+                let isOpened = false;
+
+                let currentTime = 4;
+                let duration = 57;
+                let isPlaying = true;
+                let isMuted = false;
+                let playbackSpeed = 1;
+                let timerInterval = null;
+
+                function formatTime(secs) {
+                    const m = Math.floor(secs / 60).toString().padStart(2, '0');
+                    const s = Math.floor(secs % 60).toString().padStart(2, '0');
+                    return `${m}:${s}`;
+                }
+
+                function renderSlides() {
+                    let html = '';
+                    activeDataset.forEach((video, idx) => {
+                        html += `
+                            <div class="reel-slide" data-idx="${idx}" data-title="${video.title.replace(/"/g, '&quot;')}" data-url="${video.url}">
+                                <div class="reel-iframe-wrapper">
+                                    <iframe data-src="${video.embed_url}" allowtransparency="true" allow="encrypted-media" scrolling="no"></iframe>
+                                </div>
+                                
+                                <!-- Category Pill Badge -->
+                                <span class="reel-category-pill">
+                                    ${video.category} &gt;
+                                </span>
+
+                                <!-- Custom Player Controls Bar -->
+                                <div class="reel-controls-bar">
+                                    <div class="reel-timeline-container">
+                                        <span class="reel-current-time">00:04</span>
+                                        <input type="range" class="reel-timeline-slider" min="0" max="57" value="4">
+                                        <span class="reel-duration">00:57</span>
+                                    </div>
+                                    <div class="reel-buttons-row">
+                                        <div class="reel-left-controls">
+                                            <button class="reel-speed-btn">1x</button>
+                                        </div>
+                                        <div class="reel-center-controls" style="gap: 10px;">
+                                            <button class="reel-control-btn rewind-btn" title="5 सेकंड पीछे">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                            <button class="reel-control-btn play-pause-btn" title="पॉज़" style="font-size: 1.4rem;">
+                                                <i class="fas fa-pause"></i>
+                                            </button>
+                                            <button class="reel-control-btn forward-btn" title="5 सेकंड आगे">
+                                                <i class="fas fa-redo"></i>
+                                            </button>
+                                        </div>
+                                        <div class="reel-right-controls">
+                                            <button class="reel-control-btn mute-btn" title="म्यूट">
+                                                <i class="fas fa-volume-up"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="reel-info-overlay" style="padding-bottom: 90px;">
+                                    <div class="reel-brand-header" style="display: flex; align-items: center; gap: 8px;">
+                                        <img src="/images/logo.png" alt="Aakash News 24" style="height: 24px; width: 24px; border-radius: 50%;" />
+                                        <span class="reel-brand-logo" style="font-size: 0.9rem; font-weight: 800;">AAKASH NEWS 24</span>
+                                        <span class="reel-read-news-btn">खबर पढ़ें</span>
+                                    </div>
+                                    <h4 class="reel-title">${video.title}</h4>
+                                    <div class="reel-meta-info">
+                                        <span><i class="far fa-clock"></i> ${video.time}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    scrollContainer.innerHTML = html;
+                    setupControlsListeners();
+                }
+
+                function setupControlsListeners() {
+                    const slides = scrollContainer.querySelectorAll('.reel-slide');
+                    slides.forEach(slide => {
+                        const speedBtn = slide.querySelector('.reel-speed-btn');
+                        const playPauseBtn = slide.querySelector('.play-pause-btn');
+                        const muteBtn = slide.querySelector('.mute-btn');
+                        const rewindBtn = slide.querySelector('.rewind-btn');
+                        const forwardBtn = slide.querySelector('.forward-btn');
+                        const slider = slide.querySelector('.reel-timeline-slider');
+
+                        if (speedBtn) {
+                            speedBtn.addEventListener('click', function () {
+                                toggleActiveSpeed(slide);
+                            });
+                        }
+                        if (playPauseBtn) {
+                            playPauseBtn.addEventListener('click', function () {
+                                toggleActivePlayPause(slide);
+                            });
+                        }
+                        if (muteBtn) {
+                            muteBtn.addEventListener('click', function () {
+                                toggleActiveMute(slide);
+                            });
+                        }
+                        if (rewindBtn) {
+                            rewindBtn.addEventListener('click', function () {
+                                skipActiveTime(slide, -5);
+                            });
+                        }
+                        if (forwardBtn) {
+                            forwardBtn.addEventListener('click', function () {
+                                skipActiveTime(slide, 5);
+                            });
+                        }
+                        if (slider) {
+                            slider.addEventListener('input', function () {
+                                seekActiveTime(slide, parseFloat(slider.value));
+                            });
+                        }
+                    });
+                }
+
+                function toggleActiveSpeed(slide) {
+                    if (playbackSpeed === 1) playbackSpeed = 1.5;
+                    else if (playbackSpeed === 1.5) playbackSpeed = 2;
+                    else if (playbackSpeed === 2) playbackSpeed = 0.5;
+                    else playbackSpeed = 1;
+
+                    const speedBtn = slide.querySelector('.reel-speed-btn');
+                    if (speedBtn) speedBtn.textContent = playbackSpeed + 'x';
+
+                    const iframe = slide.querySelector('iframe');
+                    if (iframe && iframe.src.includes('youtube.com')) {
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackRate', args: [playbackSpeed] }), '*');
+                    }
+                }
+
+                function toggleActivePlayPause(slide) {
+                    isPlaying = !isPlaying;
+                    const icon = slide.querySelector('.play-pause-btn i');
+                    if (icon) {
+                        icon.className = isPlaying ? 'fas fa-pause' : 'fas fa-play';
+                    }
+
+                    const iframe = slide.querySelector('iframe');
+                    if (iframe && iframe.src.includes('youtube.com')) {
+                        const command = isPlaying ? 'playVideo' : 'pauseVideo';
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: command, args: [] }), '*');
+                    }
+                }
+
+                function toggleActiveMute(slide) {
+                    isMuted = !isMuted;
+                    const icon = slide.querySelector('.mute-btn i');
+                    if (icon) {
+                        icon.className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+                    }
+
+                    const iframe = slide.querySelector('iframe');
+                    if (iframe && iframe.src.includes('youtube.com')) {
+                        const command = isMuted ? 'mute' : 'unMute';
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: command, args: [] }), '*');
+                    }
+                }
+
+                function skipActiveTime(slide, seconds) {
+                    currentTime = Math.max(0, Math.min(duration, currentTime + seconds));
+                    const slider = slide.querySelector('.reel-timeline-slider');
+                    const timeText = slide.querySelector('.reel-current-time');
+                    if (slider) slider.value = currentTime;
+                    if (timeText) timeText.textContent = formatTime(currentTime);
+
+                    const iframe = slide.querySelector('iframe');
+                    if (iframe && iframe.src.includes('youtube.com')) {
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'seekTo', args: [currentTime, true] }), '*');
+                    }
+                }
+
+                function seekActiveTime(slide, value) {
+                    currentTime = value;
+                    const timeText = slide.querySelector('.reel-current-time');
+                    if (timeText) timeText.textContent = formatTime(currentTime);
+
+                    const iframe = slide.querySelector('iframe');
+                    if (iframe && iframe.src.includes('youtube.com')) {
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'seekTo', args: [value, true] }), '*');
+                    }
+                }
+
+                function startTimer() {
+                    clearInterval(timerInterval);
+                    timerInterval = setInterval(() => {
+                        if (isOpened && isPlaying) {
+                            currentTime++;
+                            if (currentTime >= duration) {
+                                currentTime = duration;
+                                isPlaying = false;
+                                const activeSlide = scrollContainer.querySelectorAll('.reel-slide')[activeIdx];
+                                if (activeSlide) {
+                                    const icon = activeSlide.querySelector('.play-pause-btn i');
+                                    if (icon) icon.className = 'fas fa-play';
+                                }
+                            }
+                            // Update current slide UI
+                            const activeSlide = scrollContainer.querySelectorAll('.reel-slide')[activeIdx];
+                            if (activeSlide) {
+                                const slider = activeSlide.querySelector('.reel-timeline-slider');
+                                const timeText = activeSlide.querySelector('.reel-current-time');
+                                if (slider) slider.value = currentTime;
+                                if (timeText) timeText.textContent = formatTime(currentTime);
+                            }
+                        }
+                    }, 1000);
+                }
+
+                function stopTimer() {
+                    clearInterval(timerInterval);
+                }
+
+                function loadIframes() {
+                    const slides = scrollContainer.querySelectorAll('.reel-slide');
+                    slides.forEach(slide => {
+                        const iframe = slide.querySelector('iframe');
+                        if (iframe && !iframe.src) {
+                            iframe.src = iframe.getAttribute('data-src');
+                        }
+                    });
+                }
+
+                function unloadIframes() {
+                    const slides = scrollContainer.querySelectorAll('.reel-slide');
+                    slides.forEach(slide => {
+                        const iframe = slide.querySelector('iframe');
+                        if (iframe) {
+                            iframe.src = '';
+                        }
+                    });
+                    scrollContainer.innerHTML = ''; // Clear DOM to reclaim memory
+                }
+
+                function updateActiveReel(index) {
+                    if (index < 0 || index >= activeDataset.length) return;
+                    activeIdx = index;
+
+                    // Scroll to index
+                    const slideHeight = scrollContainer.clientHeight;
+                    scrollContainer.scrollTo({
+                        top: activeIdx * slideHeight,
+                        behavior: 'smooth'
+                    });
+
+                    // Update UI state
+                    prevBtn.disabled = (activeIdx === 0);
+                    nextBtn.disabled = (activeIdx === activeDataset.length - 1);
+
+                    // Update text/sharing links
+                    const video = activeDataset[activeIdx];
+                    if (!video) return;
+
+                    captionText.textContent = video.title || 'इंस्टाग्राम वीडियो';
+                    shareFb.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(video.url)}`;
+                    shareTw.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(video.url)}`;
+
+                    // Reset timeline state for this video
+                    currentTime = 0;
+                    duration = 57; // default
+                    isPlaying = true;
+                    isMuted = false;
+                    playbackSpeed = 1;
+
+                    // If the news video card has duration e.g. "02:40", parse it
+                    const videoCards = activeDataset === videoNewsDataset ? videoNewsCards : instagramCards;
+                    const activeCard = videoCards[activeIdx];
+                    if (activeCard) {
+                        const dur = activeCard.getAttribute('data-duration') || '00:57';
+                        const parts = dur.split(':');
+                        if (parts.length === 2) {
+                            duration = parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+                        }
+                    }
+
+                    // Update slider min/max on the active slide element
+                    const activeSlide = scrollContainer.querySelectorAll('.reel-slide')[activeIdx];
+                    if (activeSlide) {
+                        const slider = activeSlide.querySelector('.reel-timeline-slider');
+                        const durText = activeSlide.querySelector('.reel-duration');
+                        const curText = activeSlide.querySelector('.reel-current-time');
+                        const speedBtn = activeSlide.querySelector('.reel-speed-btn');
+                        const playPauseIcon = activeSlide.querySelector('.play-pause-btn i');
+                        const muteIcon = activeSlide.querySelector('.mute-btn i');
+
+                        if (slider) {
+                            slider.max = duration;
+                            slider.value = 0;
+                        }
+                        if (durText) durText.textContent = formatTime(duration);
+                        if (curText) curText.textContent = "00:00";
+                        if (speedBtn) speedBtn.textContent = "1x";
+                        if (playPauseIcon) playPauseIcon.className = "fas fa-pause";
+                        if (muteIcon) muteIcon.className = "fas fa-volume-up";
+                    }
+
+                    startTimer();
+                }
+
+                // Open overlay when clicking Instagram card
+                instagramCards.forEach((card, idx) => {
+                    card.addEventListener('click', function () {
+                        activeDataset = instagramDataset;
+                        renderSlides();
+                        overlay.style.display = 'flex';
+                        isOpened = true;
+                        loadIframes();
+                        setTimeout(() => {
+                            updateActiveReel(idx);
+                        }, 50);
+                    });
+                });
+
+                // Open overlay when clicking Video News card
+                videoNewsCards.forEach((card, idx) => {
+                    card.addEventListener('click', function () {
+                        activeDataset = videoNewsDataset;
+                        renderSlides();
+                        overlay.style.display = 'flex';
+                        isOpened = true;
+                        loadIframes();
+                        setTimeout(() => {
+                            updateActiveReel(idx);
+                        }, 50);
+                    });
+                });
+
+                // Close overlay
+                closeBtn.addEventListener('click', function () {
+                    overlay.style.display = 'none';
+                    isOpened = false;
+                    stopTimer();
+                    unloadIframes();
+                });
+
+                // Nav buttons
+                prevBtn.addEventListener('click', function () {
+                    updateActiveReel(activeIdx - 1);
+                });
+
+                nextBtn.addEventListener('click', function () {
+                    updateActiveReel(activeIdx + 1);
+                });
+
+                // Keyboard navigation
+                window.addEventListener('keydown', function (e) {
+                    if (!isOpened) return;
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        updateActiveReel(activeIdx + 1);
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        updateActiveReel(activeIdx - 1);
+                    } else if (e.key === 'Escape') {
+                        overlay.style.display = 'none';
+                        isOpened = false;
+                        stopTimer();
+                        unloadIframes();
+                    }
+                });
+
+                // Scroll listener to sync activeIdx when swiping/scrolling manually
+                let scrollTimeout;
+                scrollContainer.addEventListener('scroll', function () {
+                    scrollContainer.style.pointerEvents = 'none'; // Temporarily disable to prevent jitter
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        scrollContainer.style.pointerEvents = 'auto';
+                        const scrollPosition = scrollContainer.scrollTop;
+                        const slideHeight = scrollContainer.clientHeight;
+                        if (slideHeight <= 0) return;
+                        const index = Math.round(scrollPosition / slideHeight);
+                        if (index !== activeIdx && index >= 0 && index < activeDataset.length) {
+                            updateActiveReel(index);
+                        }
+                    }, 100);
+                });
+
+                // Copy Link button
+                copyBtn.addEventListener('click', function () {
+                    const video = activeDataset[activeIdx];
+                    if (video) {
+                        navigator.clipboard.writeText(video.url).then(function () {
+                            alert('लिंक कॉपी कर लिया गया है!');
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <!-- Main JS file -->
+        <script src="/js/main.js"></script>
+</body>
+
+</html>
