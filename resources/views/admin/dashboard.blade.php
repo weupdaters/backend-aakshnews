@@ -19,7 +19,7 @@
     <div class="box-breadcrumb">
         <div class="breadcrumbs">
             <ul>
-                <li><a class="icon-home" href="/">Aakash News 24</a></li>
+                <li><a class="icon-home" href="/">Aaksh News 24</a></li>
                 <li><span>{{ $t['admin_panel'] ?? 'Admin Panel' }}</span></li>
             </ul>
         </div>
@@ -243,7 +243,7 @@
         <div class="box-footer">
             <div class="row">
                 <div class="col-md-6 col-sm-12 text-center text-md-start">
-                    <p class="font-sm color-text-paragraph-2">© {{ date('Y') }} - <a class="color-brand-2" href="/">Aakash News 24 </a>{{ $t['admin_dashboard'] ?? 'Admin Dashboard' }}</p>
+                    <p class="font-sm color-text-paragraph-2">© {{ date('Y') }} - <a class="color-brand-2" href="/">Aaksh News 24 </a>{{ $t['admin_dashboard'] ?? 'Admin Dashboard' }}</p>
                 </div>
             </div>
         </div>

@@ -358,6 +358,7 @@
                 status: $('#post-status').val(),
                 is_hero: $('#post-is-hero').is(':checked') ? 1 : 0,
                 is_middle_stack: $('#post-is-middle-stack').is(':checked') ? 1 : 0,
+                is_admin_post: 1,
                 content: $('#post-content').val()
             };
 

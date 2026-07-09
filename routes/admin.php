@@ -5,9 +5,38 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
+// Root admin route redirects to dashboard
+Route::get('/admin', function () {
+    return redirect('/admin/dashboard');
+});
+
+// Admin Login Routes
+Route::get('/admin/login', function () {
+    if (Auth::check()) {
+        return redirect('/admin/dashboard');
+    }
+    return view('admin.login');
+})->name('login');
+
+Route::post('/admin/login', function (Request $request) {
+    $credentials = $request->only('email', 'password');
+    if (Auth::attempt($credentials, true)) {
+        $request->session()->regenerate();
+        return redirect('/admin/dashboard');
+    }
+    return redirect('/admin/login')->with('error', 'Invalid email or password.')->withInput();
+});
+
+Route::get('/admin/logout', function (Request $request) {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/admin/login')->with('error', 'Logged out successfully.');
+});
+
 Route::get('/admin/dashboard', function () {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
     $instagramVideos = \App\Models\InstagramVideo::latest()->get();
     $posts = \App\Models\UserPost::latest()->get();
@@ -19,7 +48,7 @@ Route::get('/admin/dashboard', function () {
 // Admin Category Management Routes
 Route::get('/admin/category', function () {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
     
     // Seed default categories if database is empty
@@ -45,14 +74,14 @@ Route::get('/admin/category', function () {
 
 Route::get('/admin/category/create', function () {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
     return view('admin.category.create');
 });
 
 Route::post('/admin/category', function (Request $request) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $validator = Validator::make($request->all(), [
@@ -90,7 +119,7 @@ Route::post('/admin/category', function (Request $request) {
 
 Route::get('/admin/category/{id}/edit', function ($id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $category = \App\Models\Category::find($id);
@@ -103,7 +132,7 @@ Route::get('/admin/category/{id}/edit', function ($id) {
 
 Route::put('/admin/category/{id}', function (Request $request, $id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $category = \App\Models\Category::find($id);
@@ -151,7 +180,7 @@ Route::put('/admin/category/{id}', function (Request $request, $id) {
 
 Route::delete('/admin/category/{id}', function ($id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $category = \App\Models\Category::find($id);
@@ -171,7 +200,7 @@ Route::delete('/admin/category/{id}', function ($id) {
 // Admin Advertisement Management Routes
 Route::get('/admin/advertisement', function () {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
     $advertisements = \App\Models\Advertisement::latest()->get();
     return view('admin.advertisement.index', compact('advertisements'));
@@ -179,14 +208,14 @@ Route::get('/admin/advertisement', function () {
 
 Route::get('/admin/advertisement/create', function () {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
     return view('admin.advertisement.create');
 });
 
 Route::post('/admin/advertisement', function (Request $request) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $validator = Validator::make($request->all(), [
@@ -221,7 +250,7 @@ Route::post('/admin/advertisement', function (Request $request) {
 
 Route::get('/admin/advertisement/{id}/edit', function ($id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $advertisement = \App\Models\Advertisement::find($id);
@@ -234,7 +263,7 @@ Route::get('/admin/advertisement/{id}/edit', function ($id) {
 
 Route::put('/admin/advertisement/{id}', function (Request $request, $id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $advertisement = \App\Models\Advertisement::find($id);
@@ -278,7 +307,7 @@ Route::put('/admin/advertisement/{id}', function (Request $request, $id) {
 
 Route::delete('/admin/advertisement/{id}', function ($id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $advertisement = \App\Models\Advertisement::find($id);
@@ -297,15 +326,23 @@ Route::delete('/admin/advertisement/{id}', function ($id) {
 // Admin News Article Management Routes
 Route::get('/admin/post', function () {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
-    $posts = \App\Models\UserPost::latest()->get();
+    $posts = \App\Models\UserPost::where('is_admin_post', true)->latest()->get();
     return view('admin.post.index', compact('posts'));
+});
+
+Route::get('/admin/reader-corner', function () {
+    if (!Auth::check()) {
+        return redirect('/admin/login')->with('error', 'Please log in first.');
+    }
+    $posts = \App\Models\UserPost::where('is_admin_post', false)->latest()->get();
+    return view('admin.reader_corner.index', compact('posts'));
 });
 
 Route::get('/admin/post/create', function () {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
     
     // Seed default categories if database is empty
@@ -331,7 +368,7 @@ Route::get('/admin/post/create', function () {
 
 Route::get('/admin/post/{id}/edit', function ($id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
     $post = \App\Models\UserPost::find($id);
     if (!$post) {
@@ -362,7 +399,7 @@ Route::get('/admin/post/{id}/edit', function ($id) {
 // Admin Breaking News Management Routes
 Route::get('/admin/breaking-news', function () {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
     $breakingNews = \App\Models\BreakingNews::latest()->get();
     return view('admin.breaking_news.index', compact('breakingNews'));
@@ -370,14 +407,14 @@ Route::get('/admin/breaking-news', function () {
 
 Route::get('/admin/breaking-news/create', function () {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
     return view('admin.breaking_news.create');
 });
 
 Route::post('/admin/breaking-news', function (Request $request) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $validator = Validator::make($request->all(), [
@@ -399,7 +436,7 @@ Route::post('/admin/breaking-news', function (Request $request) {
 
 Route::get('/admin/breaking-news/{id}/edit', function ($id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $breakingNews = \App\Models\BreakingNews::find($id);
@@ -412,7 +449,7 @@ Route::get('/admin/breaking-news/{id}/edit', function ($id) {
 
 Route::put('/admin/breaking-news/{id}', function (Request $request, $id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $breakingNews = \App\Models\BreakingNews::find($id);
@@ -439,7 +476,7 @@ Route::put('/admin/breaking-news/{id}', function (Request $request, $id) {
 
 Route::delete('/admin/breaking-news/{id}', function ($id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $breakingNews = \App\Models\BreakingNews::find($id);
@@ -454,7 +491,7 @@ Route::delete('/admin/breaking-news/{id}', function ($id) {
 // Admin Instagram Reels Management Routes
 Route::get('/admin/instagram', function () {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
     $reels = \App\Models\InstagramVideo::latest()->get();
     return view('admin.instagram.index', compact('reels'));
@@ -462,14 +499,14 @@ Route::get('/admin/instagram', function () {
 
 Route::get('/admin/instagram/create', function () {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
     return view('admin.instagram.create');
 });
 
 Route::post('/admin/instagram', function (Request $request) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $validator = Validator::make($request->all(), [
@@ -507,7 +544,7 @@ Route::post('/admin/instagram', function (Request $request) {
 
 Route::get('/admin/instagram/{id}/edit', function ($id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $reel = \App\Models\InstagramVideo::find($id);
@@ -520,7 +557,7 @@ Route::get('/admin/instagram/{id}/edit', function ($id) {
 
 Route::put('/admin/instagram/{id}', function (Request $request, $id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $reel = \App\Models\InstagramVideo::find($id);
@@ -563,7 +600,7 @@ Route::put('/admin/instagram/{id}', function (Request $request, $id) {
 
 Route::delete('/admin/instagram/{id}', function ($id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $reel = \App\Models\InstagramVideo::find($id);
@@ -578,7 +615,7 @@ Route::delete('/admin/instagram/{id}', function ($id) {
 // Admin Photo Gallery Management Routes
 Route::get('/admin/gallery', function () {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
     $photos = \App\Models\PhotoGallery::latest()->get();
     return view('admin.gallery.index', compact('photos'));
@@ -586,14 +623,14 @@ Route::get('/admin/gallery', function () {
 
 Route::get('/admin/gallery/create', function () {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
     return view('admin.gallery.create');
 });
 
 Route::post('/admin/gallery', function (Request $request) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $validator = Validator::make($request->all(), [
@@ -615,7 +652,7 @@ Route::post('/admin/gallery', function (Request $request) {
 
 Route::get('/admin/gallery/{id}/edit', function ($id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $photo = \App\Models\PhotoGallery::find($id);
@@ -628,7 +665,7 @@ Route::get('/admin/gallery/{id}/edit', function ($id) {
 
 Route::put('/admin/gallery/{id}', function (Request $request, $id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $photo = \App\Models\PhotoGallery::find($id);
@@ -655,7 +692,7 @@ Route::put('/admin/gallery/{id}', function (Request $request, $id) {
 
 Route::delete('/admin/gallery/{id}', function ($id) {
     if (!Auth::check()) {
-        return redirect('/')->with('error', 'Please log in.');
+        return redirect('/admin/login')->with('error', 'Please log in first.');
     }
 
     $photo = \App\Models\PhotoGallery::find($id);

@@ -19,8 +19,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="{{ $lang === 'en' ? 'Aakash News 24 - Always Ahead. Reader\'s Corner.' : ($lang === 'pb' ? 'ਆਕਾਸ਼ ਨਿਊਜ਼ 24 - ਪਾਠਕ ਕੋਨਾ।' : 'Aakash News 24 - Always Ahead। पाठक कोना - आपके विचार।') }}">
-    <title>{{ $lang === 'en' ? 'Reader\'s Corner - Your Thoughts' : ($lang === 'pb' ? 'ਪਾਠਕ ਕੋਨਾ - ਤੁਹਾਡੇ ਵਿਚਾਰ' : 'पाठक कोना - आपके विचार') }} | Aakash News 24</title>
+    <meta name="description" content="{{ $lang === 'en' ? 'Aaksh News 24 - Always Ahead. Reader\'s Corner.' : ($lang === 'pb' ? 'ਆਕਸ਼ ਨਿਊਜ਼ 24 - ਪਾਠਕ ਕੋਨਾ।' : 'Aaksh News 24 - Always Ahead। पाठक कोना - आपके विचार।') }}">
+    <title>{{ $lang === 'en' ? 'Reader\'s Corner - Your Thoughts' : ($lang === 'pb' ? 'ਪਾਠਕ ਕੋਨਾ - ਤੁਹਾਡੇ ਵਿਚਾਰ' : 'पाठक कोਨਾ - ਤੁਹਾਡੇ ਵਿਚਾਰ') }} | Aaksh News 24</title>
     <!-- FontAwesome for Premium Icons -->
     <!-- Feather Icons -->
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
@@ -214,10 +214,10 @@
         <div class="container header-grid">
             <div class="logo-area">
                 <a href="/" class="logo" style="display: flex; align-items: center; gap: 10px;">
-                    <img src="/images/logo.png" alt="Aakash News 24" style="height: 48px; width: 48px; border-radius: 50%; object-fit: cover;" />
+                    <img src="/images/logo.png" alt="Aaksh News 24" style="height: 48px; width: 48px; border-radius: 50%; object-fit: cover;" />
                     <div style="display: flex; flex-direction: column; line-height: 1.1;">
                         <div style="display: flex; align-items: center;">
-                            <span style="color: var(--text-main); font-weight: 900; font-size: 1.4rem; letter-spacing: 0.5px;">AAKASH</span>
+                            <span style="color: var(--text-main); font-weight: 900; font-size: 1.4rem; letter-spacing: 0.5px;">AAKSH</span>
                             <span style="color: #e53e3e; font-weight: 900; font-size: 1.4rem; letter-spacing: 0.5px; margin-left: 6px;">NEWS 24</span>
                         </div>
                         <span class="tagline" style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; margin-top: 2px;">Always Ahead</span>
@@ -285,8 +285,8 @@
     <div class="mobile-sidebar" id="mobile-sidebar">
         <div class="mobile-sidebar-header">
             <a href="/" class="logo" style="display: flex; align-items: center; gap: 8px;">
-                <img src="/images/logo.png" alt="Aakash News 24" style="height: 36px; width: 36px; border-radius: 50%;" />
-                <span style="color: var(--text-main); font-weight: 900; font-size: 1.25rem;">AAKASH <span style="color: #e53e3e;">NEWS 24</span></span>
+                <img src="/images/logo.png" alt="Aaksh News 24" style="height: 36px; width: 36px; border-radius: 50%;" />
+                <span style="color: var(--text-main); font-weight: 900; font-size: 1.25rem;">AAKSH <span style="color: #e53e3e;">NEWS 24</span></span>
             </a>
             <button class="mobile-sidebar-close" id="sidebar-close">&times;</button>
         </div>
@@ -628,7 +628,7 @@
 
             <!-- Premium Support Ad Panel -->
             <div class="sidebar-ad-card" style="margin-top: 20px; background: linear-gradient(135deg, #f53d3d, #c92222); padding: 25px; border-radius: 12px; color: #fff; text-align: center; box-shadow: 0 4px 15px rgba(229,62,62,0.2);">
-                <h4 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 8px;">{{ $lang === 'en' ? 'AAKASH NEWS 24 Premium' : ($lang === 'pb' ? 'ਆਕਾਸ਼ ਨਿਊਜ਼ 24 ਪ੍ਰੀਮੀਅਮ' : 'आकाश न्यूज़ 24 प्रीमियम') }}</h4>
+                <h4 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 8px;">{{ $lang === 'en' ? 'AAKSH NEWS 24 Premium' : ($lang === 'pb' ? 'ਆਕਸ਼ ਨਿਊਜ਼ 24 ਪ੍ਰੀਮੀਅਮ' : 'आकश न्यूज़ 24 प्रीमियम') }}</h4>
                 <p style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 15px; line-height: 1.4;">{{ $lang === 'en' ? 'Support independent journalism. Subscribe today.' : ($lang === 'pb' ? 'ਨਿਰਪੱਖ ਪੱਤਰਕਾਰੀ ਦਾ ਸਮਰਥਨ ਕਰੋ। ਅੱਜ ਹੀ ਸਬਸਕ੍ਰਾਈਬ ਕਰੋ।' : 'निष्पक्ष पत्रकारिता का समर्थन करें। आज ही सदस्यता लें।') }}</p>
                 <button style="background: #fff; color: #e53e3e; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: transform 0.2s;">{{ $lang === 'en' ? 'Subscribe Now' : ($lang === 'pb' ? 'ਹੁਣੇ ਸਬਸਕ੍ਰਾਈਬ ਕਰੋ' : 'अभी सदस्यता लें') }}</button>
             </div>
@@ -723,8 +723,8 @@
         <div class="container footer-grid">
             <div class="footer-logo-col">
                 <a href="/" class="footer-logo" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                    <img src="/images/logo.png" alt="Aakash News 24" style="height: 40px; width: 40px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);" />
-                    <span style="color: #fff; font-weight: 900; font-size: 1.35rem;">AAKASH <span style="color: #e53e3e;">NEWS 24</span></span>
+                    <img src="/images/logo.png" alt="Aaksh News 24" style="height: 40px; width: 40px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);" />
+                    <span style="color: #fff; font-weight: 900; font-size: 1.35rem;">AAKSH <span style="color: #e53e3e;">NEWS 24</span></span>
                 </a>
                 <p>{{ $t['footer_tagline'] }}</p>
                 <div class="social-links">
@@ -791,7 +791,7 @@
             </div>
         </div>
         <div class="copyright-bar">
-            &copy; 2026 Aakash News 24. {{ $lang === 'en' ? 'All rights reserved.' : ($lang === 'pb' ? 'ਸਾਰੇ ਹੱਕ ਰਾਖਵੇਂ ਹਨ।' : 'सभी अधिकार सुरक्षित।') }}
+            &copy; 2026 Aaksh News 24. {{ $lang === 'en' ? 'All rights reserved.' : ($lang === 'pb' ? 'ਸਾਰੇ ਹੱਕ ਰਾਖਵੇਂ ਹਨ।' : 'सभी अधिकार सुरक्षित।') }}
         </div>
     </footer>
     <div class="sidebar-overlay" id="auth-modal-overlay" style="z-index: 999;"></div>

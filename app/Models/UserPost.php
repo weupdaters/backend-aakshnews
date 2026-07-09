@@ -27,6 +27,7 @@ class UserPost extends Model
         'content_en',
         'content_hi',
         'content_pb',
+        'is_admin_post',
     ];
 
     public function user()

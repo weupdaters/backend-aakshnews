@@ -3,20 +3,18 @@
 @section('content')
 <div class="box-heading mb-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
     <div class="box-title">
-        <h3 class="mb-35">News Articles</h3>
+        <h3 class="mb-35">Reader's Corner</h3>
+        <p class="text-muted mb-0 font-sm">Manage, approve, or reject articles submitted by readers from the frontend.</p>
     </div>
     <div class="d-flex align-items-center gap-3">
         <div class="box-breadcrumb">
             <div class="breadcrumbs">
                 <ul>
                     <li><a class="icon-home" href="/admin/dashboard">Admin</a></li>
-                    <li><span>News Articles</span></li>
+                    <li><span>Reader's Corner</span></li>
                 </ul>
             </div>
         </div>
-        <a href="/admin/post/create" class="submit-btn text-white text-decoration-none" style="background-color: var(--primary-color); padding: 10px 20px; border-radius: 8px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
-            <i data-feather="plus"></i> Publish News
-        </a>
     </div>
 </div>
 
@@ -41,9 +39,9 @@
                 <div class="panel-white mb-30">
                     <div class="box-padding">
                         <div class="panel-head d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom">
-                            <h5>All Articles</h5>
+                            <h5>Reader Submissions</h5>
                             <div class="box-search" style="width: 280px; margin: 0;">
-                                <input type="text" id="post-search-input" placeholder="Search articles..." class="form-control py-1 px-3 border rounded-3 font-sm" style="height: 34px;">
+                                <input type="text" id="post-search-input" placeholder="Search reader posts..." class="form-control py-1 px-3 border rounded-3 font-sm" style="height: 34px;">
                             </div>
                         </div>
                         <div class="row display-list" id="posts-list">
@@ -64,7 +62,7 @@
                                             <h6 class="mb-1" style="font-size: 14px; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; white-space: normal;" title="{{ $post->title }}">
                                                 {{ $post->title }}
                                             </h6>
-                                            <span class="text-muted font-xs d-block mb-1">By {{ $post->author_name }}</span>
+                                            <span class="text-muted font-xs d-block mb-1">By {{ $post->author_name ?: 'Anonymous Reader' }}</span>
                                             <span class="text-muted font-xs d-block">{{ $post->created_at->diffForHumans() }}</span>
                                         </div>
                                     </div>
@@ -73,7 +71,7 @@
                                             {{ $post->category }}
                                         </span>
                                         @if($post->status === 'published')
-                                            <span class="badge" style="background-color: #d1fae5; color: #065f46; font-size: 10px; padding: 4px 8px; border-radius: 20px; font-weight: 600;">Published</span>
+                                            <span class="badge" style="background-color: #d1fae5; color: #065f46; font-size: 10px; padding: 4px 8px; border-radius: 20px; font-weight: 600;">Approved / Published</span>
                                         @elseif($post->status === 'pending')
                                             <span class="badge" style="background-color: #fef3c7; color: #92400e; font-size: 10px; padding: 4px 8px; border-radius: 20px; font-weight: 600;">Pending</span>
                                         @elseif($post->status === 'rejected')
@@ -81,18 +79,50 @@
                                         @else
                                             <span class="badge" style="background-color: #f3f4f6; color: #374151; font-size: 10px; padding: 4px 8px; border-radius: 20px; font-weight: 600;">Hidden</span>
                                         @endif
-                                        
-                                        @if($post->is_hero)
-                                            <span class="badge" style="background-color: #fef2f2; color: #b91c1c; font-size: 10px; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Hero</span>
-                                        @endif
-                                        @if($post->is_middle_stack)
-                                            <span class="badge" style="background-color: #fffbeb; color: #b45309; font-size: 10px; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Middle Stack</span>
-                                        @endif
                                     </div>
                                     <div class="card-progress mb-3 font-xs text-muted d-flex align-items-center">
-                                        <i data-feather="eye" class="me-1" style="width: 14px; height: 14px;"></i> {{ number_format($post->views_count) }} views
+                                        <span class="d-inline-flex align-items-center me-3">
+                                            <i data-feather="eye" class="me-1" style="width: 14px; height: 14px;"></i> {{ number_format($post->views_count) }} views
+                                        </span>
+                                        @if($post->ai_status === 'approved')
+                                            <span class="text-success d-inline-flex align-items-center font-xs" title="AI Moderation Verdict: Approved">
+                                                <i data-feather="cpu" class="me-1" style="width: 14px; height: 14px;"></i> AI: Ok
+                                            </span>
+                                        @elseif($post->ai_status === 'rejected' || $post->ai_status === 'flagged')
+                                            <span class="text-danger d-inline-flex align-items-center font-xs" title="AI Moderation Verdict: Flagged/Rejected">
+                                                <i data-feather="cpu" class="me-1" style="width: 14px; height: 14px;"></i> AI: Flagged
+                                            </span>
+                                        @else
+                                            <span class="text-muted d-inline-flex align-items-center font-xs">
+                                                <i data-feather="cpu" class="me-1" style="width: 14px; height: 14px;"></i> AI: Pending
+                                            </span>
+                                        @endif
                                     </div>
+                                    
+                                    @if($post->ai_feedback)
+                                        @php
+                                            $feedback = json_decode($post->ai_feedback, true);
+                                        @endphp
+                                        @if($feedback && isset($feedback['reason']))
+                                            <div class="p-2 mb-3 rounded border font-xs text-danger" style="background-color: #fff5f5; border-color: #ffe3e3 !important; line-height: 1.3;">
+                                                <strong>AI Reason:</strong> {{ $feedback['reason'] }}
+                                            </div>
+                                        @endif
+                                    @endif
+
                                     <div class="mt-auto pt-2 border-top d-flex flex-column gap-2">
+                                        <div class="d-flex gap-2 w-100">
+                                            @if($post->status !== 'published')
+                                                <button class="btn btn-sm approve-post-btn d-inline-flex align-items-center justify-content-center flex-grow-1" data-id="{{ $post->id }}" style="background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; height: 28px; padding: 0 8px; font-size: 11px; font-weight: 600; border-radius: 4px;" title="Approve Post">
+                                                    <i data-feather="check" style="width:12px; height:12px; margin-right: 3px;"></i> Approve
+                                                </button>
+                                            @endif
+                                            @if($post->status !== 'rejected')
+                                                <button class="btn btn-sm reject-post-btn d-inline-flex align-items-center justify-content-center flex-grow-1" data-id="{{ $post->id }}" style="background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; height: 28px; padding: 0 8px; font-size: 11px; font-weight: 600; border-radius: 4px;" title="Reject Post">
+                                                    <i data-feather="x" style="width:12px; height:12px; margin-right: 3px;"></i> Reject
+                                                </button>
+                                            @endif
+                                        </div>
                                         <div class="d-flex gap-2 w-100">
                                             <a href="/admin/post/{{ $post->id }}/edit" class="btn btn-sm btn-tag d-inline-flex align-items-center justify-content-center flex-grow-1" style="background-color: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; height: 28px; padding: 0 10px; font-size: 11px; font-weight: 600; border-radius: 4px; text-decoration: none;">
                                                 <i data-feather="edit" style="width:12px; height:12px; margin-right: 3px;"></i> Edit
@@ -106,8 +136,8 @@
                             </div>
                             @empty
                             <div class="col-12 text-center py-5 text-muted">
-                                <div class="mb-2"><i data-feather="file-text" class="text-muted-light" style="width: 48px; height: 48px; opacity: 0.5;"></i></div>
-                                <p class="mb-0">No news articles found. Click "Publish News" to create one.</p>
+                                <div class="mb-2"><i data-feather="users" class="text-muted-light" style="width: 48px; height: 48px; opacity: 0.5;"></i></div>
+                                <p class="mb-0">No reader corner submissions found.</p>
                             </div>
                             @endforelse
                         </div>
@@ -132,8 +162,7 @@
         // Approve Post Handler
         $('.approve-post-btn').on('click', function() {
             var id = $(this).data('id');
-            var card = $(this).closest('.post-card-item');
-            if (confirm('Are you sure you want to approve this article?')) {
+            if (confirm('Are you sure you want to approve this reader submission?')) {
                 $.ajax({
                     url: '/api/posts/' + id + '/approve',
                     type: 'POST',
@@ -146,7 +175,7 @@
                         }
                     },
                     error: function() {
-                        alert('Failed to approve the article.');
+                        alert('Failed to approve the post.');
                     }
                 });
             }
@@ -155,8 +184,7 @@
         // Reject Post Handler
         $('.reject-post-btn').on('click', function() {
             var id = $(this).data('id');
-            var card = $(this).closest('.post-card-item');
-            if (confirm('Are you sure you want to reject this article?')) {
+            if (confirm('Are you sure you want to reject this reader submission?')) {
                 $.ajax({
                     url: '/api/posts/' + id + '/reject',
                     type: 'POST',
@@ -169,7 +197,7 @@
                         }
                     },
                     error: function() {
-                        alert('Failed to reject the article.');
+                        alert('Failed to reject the post.');
                     }
                 });
             }
@@ -179,7 +207,7 @@
         $('.delete-post-btn').on('click', function() {
             var id = $(this).data('id');
             var card = $(this).closest('.post-card-item');
-            if (confirm('Are you sure you want to delete this article?')) {
+            if (confirm('Are you sure you want to delete this reader submission?')) {
                 $.ajax({
                     url: '/api/posts/' + id,
                     type: 'DELETE',
@@ -197,13 +225,13 @@
                         }
                     },
                     error: function() {
-                        alert('Failed to delete the article.');
+                        alert('Failed to delete the post.');
                     }
                 });
             }
         });
 
-        // Search articles in card list
+        // Search reader posts in card list
         $('#post-search-input').on('keyup', function() {
             let value = $(this).val().toLowerCase();
             $('#posts-list .post-card-item').filter(function() {

@@ -103,6 +103,7 @@ Route::get('/api/user', function (Request $request) {
 });
 
 Route::get('/', function (Request $request) {
+    return redirect('http://localhost:3000/' . ($request->getQueryString() ? '?' . $request->getQueryString() : ''));
     $lang = $request->query('lang', session('lang', 'en'));
     if (!in_array($lang, ['en', 'hi', 'pb'])) {
         $lang = 'en';
@@ -295,6 +296,7 @@ Route::get('/', function (Request $request) {
                 }
             } else {
                 $filteredPostsModels = \App\Models\UserPost::where('status', 'published')
+                    ->where('is_admin_post', true)
                     ->where('category', $dbCategory)
                     ->latest()
                     ->get();
@@ -341,9 +343,11 @@ Route::get('/', function (Request $request) {
 
     // Fetch Hero Main
     $heroMainModel = \App\Models\UserPost::where('status', 'published')
+        ->where('is_admin_post', true)
         ->where('is_hero', true)
         ->latest()
         ->first() ?? \App\Models\UserPost::where('status', 'published')
+        ->where('is_admin_post', true)
         ->whereNull('video_url')
         ->latest()
         ->first();
@@ -368,6 +372,7 @@ Route::get('/', function (Request $request) {
 
     // Fetch Middle Stack (3 articles)
     $middleStackModels = \App\Models\UserPost::where('status', 'published')
+        ->where('is_admin_post', true)
         ->where('is_middle_stack', true)
         ->latest()
         ->take(3)
@@ -376,6 +381,7 @@ Route::get('/', function (Request $request) {
     if ($middleStackModels->count() < 3) {
         $excludeIds = $heroMainModel ? [$heroMainModel->id] : [];
         $extraModels = \App\Models\UserPost::where('status', 'published')
+            ->where('is_admin_post', true)
             ->whereNull('video_url')
             ->whereNotIn('id', $excludeIds)
             ->latest()
@@ -423,6 +429,7 @@ Route::get('/', function (Request $request) {
 
     // Trending and Most Read
     $trendingModels = \App\Models\UserPost::where('status', 'published')
+        ->where('is_admin_post', true)
         ->latest()
         ->take(5)
         ->get();
@@ -437,7 +444,7 @@ Route::get('/', function (Request $request) {
     if (empty($trendingNews)) {
         $trendingNews = [
             ['id' => 1, 'title' => $lang === 'en' ? "India won T20 World Cup" : ($lang === 'pb' ? "ਭਾਰਤ ਨੇ ਟੀ-20 ਵਿਸ਼ਵ ਕੱਪ ਜਿੱਤਿਆ" : "भारत ने T20 विश्व कप जीता"), 'time' => "2 घंटे पहले"],
-            ['id' => 2, 'title' => $lang === 'en' ? "Heavy rain in Mumbai" : ($lang === 'pb' ? "ਮੁੰਬਈ ਵਿੱਚ ਭਾਰੀ ਮੀਂਹ" : "मुंबई में भारी बारिश"), 'time' => "3 घंटे पहले"],
+            ['id' => 2, 'title' => $lang === 'en' ? "Heavy rain in Mumbai" : ($lang === 'pb' ? "ਮੁੰਬਈ ਵਿੱਚ ਭਾਰੀ मੀਂਹ" : "मुंबई में भारी बारिश"), 'time' => "3 घंटे पहले"],
             ['id' => 3, 'title' => $lang === 'en' ? "Stock market decline" : ($lang === 'pb' ? "ਸ਼ੇਅਰ ਬਾਜ਼ਾਰ ਵਿੱਚ ਗਿਰਾਵਟ" : "शेयर बाजार में गिरावट"), 'time' => "4 घंटे पहले"],
             ['id' => 4, 'title' => $lang === 'en' ? "Gold prices surge" : ($lang === 'pb' ? "ਸੋਨੇ ਦੀਆਂ ਕੀਮਤਾਂ ਵਿੱਚ ਉਛਾਲ" : "सोने की कीमतों में उछाल"), 'time' => "5 घंटे पहले"],
             ['id' => 5, 'title' => $lang === 'en' ? "IPL 2024 final today" : ($lang === 'pb' ? "ਆਈਪੀਐਲ 2024 ਦਾ ਫਾਈਨਲ ਅੱਜ" : "IPL 2024 का फाइनल आज"), 'time' => "6 घंटे पहले"]
@@ -445,6 +452,7 @@ Route::get('/', function (Request $request) {
     }
 
     $mostReadModels = \App\Models\UserPost::where('status', 'published')
+        ->where('is_admin_post', true)
         ->orderByDesc('views_count')
         ->take(5)
         ->get();
@@ -468,6 +476,7 @@ Route::get('/', function (Request $request) {
 
     // Latest News (non-video)
     $latestModels = \App\Models\UserPost::where('status', 'published')
+        ->where('is_admin_post', true)
         ->whereNull('video_url')
         ->latest()
         ->take(4)
@@ -508,6 +517,7 @@ Route::get('/', function (Request $request) {
     }
     
     $videoModels = \App\Models\UserPost::where('status', 'published')
+        ->where('is_admin_post', true)
         ->whereNotNull('video_url')
         ->latest()
         ->take(5)
@@ -559,6 +569,7 @@ Route::get('/', function (Request $request) {
     $categoriesNews = [];
     foreach ($categoriesList as $cat) {
         $catPosts = \App\Models\UserPost::where('status', 'published')
+            ->where('is_admin_post', true)
             ->where('category', $cat['name'])
             ->latest()
             ->take(3)
@@ -717,6 +728,7 @@ Route::get('/reader-corner', function (\Illuminate\Http\Request $request) {
 
     // Trending and Most Read
     $trendingModels = \App\Models\UserPost::where('status', 'published')
+        ->where('is_admin_post', true)
         ->latest()
         ->take(5)
         ->get();
@@ -739,6 +751,7 @@ Route::get('/reader-corner', function (\Illuminate\Http\Request $request) {
     }
 
     $mostReadModels = \App\Models\UserPost::where('status', 'published')
+        ->where('is_admin_post', true)
         ->orderByDesc('views_count')
         ->take(5)
         ->get();
@@ -833,13 +846,15 @@ Route::delete('/api/instagram-videos/{id}', function ($id) {
 Route::get('/api/posts', function (Request $request) {
     $query = \App\Models\UserPost::query();
     
-    // If not admin, only show published
     if (!Auth::check()) {
         $query->where('status', 'published');
     } else {
-        // Admin can request all status or filter by status
+        // Admin can request all status or filter by status/is_admin_post
         if ($request->has('status')) {
             $query->where('status', $request->input('status'));
+        }
+        if ($request->has('is_admin_post')) {
+            $query->where('is_admin_post', $request->boolean('is_admin_post'));
         }
     }
     
@@ -879,6 +894,11 @@ Route::post('/api/posts', function (Request $request) {
     $isMiddleStack = $request->boolean('is_middle_stack', false);
     $duration = $request->input('duration');
     $viewsCount = $request->input('views_count', 0);
+
+    $isAdminPost = $request->boolean('is_admin_post', false);
+    if (Auth::check() && $request->has('status')) {
+        $isAdminPost = true;
+    }
 
     if ($isHero) {
         \App\Models\UserPost::query()->update(['is_hero' => false]);
@@ -967,6 +987,7 @@ Route::post('/api/posts', function (Request $request) {
         'content_en' => $contentEn ?: $content,
         'content_hi' => $contentHi ?: $content,
         'content_pb' => $contentPb ?: $content,
+        'is_admin_post' => $isAdminPost,
     ]);
 
     return response()->json([
@@ -1139,8 +1160,14 @@ if (!function_exists('getYouTubeChannelVideos')) {
 }
 
 // Breaking News Routes
-Route::get('/api/breaking-news', function () {
-    return response()->json(\App\Models\BreakingNews::where('is_active', true)->latest()->get());
+Route::get('/api/breaking-news', function (\Illuminate\Http\Request $request) {
+    $lang = $request->query('lang', 'en');
+    $raw = \App\Models\BreakingNews::where('is_active', true)->latest()->get();
+    $titles = [];
+    foreach ($raw as $item) {
+        $titles[] = translateText($item->title, $lang === 'pb' ? 'pa' : $lang);
+    }
+    return response()->json($titles);
 });
 
 Route::post('/api/breaking-news', function (Request $request) {
@@ -1356,6 +1383,7 @@ Route::post('/api/posts/{id}/update', function (Request $request, $id) {
         'content_en' => $contentEn ?: $content,
         'content_hi' => $contentHi ?: $content,
         'content_pb' => $contentPb ?: $content,
+        'is_admin_post' => $request->boolean('is_admin_post', $post->is_admin_post),
     ]);
 
     return response()->json([
@@ -1411,64 +1439,148 @@ Route::get('/test-yt', function() {
     return response()->json(getYouTubeChannelVideos('en'));
 });
 
+Route::get('/api/advertisements', function() {
+    $ads = \App\Models\Advertisement::where('status', 'active')->get();
+    return response()->json($ads);
+});
+
+Route::get('/api/youtube-videos', function() {
+    $lang = request()->query('lang', 'en');
+    return response()->json(getYouTubeChannelVideos($lang));
+});
+
+if (!function_exists('getFacebookMockVideos')) {
+    function getFacebookMockVideos($lang) {
+        return [
+            [
+                'id' => 'fb_mock_1',
+                'title' => $lang === 'en' ? 'Aaksh News 24x7 Live Coverage: Special Ground Report' : ($lang === 'pb' ? 'ਆਕਸ਼ ਨਿਊਜ਼ 24x7 ਲਾਈਵ ਕਵਰੇਜ: ਵਿਸ਼ੇਸ਼ ਜ਼ਮੀਨੀ ਰਿਪੋਰਟ' : 'आकश न्यूज़ 24x7 लाइव: ग्राउंड रिपोर्ट'),
+                'time' => '1 hour ago',
+                'duration' => '05:32',
+                'image' => '/images/hero_india_gate.png',
+                'embed_url' => 'https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379986336%2F&show_text=false&t=0',
+                'url' => 'https://www.facebook.com/facebook/videos/10153231379986336/',
+                'category' => translateCategory("News", $lang)
+            ],
+            [
+                'id' => 'fb_mock_2',
+                'title' => $lang === 'en' ? 'Exclusive Interview: Key Political Developments & Analysis' : ($lang === 'pb' ? 'ਵਿਸ਼ੇਸ਼ ਇੰਟਰਵਿਊ: ਮੁੱਖ ਰਾਜਨੀਤਿਕ ਘਟਨਾਵਾਂ ਅਤੇ ਵਿਸ਼ਲੇਸ਼ਣ' : 'विशेष साक्षात्कार: प्रमुख राजनीतिक घटनाक्रम और विश्लेषण'),
+                'time' => '3 hours ago',
+                'duration' => '10:15',
+                'image' => '/images/parliament.png',
+                'embed_url' => 'https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379986336%2F&show_text=false&t=0',
+                'url' => 'https://www.facebook.com/facebook/videos/10153231379986336/',
+                'category' => translateCategory("Politics", $lang)
+            ],
+            [
+                'id' => 'fb_mock_3',
+                'title' => $lang === 'en' ? 'Ground Reality: Impact of Rain and Weather in Metro Cities' : ($lang === 'pb' ? 'ਜ਼ਮੀਨੀ ਹਕੀਕਤ: ਮਹਾਨਗਰਾਂ ਵਿੱਚ ਮੀਂਹ ਅਤੇ ਮੌਸਮ ਦਾ ਪ੍ਰਭਾਵ' : 'जमीनी हकीकत: मेट्रो शहरों में बारिश और मौसम का प्रभाव'),
+                'time' => '5 hours ago',
+                'duration' => '03:45',
+                'image' => '/images/video_delhi_rain.png',
+                'embed_url' => 'https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379986336%2F&show_text=false&t=0',
+                'url' => 'https://www.facebook.com/facebook/videos/10153231379986336/',
+                'category' => translateCategory("National", $lang)
+            ],
+            [
+                'id' => 'fb_mock_4',
+                'title' => $lang === 'en' ? 'Sports Round-up: India\'s Major Win & Post-Match Discussion' : ($lang === 'pb' ? 'ਖੇਡਾਂ ਦਾ ਦੌਰ: ਭਾਰਤ ਦੀ ਵੱਡੀ ਜਿੱਤ ਅਤੇ ਮੈਚ ਤੋਂ ਬਾਅਦ ਦੀ ਚਰਚਾ' : 'स्पोर्ट्स राउंड-अप: भारत की बड़ी जीत और मैच के बाद चर्चा'),
+                'time' => '8 hours ago',
+                'duration' => '07:20',
+                'image' => '/images/video_cricket.png',
+                'embed_url' => 'https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379986336%2F&show_text=false&t=0',
+                'url' => 'https://www.facebook.com/facebook/videos/10153231379986336/',
+                'category' => translateCategory("Sports", $lang)
+            ],
+            [
+                'id' => 'fb_mock_5',
+                'title' => $lang === 'en' ? 'Tech Talk: New Gadgets & Artificial Intelligence Innovations' : ($lang === 'pb' ? 'ਟੈਕ ਟਾਕ: ਨਵੇਂ ਗੈਜੇਟਸ ਅਤੇ ਆਰਟੀਫੀਸ਼ੀਅਲ ਇੰਟੈਲੀਜੈਂਸ ਨਵੀਨਤਾਵਾਂ' : 'टेक टॉक: नए गैजेट्स और आर्टिफिशियल इंटेलिजेंस नवाचार'),
+                'time' => '12 hours ago',
+                'duration' => '04:12',
+                'image' => '/images/ai_technology.png',
+                'embed_url' => 'https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379986336%2F&show_text=false&t=0',
+                'url' => 'https://www.facebook.com/facebook/videos/10153231379986336/',
+                'category' => translateCategory("Technology", $lang)
+            ],
+            [
+                'id' => 'fb_mock_6',
+                'title' => $lang === 'en' ? 'Business Update: Markets, Inflation & Budget Analysis' : ($lang === 'pb' ? 'ਕਾਰੋਬਾਰੀ ਅਪਡੇਟ: ਬਾਜ਼ਾਰ, ਮਹਿੰਗਾਈ ਅਤੇ ਬਜਟ ਵਿਸ਼ਲੇਸ਼ਣ' : 'बिजनेस अपडेट: बाजार, महंगाई और बजट विश्लेषण'),
+                'time' => '1 day ago',
+                'duration' => '08:30',
+                'image' => '/images/stock_market.png',
+                'embed_url' => 'https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379986336%2F&show_text=false&t=0',
+                'url' => 'https://www.facebook.com/facebook/videos/10153231379986336/',
+                'category' => translateCategory("Business", $lang)
+            ],
+            [
+                'id' => 'fb_mock_7',
+                'title' => $lang === 'en' ? 'Entertainment Desk: Movie Reviews & Celebrity Spotting' : ($lang === 'pb' ? 'ਮਨੋਰੰਜਨ ਡੈਸਕ: ਫਿਲਮ ਸਮੀਖਿਆਵਾਂ ਅਤੇ ਸੇਲਿਬ੍ਰਿਟੀ ਸਪੌਟਿੰਗ' : 'मनोरंजन डेस्क: मूवी समीक्षा और सेलिब्रिटी स्पॉटिंग'),
+                'time' => '2 days ago',
+                'duration' => '02:50',
+                'image' => '/images/salman_khan.png',
+                'embed_url' => 'https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379986336%2F&show_text=false&t=0',
+                'url' => 'https://www.facebook.com/facebook/videos/10153231379986336/',
+                'category' => translateCategory("Entertainment", $lang)
+            ],
+            [
+                'id' => 'fb_mock_8',
+                'title' => $lang === 'en' ? 'World View: Global News Highlights & Strategic Alliances' : ($lang === 'pb' ? 'ਵਿਸ਼ਵ ਦ੍ਰਿਸ਼ਟੀਕੋਣ: ਗਲੋਬਲ ਖ਼ਬਰਾਂ ਦੀਆਂ ਮੁੱਖ ਗੱਲਾਂ' : 'विश्व दृष्टिकोण: वैश्विक समाचार मुख्य अंश और रणनीतिक गठबंधन'),
+                'time' => '3 days ago',
+                'duration' => '06:15',
+                'image' => '/images/world_leaders_category.png',
+                'embed_url' => 'https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379986336%2F&show_text=false&t=0',
+                'url' => 'https://www.facebook.com/facebook/videos/10153231379986336/',
+                'category' => translateCategory("World", $lang)
+            ]
+        ];
+    }
+}
+
 if (!function_exists('getFacebookPageVideos')) {
     function getFacebookPageVideos($lang) {
         $accessToken = config('services.facebook.page_access_token');
         $pageId = config('services.facebook.page_id');
 
         if (empty($pageId) || empty($accessToken)) {
-            return [];
+            return getFacebookMockVideos($lang);
         }
 
         $cacheKey = 'facebook_videos_page_' . $pageId . '_' . $lang;
         return \Illuminate\Support\Facades\Cache::remember($cacheKey, 1800, function() use ($accessToken, $pageId, $lang) {
             try {
-                // Fetch videos uploaded to the Facebook Page
-                $url = "https://graph.facebook.com/v19.0/" . urlencode($pageId) . "/videos?fields=description,title,embed_html,source,picture,created_time,length,permalink_url&access_token=" . urlencode($accessToken);
+                // Fetch media from Facebook Page (photos and videos endpoints)
+                $photosUrl = "https://graph.facebook.com/v19.0/" . urlencode($pageId) . "/photos?fields=id,name,images,created_time,link&access_token=" . urlencode($accessToken);
+                $videosUrl = "https://graph.facebook.com/v19.0/" . urlencode($pageId) . "/videos?fields=description,title,embed_html,source,picture,created_time,length,permalink_url&access_token=" . urlencode($accessToken);
                 
-                $ch = curl_init($url);
+                $videos = [];
+                
+                // 1. Try Photos Endpoint
+                $ch = curl_init($photosUrl);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 10);
                 curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
-                $response = curl_exec($ch);
+                $resPhotos = curl_exec($ch);
                 curl_close($ch);
 
-                $videos = [];
-
-                if ($response) {
-                    $data = json_decode($response, true);
-                    if (isset($data['data']) && is_array($data['data'])) {
-                        foreach ($data['data'] as $item) {
-                            $videoId = $item['id'] ?? '';
-                            if (empty($videoId)) continue;
-
-                            $title = $item['title'] ?? ($item['description'] ?? 'Facebook Video');
-                            // Limit title length
+                if ($resPhotos) {
+                    $dataPhotos = json_decode($resPhotos, true);
+                    if (isset($dataPhotos['data']) && is_array($dataPhotos['data'])) {
+                        foreach ($dataPhotos['data'] as $item) {
+                            $photoId = $item['id'] ?? '';
+                            if (empty($photoId)) continue;
+                            $title = $item['name'] ?? 'Facebook Media';
                             $title = \Illuminate\Support\Str::limit($title, 100);
-
                             $createdTime = $item['created_time'] ?? '';
                             $timeStr = !empty($createdTime) ? \Carbon\Carbon::parse($createdTime)->diffForHumans() : 'Recently';
-
-                            $length = $item['length'] ?? 0;
-                            $duration = '00:00';
-                            if ($length > 0) {
-                                $mins = floor($length / 60);
-                                $secs = $length % 60;
-                                $duration = sprintf("%02d:%02d", $mins, $secs);
-                            }
-
-                            $thumbUrl = $item['picture'] ?? '/images/video_delhi_rain.png';
-                            $permalinkUrl = $item['permalink_url'] ?? "https://www.facebook.com/watch/?v=" . $videoId;
-
-                            // Standard embed URL for Facebook videos
-                            $embedUrl = "https://www.facebook.com/plugins/video.php?href=" . urlencode($permalinkUrl) . "&show_text=false&t=0";
-
+                            $permalinkUrl = $item['link'] ?? "https://www.facebook.com/" . $photoId;
+                            $embedUrl = "https://www.facebook.com/plugins/post.php?href=" . urlencode($permalinkUrl) . "&show_text=false";
+                            
                             $videos[] = [
-                                'id' => $videoId,
+                                'id' => $photoId,
                                 'title' => $title,
                                 'time' => $timeStr,
-                                'duration' => $duration,
-                                'image' => $thumbUrl,
+                                'duration' => 'Media',
+                                'image' => isset($item['images'][0]['source']) ? $item['images'][0]['source'] : '/images/hero_india_gate.png',
                                 'embed_url' => $embedUrl,
                                 'url' => $permalinkUrl,
                                 'category' => translateCategory("Entertainment", $lang)
@@ -1476,64 +1588,75 @@ if (!function_exists('getFacebookPageVideos')) {
                         }
                     }
                 }
+
+                // 2. Try Videos Endpoint if photos empty or supplementary
+                if (empty($videos)) {
+                    $ch = curl_init($videosUrl);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+                    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
+                    $response = curl_exec($ch);
+                    curl_close($ch);
+
+                    if ($response) {
+                        $data = json_decode($response, true);
+                        if (isset($data['data']) && is_array($data['data'])) {
+                            foreach ($data['data'] as $item) {
+                                $videoId = $item['id'] ?? '';
+                                if (empty($videoId)) continue;
+
+                                $title = $item['title'] ?? ($item['description'] ?? 'Facebook Video');
+                                $title = \Illuminate\Support\Str::limit($title, 100);
+                                $createdTime = $item['created_time'] ?? '';
+                                $timeStr = !empty($createdTime) ? \Carbon\Carbon::parse($createdTime)->diffForHumans() : 'Recently';
+
+                                $length = $item['length'] ?? 0;
+                                $duration = '00:00';
+                                if ($length > 0) {
+                                    $mins = floor($length / 60);
+                                    $secs = $length % 60;
+                                    $duration = sprintf("%02d:%02d", $mins, $secs);
+                                }
+
+                                $thumbUrl = $item['picture'] ?? '/images/video_delhi_rain.png';
+                                $permalinkUrl = $item['permalink_url'] ?? "https://www.facebook.com/watch/?v=" . $videoId;
+                                $embedUrl = "https://www.facebook.com/plugins/video.php?href=" . urlencode($permalinkUrl) . "&show_text=false&t=0";
+
+                                $videos[] = [
+                                    'id' => $videoId,
+                                    'title' => $title,
+                                    'time' => $timeStr,
+                                    'duration' => $duration,
+                                    'image' => $thumbUrl,
+                                    'embed_url' => $embedUrl,
+                                    'url' => $permalinkUrl,
+                                    'category' => translateCategory("Entertainment", $lang)
+                                ];
+                            }
+                        }
+                    }
+                }
                 
                 // If API failed or returned empty (e.g. invalid token), return high-quality mock/placeholder data so the page looks premium and functional
                 if (empty($videos)) {
-                    $videos = [
-                        [
-                            'id' => 'fb_mock_1',
-                            'title' => $lang === 'en' ? 'Aakash News 24x7 Live Coverage: Special Ground Report' : ($lang === 'pb' ? 'ਆਕਾਸ਼ ਨਿਊਜ਼ 24x7 ਲਾਈਵ ਕਵਰੇਜ: ਵਿਸ਼ੇਸ਼ ਜ਼ਮੀਨੀ ਰਿਪੋਰਟ' : 'Aakash News 24x7 Live Coverage: Special Ground Report'),
-                            'time' => '1 hour ago',
-                            'duration' => '05:32',
-                            'image' => '/images/hero_india_gate.png',
-                            'embed_url' => 'https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379986336%2F&show_text=false&t=0',
-                            'url' => 'https://www.facebook.com/facebook/videos/10153231379986336/',
-                            'category' => translateCategory("Entertainment", $lang)
-                        ],
-                        [
-                            'id' => 'fb_mock_2',
-                            'title' => $lang === 'en' ? 'Exclusive Interview with Key Regional Leaders' : ($lang === 'pb' ? 'ਮੁੱਖ ਖੇਤਰੀ ਆਗੂਆਂ ਨਾਲ ਵਿਸ਼ੇਸ਼ ਮੁਲਾਕਾਤ' : 'Exclusive Interview with Key Regional Leaders'),
-                            'time' => '3 hours ago',
-                            'duration' => '10:15',
-                            'image' => '/images/parliament.png',
-                            'embed_url' => 'https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379986336%2F&show_text=false&t=0',
-                            'url' => 'https://www.facebook.com/facebook/videos/10153231379986336/',
-                            'category' => translateCategory("Entertainment", $lang)
-                        ]
-                    ];
+                    return getFacebookMockVideos($lang);
                 }
 
-                return $videos;
+                return array_slice($videos, 0, 8);
             } catch (\Exception $e) {
                 // Return fallback data on exception as well
-                return [
-                    [
-                        'id' => 'fb_mock_1',
-                        'title' => $lang === 'en' ? 'Aakash News 24x7 Live Coverage: Special Ground Report' : ($lang === 'pb' ? 'ਆਕਾਸ਼ ਨਿਊਜ਼ 24x7 ਲਾਈਵ ਕਵਰੇਜ: ਵਿਸ਼ੇਸ਼ ਜ਼ਮੀਨੀ ਰਿਪੋਰਟ' : 'Aakash News 24x7 Live Coverage: Special Ground Report'),
-                        'time' => '1 hour ago',
-                        'duration' => '05:32',
-                        'image' => '/images/hero_india_gate.png',
-                        'embed_url' => 'https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379986336%2F&show_text=false&t=0',
-                        'url' => 'https://www.facebook.com/facebook/videos/10153231379986336/',
-                        'category' => translateCategory("Entertainment", $lang)
-                    ],
-                    [
-                        'id' => 'fb_mock_2',
-                        'title' => $lang === 'en' ? 'Exclusive Interview with Key Regional Leaders' : ($lang === 'pb' ? 'ਮੁੱਖ ਖੇਤਰੀ ਆਗੂਆਂ ਨਾਲ ਵਿਸ਼ੇਸ਼ ਮੁਲਾਕਾਤ' : 'Exclusive Interview with Key Regional Leaders'),
-                        'time' => '3 hours ago',
-                        'duration' => '10:15',
-                        'image' => '/images/parliament.png',
-                        'embed_url' => 'https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379986336%2F&show_text=false&t=0',
-                        'url' => 'https://www.facebook.com/facebook/videos/10153231379986336/',
-                        'category' => translateCategory("Entertainment", $lang)
-                    ]
-                ];
+                return getFacebookMockVideos($lang);
             }
         });
     }
 }
 
 Route::get('/test-fb', function() {
+    $lang = request()->query('lang', 'en');
+    return response()->json(getFacebookPageVideos($lang));
+});
+
+Route::get('/api/facebook-videos', function() {
     $lang = request()->query('lang', 'en');
     return response()->json(getFacebookPageVideos($lang));
 });

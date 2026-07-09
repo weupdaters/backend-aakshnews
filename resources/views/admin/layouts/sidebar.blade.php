@@ -1,7 +1,4 @@
 <div class="nav-sidebar">
-    <div class="mb-4">
-        <small class="text-uppercase text-muted font-monospace fw-bold" style="font-size: 10px; letter-spacing: 1px;">{{ $lang === 'hi' ? 'मुख्य' : ($lang === 'pb' ? 'ਮੁੱਖ' : 'Main') }}</small>
-    </div>
     <nav class="nav-main-menu">
         <ul class="main-menu">
             <li>
@@ -20,6 +17,11 @@
                 </a>
             </li>
             <li>
+                <a href="/admin/reader-corner" class="sidebar-btn {{ request()->is('admin/reader-corner*') ? 'active' : '' }}">
+                    <i data-feather="users"></i> <span class="name">{{ $t['readers_corner'] ?? "Reader's Corner" }}</span>
+                </a>
+            </li>
+            <li>
                 <a href="/admin/advertisement" class="sidebar-btn {{ request()->is('admin/advertisement*') ? 'active' : '' }}">
                     <i data-feather="tv"></i> <span class="name">{{ $t['advertisements'] ?? 'Advertisements' }}</span>
                 </a>
@@ -30,18 +32,8 @@
                 </a>
             </li>
             <li>
-                <a href="/admin/instagram" class="sidebar-btn {{ request()->is('admin/instagram*') ? 'active' : '' }}">
-                    <i data-feather="instagram"></i> <span class="name">{{ $t['instagram_reels'] ?? 'Instagram Reels' }}</span>
-                </a>
-            </li>
-            <li>
                 <a href="/admin/gallery" class="sidebar-btn {{ request()->is('admin/gallery*') ? 'active' : '' }}">
                     <i data-feather="image"></i> <span class="name">{{ $t['gallery'] ?? 'Photo Gallery' }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="/admin/dashboard#subscribers-tab" class="sidebar-btn">
-                    <i data-feather="mail"></i> <span class="name">{{ $t['subscribers'] ?? 'Subscribers' }}</span>
                 </a>
             </li>
             <li>
@@ -64,8 +56,8 @@
     <!-- Banner Card -->
     <div class="sidebar-border-bg mt-auto">
         <span class="text-grey">{{ $t['live_broadcast'] ?? 'LIVE BROADCAST' }}</span>
-        <span class="text-hiring">{{ $t['aakash_news'] ?? 'AAKASH NEWS' }}</span>
+        <span class="text-hiring">{{ $t['aaksh_news'] ?? 'AAKSH NEWS' }}</span>
         <p>{{ $t['broadcast_desc'] ?? 'Always ahead. Live coverage of national and local breaking news 24/7.' }}</p>
-        <a href="/" class="btn-paragraph-2">{{ $t['view_live_tv'] ?? 'View Live TV' }}</a>
+        <a href="http://localhost:3000/" class="btn-paragraph-2">{{ $t['view_live_tv'] ?? 'View Live TV' }}</a>
     </div>
 </div>

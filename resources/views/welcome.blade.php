@@ -19,8 +19,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="{{ $lang === 'en' ? 'Aakash News 24 - Always Ahead. English News Portal.' : ($lang === 'pb' ? 'ਆਕਾਸ਼ ਨਿਊਜ਼ 24 - ਹਮੇਸ਼ਾ ਅੱਗੇ. ਪੰਜਾਬੀ ਖ਼ਬਰਾਂ।' : 'Aakash News 24 - Always Ahead। हिंदी न्यूज़ पोर्टल।') }}">
-    <title>Aakash News 24 | Always Ahead | {{ $lang === 'en' ? 'English News Portal' : ($lang === 'pb' ? 'ਪੰਜਾਬੀ ਖ਼ਬਰ ਪੋਰਟਲ' : 'हिंदी न्यूज़ पोर्टल') }}</title>
+    <meta name="description" content="{{ $lang === 'en' ? 'Aaksh News 24 - Always Ahead. English News Portal.' : ($lang === 'pb' ? 'ਆਕਾਸ਼ ਨਿਊਜ਼ 24 - ਹਮੇਸ਼ਾ ਅੱਗੇ. ਪੰਜਾਬੀ ਖ਼ਬਰਾਂ।' : 'Aaksh News 24 - Always Ahead। हिंदी न्यूज़ पोर्टल।') }}">
+    <title>Aaksh News 24 | Always Ahead | {{ $lang === 'en' ? 'English News Portal' : ($lang === 'pb' ? 'ਪੰਜਾਬੀ ਖ਼ਬਰ ਪੋਰਟਲ' : 'हिंदी न्यूज़ पोर्टल') }}</title>
     <!-- FontAwesome for Premium Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Feather Icons -->
@@ -173,10 +173,10 @@
         <div class="container header-grid">
             <div class="logo-area">
                 <a href="/" class="logo" style="display: flex; align-items: center; gap: 10px;">
-                    <img src="{{ asset('images/logo.png') }}" alt="Aakash News 24 Logo" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 8px rgba(0,0,0,0.08); flex-shrink: 0;">
+                    <img src="{{ asset('images/logo.png') }}" alt="Aaksh News 24 Logo" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 8px rgba(0,0,0,0.08); flex-shrink: 0;">
                     <div style="display: flex; flex-direction: column; line-height: 1.1;">
                         <div style="display: flex; align-items: center;">
-                            <span style="color: #1a2b4c; font-weight: 900; font-size: 1.45rem; letter-spacing: 0.5px;">AAKASH</span>
+                            <span style="color: #1a2b4c; font-weight: 900; font-size: 1.45rem; letter-spacing: 0.5px;">AAKSH</span>
                             <span style="color: #e53e3e; font-weight: 900; font-size: 1.45rem; letter-spacing: 0.5px; margin-left: 6px;">NEWS 24</span>
                         </div>
                         <span class="tagline" style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px;">Always Ahead</span>
@@ -251,8 +251,8 @@
     <div class="mobile-sidebar" id="mobile-sidebar">
         <div class="mobile-sidebar-header">
             <a href="/" class="logo" style="display: flex; align-items: center; gap: 8px;">
-                <img src="{{ asset('images/logo.png') }}" alt="Aakash News 24" style="height: 36px; width: 36px; border-radius: 50%;" />
-                <span style="color: var(--text-main); font-weight: 900; font-size: 1.25rem;">AAKASH <span style="color: #e53e3e;">NEWS 24</span></span>
+                <img src="{{ asset('images/logo.png') }}" alt="Aaksh News 24" style="height: 36px; width: 36px; border-radius: 50%;" />
+                <span style="color: var(--text-main); font-weight: 900; font-size: 1.25rem;">AAKSH <span style="color: #e53e3e;">NEWS 24</span></span>
             </a>
             <button class="mobile-sidebar-close" id="sidebar-close">&times;</button>
         </div>
@@ -741,10 +741,10 @@
                             <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid #e4e6eb; background: #fff;">
                                 <div style="display: flex; align-items: center; gap: 10px;">
                                     <div style="width: 32px; height: 32px; border-radius: 50%; padding: 2px; background: #1877f2; display: flex; align-items: center; justify-content: center;">
-                                        <img src="{{ asset('images/logo.png') }}" alt="Aakash News 24" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #fff;">
+                                        <img src="{{ asset('images/logo.png') }}" alt="Aaksh News 24" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #fff;">
                                     </div>
                                     <div style="display: flex; flex-direction: column; line-height: 1.2;">
-                                        <span style="font-size: 0.85rem; font-weight: 700; color: #050505;">Aakash News 24</span>
+                                        <span style="font-size: 0.85rem; font-weight: 700; color: #050505;">Aaksh News 24</span>
                                         <span style="font-size: 0.72rem; color: #65676b;">Facebook Video</span>
                                     </div>
                                 </div>
@@ -1061,7 +1061,7 @@
 
             <!-- Premium Support Ad Panel -->
             <div class="sidebar-ad-card" style="margin-top: 20px; background: linear-gradient(135deg, #f53d3d, #c92222); padding: 25px; border-radius: 12px; color: #fff; text-align: center; box-shadow: 0 4px 15px rgba(229,62,62,0.2);">
-                <h4 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 8px;">AAKASH NEWS 24 Premium</h4>
+                <h4 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 8px;">AAKSH NEWS 24 Premium</h4>
                 <p style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 15px; line-height: 1.4;">Support independent journalism. Subscribe today.</p>
                 <button style="background: #fff; color: #e53e3e; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: transform 0.2s;">Subscribe Now</button>
             </div>
@@ -1376,8 +1376,8 @@
         <div class="abp-footer-top-bar">
             <div class="abp-footer-top-container">
                 <a href="/" class="abp-footer-logo">
-                    <img src="/images/logo.png" alt="Aakash News 24 Logo" class="abp-footer-logo-img">
-                    <span class="abp-footer-logo-text">AAKASH <span>NEWS 24</span></span>
+                    <img src="/images/logo.png" alt="Aaksh News 24 Logo" class="abp-footer-logo-img">
+                    <span class="abp-footer-logo-text">AAKSH <span>NEWS 24</span></span>
                 </a>
                 <div>
                     <select class="abp-footer-lang-select" onchange="window.location.href='/?lang=' + this.value">
@@ -1504,25 +1504,25 @@
                 </div>
 
                 <!-- Group websites -->
-                <div class="abp-footer-group-title">Aakash News Group Websites</div>
+                <div class="abp-footer-group-title">Aaksh News Group Websites</div>
                 <div class="abp-footer-group-links">
-                    <a href="/?lang=en">Aakash Network</a>
-                    <a href="/?lang=en">Aakash Live</a>
-                    <a href="/?lang=en">Aakash English</a>
-                    <a href="/?lang=hi">Aakash Hindi</a>
-                    <a href="/?lang=pb">Aakash Punjabi</a>
-                    <a href="/?lang=hi">Aakash Bangla</a>
-                    <a href="/?lang=hi">Aakash Marathi</a>
-                    <a href="/?lang=hi">Aakash Gujarati</a>
-                    <a href="/?lang=en">Aakash Tamil</a>
-                    <a href="/?lang=en">Aakash Kannada</a>
+                    <a href="/?lang=en">Aaksh Network</a>
+                    <a href="/?lang=en">Aaksh Live</a>
+                    <a href="/?lang=en">Aaksh English</a>
+                    <a href="/?lang=hi">Aaksh Hindi</a>
+                    <a href="/?lang=pb">Aaksh Punjabi</a>
+                    <a href="/?lang=hi">Aaksh Bangla</a>
+                    <a href="/?lang=hi">Aaksh Marathi</a>
+                    <a href="/?lang=hi">Aaksh Gujarati</a>
+                    <a href="/?lang=en">Aaksh Tamil</a>
+                    <a href="/?lang=en">Aaksh Kannada</a>
                 </div>
 
                 <!-- Info and Social row -->
                 <div class="abp-footer-info-row">
                     <div class="abp-footer-info-text">
                         This website follows the <a href="https://www.dnpa.india/" target="_blank">DNPA Code of Ethics</a>. <br>
-                        Copyright &copy; 2026 Aakash News 24. All rights reserved.
+                        Copyright &copy; 2026 Aaksh News 24. All rights reserved.
                     </div>
                     <div class="abp-footer-social">
                         <a href="https://twitter.com" target="_blank" class="abp-footer-social-btn" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
@@ -1711,8 +1711,8 @@
 
                             <div class="reel-info-overlay" style="padding-bottom: 90px;">
                                 <div class="reel-brand-header" style="display: flex; align-items: center; gap: 8px;">
-                                    <img src="/images/logo.png" alt="Aakash News 24" style="height: 24px; width: 24px; border-radius: 50%;" />
-                                    <span class="reel-brand-logo" style="font-size: 0.9rem; font-weight: 800;">AAKASH NEWS 24</span>
+                                    <img src="/images/logo.png" alt="Aaksh News 24" style="height: 24px; width: 24px; border-radius: 50%;" />
+                                    <span class="reel-brand-logo" style="font-size: 0.9rem; font-weight: 800;">AAKSH NEWS 24</span>
                                     <span class="reel-read-news-btn">खबर पढ़ें</span>
                                 </div>
                                 <h4 class="reel-title">${video.title}</h4>

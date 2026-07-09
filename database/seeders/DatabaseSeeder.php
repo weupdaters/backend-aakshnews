@@ -163,7 +163,7 @@ class DatabaseSeeder extends Seeder
                 'title' => "दिल्ली में बारिश से जलभराव",
                 'category' => "दिल्ली",
                 'image_url' => "/images/video_delhi_rain.png",
-                'video_url' => "https://www.youtube.com/shorts/5K1yN9tG4C0",
+                'video_url' => "https://www.youtube.com/watch?v=21X5lGlDOfg",
                 'duration' => "02:40",
                 'views_count' => 12000,
                 'content' => "दिल्ली में आज सुबह हुई तेज बारिश के बाद कई इलाकों में गंभीर जलभराव की समस्या पैदा हो गई है। मिंटो ब्रिज और आईटीओ के पास पानी भरने से ट्रैफिक जाम हो गया।"
@@ -172,7 +172,7 @@ class DatabaseSeeder extends Seeder
                 'title' => "भारत की शानदार जीत",
                 'category' => "खेल",
                 'image_url' => "/images/video_cricket.png",
-                'video_url' => "https://www.youtube.com/shorts/gU9c13rWwL8",
+                'video_url' => "https://www.youtube.com/watch?v=M7lc1UVf-VE",
                 'duration' => "03:10",
                 'views_count' => 18000,
                 'content' => "भारतीय क्रिकेट टीम ने एक बार फिर शानदार प्रदर्शन करते हुए जीत हासिल की। जीत के बाद देश भर में जश्न का माहौल है और कप्तान ने खिलाड़ियों की तारीफ की।"
@@ -181,7 +181,7 @@ class DatabaseSeeder extends Seeder
                 'title' => "राहुल गांधी का बड़ा बयान",
                 'category' => "राजनीति",
                 'image_url' => "/images/video_rahul.png",
-                'video_url' => "https://www.youtube.com/shorts/c0t36i2q_g0",
+                'video_url' => "https://www.youtube.com/watch?v=jfKfPfyJRdk",
                 'duration' => "01:50",
                 'views_count' => 8000,
                 'content' => "कांग्रेस नेता राहुल गांधी ने आज प्रेस कॉन्फ्रेंस में सरकार की नीतियों पर बड़ा हमला बोला और किसानों के मुद्दे पर गंभीर सवाल खड़े किए।"
@@ -190,7 +190,7 @@ class DatabaseSeeder extends Seeder
                 'title' => "नई इलेक्ट्रिक कार लॉन्च",
                 'category' => "टेक्नोलॉजी",
                 'image_url' => "/images/video_electric_car.png",
-                'video_url' => "https://www.youtube.com/shorts/kHrn-rS2b4c",
+                'video_url' => "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
                 'duration' => "02:30",
                 'views_count' => 7000,
                 'content' => "बाजार में आज एक नई इलेक्ट्रिक कार लॉन्च की गई जो सिंगल चार्ज में 500 किलोमीटर की रेंज देने का दावा करती है। इसके फीचर्स और कीमत आकर्षक हैं।"
@@ -199,7 +199,7 @@ class DatabaseSeeder extends Seeder
                 'title' => "अंतरिक्ष में भारत का कमाल",
                 'category' => "विज्ञान",
                 'image_url' => "/images/video_space.png",
-                'video_url' => "https://www.youtube.com/shorts/l5921-2Yd2s",
+                'video_url' => "https://www.youtube.com/watch?v=9Auq9mYxFEE",
                 'duration' => "02:20",
                 'views_count' => 11000,
                 'content' => "भारतीय अंतरिक्ष कार्यक्रम के तहत आज एक नया उपग्रह सफलतापूर्वक स्थापित किया गया जो देश के संचार क्षेत्र को नई ऊंचाइयों पर ले जाएगा।"
