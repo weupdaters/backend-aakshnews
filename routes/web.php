@@ -1012,14 +1012,84 @@ Route::post('/api/translate', function (Request $request) {
 if (!function_exists('translateText')) {
     function translateText($text, $targetLang) {
         if (empty($text)) return '';
-        $cacheKey = "trans_" . md5($text . "_" . $targetLang);
-        return \Illuminate\Support\Facades\Cache::remember($cacheKey, 86400, function() use ($text, $targetLang) {
+        
+        $targetLangClean = strtolower($targetLang);
+        if ($targetLangClean === 'pa') $targetLangClean = 'pb';
+
+        // 1. Language checks to avoid translating if target language matches source text format
+        // Hindi: Devanagari script
+        if ($targetLangClean === 'hi' && preg_match('/\p{Devanagari}/u', $text)) {
+            return $text;
+        }
+        // English: Pure ASCII text
+        if ($targetLangClean === 'en' && !preg_match('/[^\x00-\x7F]/', $text)) {
+            return $text;
+        }
+        // Punjabi: Gurmukhi script
+        if ($targetLangClean === 'pb' && preg_match('/\p{Gurmukhi}/u', $text)) {
+            return $text;
+        }
+
+        // 2. Static translation dictionary for seeded/common content to avoid network calls
+        $dictionary = [
+            "भारत ने T20 विश्व कप 2024 में पाकिस्तान को हराया" => [
+                'en' => "India defeated Pakistan in T20 World Cup 2024",
+                'pb' => "ਭਾਰਤ ਨੇ ਟੀ-20 ਵਿਸ਼ਵ ਕੱਪ 2024 ਵਿੱਚ ਪਾਕਿਸਤਾਨ ਨੂੰ ਹਰਾਇਆ"
+            ],
+            "मुंबई में भारी बारिश से जनजीवन प्रभावित, मौसम विभाग का रेड अलर्ट जारी" => [
+                'en' => "Heavy rain in Mumbai affects life, Meteorological Department issues red alert",
+                'pb' => "ਮੁੰਬਈ ਵਿੱਚ ਭਾਰੀ ਮੀਂਹ ਕਾਰਨ ਜਨਜੀਵਨ ਪ੍ਰਭਾਵਿਤ, ਮੌਸਮ ਵਿਭਾਗ ਵੱਲੋਂ ਰੈੱਡ ਅਲਰਟ ਜਾਰੀ"
+            ],
+            "शेयर बाजार में बड़ी गिरावट, सेंसेक्स 800 अंक नीचे गिरा" => [
+                'en' => "Major fall in stock market, Sensex drops 800 points",
+                'pb' => "ਸ਼ੇਅਰ ਬਾਜ਼ਾਰ ਵਿੱਚ ਵੱਡੀ ਗिਰਾਵਟ, ਸੈਂਸੈਕਸ 800 ਅੰਕ ਹੇਠਾਂ ਡਿੱਗਿਆ"
+            ],
+            "सोने की कीमतों में भारी उछाल, रिकॉर्ड स्तर पर पहुंचे दाम" => [
+                'en' => "Huge jump in gold prices, rates reach record high",
+                'pb' => "ਸੋਨੇ ਦੀਆਂ ਕੀਮਤਾਂ ਵਿੱਚ ਭਾਰੀ ਉਛਾਲ, ਕੀਮਤਾਂ ਰਿਕਾਰਡ ਪੱਧਰ 'ਤੇ ਪਹੁੰਚੀਆਂ"
+            ],
+            "केदारनाथ धाम" => [
+                'en' => "Kedarnath Dham",
+                'pb' => "ਕੇਦਾਰਨਾਥ ਧਾਮ"
+            ],
+            "गोवा बीच" => [
+                'en' => "Goa Beach",
+                'pb' => "ਗੋਆ ਬੀਚ"
+            ],
+            "लद्दाख यात्रा" => [
+                'en' => "Ladakh Trip",
+                'pb' => "ਲਦਾਖ ਯਾਤਰਾ"
+            ],
+            "वाराणसी घाट" => [
+                'en' => "Varanasi Ghat",
+                'pb' => "ਵਾਰਾਣਸੀ ਘਾਟ"
+            ],
+            "जयपुर सिटी पैलेस" => [
+                'en' => "Jaipur City Palace",
+                'pb' => "ਜੈਪੁਰ ਸਿਟੀ ਪੈਲੇਸ"
+            ],
+            "ताज महल" => [
+                'en' => "Taj Mahal",
+                'pb' => "ਤਾਜ ਮਹਿਲ"
+            ],
+            "हम्पी मंदिर" => [
+                'en' => "Hampi Temple",
+                'pb' => "ਹੰਪੀ ਮੰਦਰ"
+            ]
+        ];
+
+        if (isset($dictionary[$text][$targetLangClean])) {
+            return $dictionary[$text][$targetLangClean];
+        }
+
+        $cacheKey = "trans_" . md5($text . "_" . $targetLangClean);
+        return \Illuminate\Support\Facades\Cache::remember($cacheKey, 86400, function() use ($text, $targetLangClean) {
             try {
-                $url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" . $targetLang . "&dt=t&q=" . urlencode($text);
+                $url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" . $targetLangClean . "&dt=t&q=" . urlencode($text);
                 $ch = curl_init($url);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
-                curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 5); // Reduce timeout to 5s
                 $response = curl_exec($ch);
                 curl_close($ch);
                 if ($response) {
@@ -1198,8 +1268,20 @@ Route::delete('/api/breaking-news/{id}', function ($id) {
 });
 
 // Photo Gallery Routes
-Route::get('/api/photo-gallery', function () {
-    return response()->json(\App\Models\PhotoGallery::latest()->get());
+Route::get('/api/photo-gallery', function (\Illuminate\Http\Request $request) {
+    $lang = $request->query('lang', 'en');
+    $photos = \App\Models\PhotoGallery::latest()->get();
+    $translated = [];
+    foreach ($photos as $photo) {
+        $translated[] = [
+            'id' => $photo->id,
+            'name' => translateText($photo->name, $lang === 'pb' ? 'pa' : $lang),
+            'image_url' => $photo->image_url,
+            'created_at' => $photo->created_at,
+            'updated_at' => $photo->updated_at,
+        ];
+    }
+    return response()->json($translated);
 });
 
 Route::post('/api/photo-gallery', function (Request $request) {

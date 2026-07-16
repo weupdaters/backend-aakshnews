@@ -359,7 +359,13 @@
                 is_hero: $('#post-is-hero').is(':checked') ? 1 : 0,
                 is_middle_stack: $('#post-is-middle-stack').is(':checked') ? 1 : 0,
                 is_admin_post: 1,
-                content: $('#post-content').val()
+                content: $('#post-content').val(),
+                title_en: $('#post-title-en').val(),
+                title_hi: $('#post-title-hi').val(),
+                title_pb: $('#post-title-pb').val(),
+                content_en: $('#post-content-en').val(),
+                content_hi: $('#post-content-hi').val(),
+                content_pb: $('#post-content-pb').val()
             };
 
             $.post('/api/posts', payload)

@@ -72,6 +72,7 @@ class DatabaseSeeder extends Seeder
             'ai_status' => 'approved',
             'ai_feedback' => 'Seeded featured article',
             'status' => 'published',
+            'is_admin_post' => true,
             'is_hero' => true,
             'is_middle_stack' => false,
             'views_count' => 12500
@@ -108,6 +109,7 @@ class DatabaseSeeder extends Seeder
                 'image_url' => $card['image_url'],
                 'ai_status' => 'approved',
                 'status' => 'published',
+                'is_admin_post' => true,
                 'is_hero' => false,
                 'is_middle_stack' => true,
                 'views_count' => rand(1000, 9000)
@@ -151,6 +153,7 @@ class DatabaseSeeder extends Seeder
                 'image_url' => $card['image_url'],
                 'ai_status' => 'approved',
                 'status' => 'published',
+                'is_admin_post' => true,
                 'is_hero' => false,
                 'is_middle_stack' => false,
                 'views_count' => rand(500, 3000)
@@ -217,6 +220,7 @@ class DatabaseSeeder extends Seeder
                 'duration' => $card['duration'],
                 'ai_status' => 'approved',
                 'status' => 'published',
+                'is_admin_post' => true,
                 'is_hero' => false,
                 'is_middle_stack' => false,
                 'views_count' => $card['views_count']
