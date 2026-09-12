@@ -16,8 +16,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Create default admin if not exists
-        $admin = User::firstOrCreate(
+        // 1. Create default admin or update password if exists
+        $admin = User::updateOrCreate(
             ['email' => 'admin@newsportal.in'],
             [
                 'name' => 'Aakash News Admin',

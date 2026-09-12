@@ -30,6 +30,13 @@ class UserPost extends Model
         'is_admin_post',
     ];
 
+    protected $casts = [
+        'is_hero' => 'boolean',
+        'is_middle_stack' => 'boolean',
+        'is_admin_post' => 'boolean',
+        'views_count' => 'integer',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

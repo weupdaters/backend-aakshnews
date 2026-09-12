@@ -10,4 +10,8 @@ class BreakingNews extends Model
         'title',
         'is_active',
     ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 }

@@ -40,7 +40,7 @@
                 <a href="#" onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();" class="sidebar-btn text-danger">
                     <i data-feather="log-out"></i> <span class="name">{{ $t['logout'] ?? 'Logout' }}</span>
                 </a>
-                <form id="sidebar-logout-form" action="/api/logout" method="POST" style="display: none;">
+                <form id="sidebar-logout-form" action="/admin/logout" method="POST" style="display: none;">
                     @csrf
                 </form>
             </li>
@@ -58,6 +58,6 @@
         <span class="text-grey">{{ $t['live_broadcast'] ?? 'LIVE BROADCAST' }}</span>
         <span class="text-hiring">{{ $t['aaksh_news'] ?? 'AAKSH NEWS' }}</span>
         <p>{{ $t['broadcast_desc'] ?? 'Always ahead. Live coverage of national and local breaking news 24/7.' }}</p>
-        <a href="http://localhost:3000/" class="btn-paragraph-2">{{ $t['view_live_tv'] ?? 'View Live TV' }}</a>
+        <a href="/admin/dashboard" class="btn-paragraph-2">{{ $t['view_live_tv'] ?? 'View Live TV' }}</a>
     </div>
 </div>

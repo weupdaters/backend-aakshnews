@@ -148,6 +148,19 @@
             align-items: center;
             gap: 10px;
         }
+
+        .alert-custom-success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6ee7b7;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
     </style>
 </head>
 <body>
@@ -157,6 +170,13 @@
             <h2>AAKSH <span>NEWS 24</span></h2>
             <p>Admin Dashboard Portal Access</p>
         </div>
+
+        @if(session('success'))
+            <div class="alert-custom-success">
+                <i class="fas fa-check-circle"></i>
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
 
         @if(session('error'))
             <div class="alert-custom">
@@ -194,12 +214,6 @@
                 <i class="fas fa-sign-in-alt me-2"></i> Log In to Dashboard
             </button>
         </form>
-
-        <div style="text-align: center; margin-top: 25px;">
-            <a href="http://localhost:3001" style="color: #64748b; font-size: 0.85rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#cbd5e1'" onmouseout="this.style.color='#64748b'">
-                <i class="fas fa-arrow-left me-1"></i> Back to Main News Portal
-            </a>
-        </div>
     </div>
 </body>
 </html>

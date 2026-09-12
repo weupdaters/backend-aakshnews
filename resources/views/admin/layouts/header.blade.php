@@ -3,7 +3,7 @@
         <div class="main-header">
             <div class="header-left">
                 <div class="header-logo">
-                    <a href="http://localhost:3000/">
+                    <a href="/admin/dashboard">
                         <img src="{{ asset('images/logo.png') }}" alt="Aaksh News Logo">
                         <span class="brand-logo-text">AAKSH <span>NEWS 24</span></span>
                     </a>
@@ -36,7 +36,7 @@
                             <ul class="dropdown-menu" aria-labelledby="dropdownProfile">
                                 <li><a class="dropdown-item" href="/admin/dashboard">{{ $t['dashboard'] ?? 'Dashboard' }}</a></li>
                                 <li>
-                                    <form action="/api/logout" method="POST" id="logout-form" style="display:none;">
+                                    <form action="/admin/logout" method="POST" id="logout-form" style="display:none;">
                                         @csrf
                                     </form>
                                     <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ $t['logout'] ?? 'Logout' }}</a>
