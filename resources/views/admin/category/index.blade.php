@@ -52,19 +52,18 @@
                                 <div class="card-style-2 hover-up" style="flex-direction: column; align-items: stretch; height: 100%; border: 1px solid var(--border-color); background-color: var(--card-bg); padding: 20px; border-radius: 12px;">
                                     <div class="card-head" style="align-items: center; gap: 14px; margin-bottom: 15px;">
                                         <div class="card-image">
-                                            @if($category->image)
-                                                <img src="{{ asset($category->image) }}" alt="{{ $category->name }}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover;">
-                                            @else
-                                                <div class="rounded bg-light d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; border: 1px solid var(--border-color);">
-                                                    <i data-feather="image" class="text-muted" style="width: 16px; height: 16px;"></i>
-                                                </div>
-                                            @endif
+                                            <div class="rounded-3 d-flex align-items-center justify-content-center shadow-xs" style="width: 44px; height: 44px; background-color: {{ $category->color ? $category->color . '1A' : '#F1F5F9' }}; border: 1.5px solid {{ $category->color ?? '#CBD5E1' }};">
+                                                <i data-lucide="{{ $category->icon ?? 'newspaper' }}" style="width: 22px; height: 22px; color: {{ $category->color ?? '#3B82F6' }};"></i>
+                                            </div>
                                         </div>
                                         <div class="card-title">
-                                            <h6 class="mb-1" style="font-size: 14px; font-weight: 700;">
+                                            <h6 class="mb-0 font-bold" style="font-size: 14px;">
                                                 {{ $category->name }}
+                                                @if($category->name_pb)
+                                                    <span class="text-muted fw-normal" style="font-size: 12px;">({{ $category->name_pb }})</span>
+                                                @endif
                                             </h6>
-                                            <span class="font-monospace text-muted font-xs d-block">{{ $category->slug }}</span>
+                                            <span class="font-monospace text-muted font-xs d-block">{{ $category->slug }} • <code style="color: {{ $category->color ?? '#3B82F6' }};">{{ $category->icon ?? 'newspaper' }}</code></span>
                                         </div>
                                     </div>
                                     <div class="mb-3 d-flex align-items-center justify-content-between">

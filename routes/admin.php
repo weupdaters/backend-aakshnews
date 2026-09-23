@@ -51,6 +51,9 @@ Route::get('/admin/post', [PostController::class, 'index']);
 Route::get('/admin/reader-corner', [PostController::class, 'readerCorner']);
 Route::get('/admin/post/create', [PostController::class, 'create']);
 Route::get('/admin/post/{id}/edit', [PostController::class, 'edit']);
+Route::delete('/admin/post/{id}', [PostController::class, 'destroy']);
+Route::post('/admin/post/{id}/duplicate', [PostController::class, 'duplicate']);
+Route::post('/admin/post/bulk-action', [PostController::class, 'bulkAction']);
 
 // Admin Breaking News Management Routes
 Route::get('/admin/breaking-news', [BreakingNewsController::class, 'index']);
@@ -75,3 +78,25 @@ Route::post('/admin/gallery', [PhotoGalleryController::class, 'store']);
 Route::get('/admin/gallery/{id}/edit', [PhotoGalleryController::class, 'edit']);
 Route::put('/admin/gallery/{id}', [PhotoGalleryController::class, 'update']);
 Route::delete('/admin/gallery/{id}', [PhotoGalleryController::class, 'destroy']);
+
+// Admin Site & Social Media Settings Routes
+Route::get('/admin/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index']);
+Route::post('/admin/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update']);
+
+// Admin Newsletter Subscribers Route
+Route::get('/admin/subscribers', function () {
+    $subscribers = \App\Models\Subscriber::latest()->get();
+    return view('admin.subscribers.index', compact('subscribers'));
+});
+
+// Admin Reader Messages Route
+Route::get('/admin/messages', function () {
+    $messages = \App\Models\ContactMessage::latest()->get();
+    return view('admin.messages.index', compact('messages'));
+});
+
+// Admin Push Notification Broadcast Routes
+Route::get('/admin/push', [\App\Http\Controllers\Admin\PushNotificationController::class, 'index']);
+Route::post('/admin/push/send', [\App\Http\Controllers\Admin\PushNotificationController::class, 'send']);
+
+

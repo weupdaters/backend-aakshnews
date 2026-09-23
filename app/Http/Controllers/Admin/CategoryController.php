@@ -56,12 +56,16 @@ class CategoryController extends Controller
 
         Category::create([
             'name' => $request->input('name'),
+            'name_en' => $request->input('name_en') ?: $request->input('name'),
+            'name_hi' => $request->input('name_hi'),
+            'name_pb' => $request->input('name_pb'),
             'slug' => $request->input('slug'),
             'meta_title' => $request->input('meta_title'),
             'meta_desc' => $request->input('meta_desc'),
             'meta_keywords' => $request->input('meta_keywords'),
             'image' => $imagePath,
-            'color' => $request->input('color', '#000000'),
+            'color' => $request->input('color', '#3B82F6'),
+            'icon' => $request->input('icon', 'newspaper'),
             'status' => $request->input('status', 'active'),
         ]);
 
@@ -118,13 +122,17 @@ class CategoryController extends Controller
 
         $category->update([
             'name' => $request->input('name'),
+            'name_en' => $request->input('name_en') ?: $request->input('name'),
+            'name_hi' => $request->input('name_hi'),
+            'name_pb' => $request->input('name_pb'),
             'slug' => $request->input('slug'),
             'meta_title' => $request->input('meta_title'),
             'meta_desc' => $request->input('meta_desc'),
             'meta_keywords' => $request->input('meta_keywords'),
             'image' => $imagePath,
-            'color' => $request->input('color'),
-            'status' => $request->input('status'),
+            'color' => $request->input('color', $category->color),
+            'icon' => $request->input('icon', $category->icon ?? 'newspaper'),
+            'status' => $request->input('status', 'active'),
         ]);
 
         return redirect('/admin/category')->with('success', 'Category updated successfully!');

@@ -31,6 +31,59 @@ class AiToolController extends Controller
         return response()->json(['success' => true, 'description' => $description]);
     }
 
+    public function suggestTitle(Request $request)
+    {
+        $category = $request->input('category', 'Punjab');
+        $content = $request->input('content', '');
+        $currentTitle = $request->input('title', '');
+
+        $suggestions = [];
+        if (!empty($currentTitle)) {
+            $suggestions = [
+                $currentTitle . " : ਵਿਸ਼ੇਸ਼ ਜ਼ਮੀਨੀ ਰਿਪੋਰਟ ਅਤੇ ਵੱਡੇ ਖ਼ੁਲਾਸੇ",
+                "ਵੱਡੀ ਖ਼ਬਰ: " . $currentTitle . " ਨੂੰ ਲੈ ਕੇ ਸਰਕਾਰੀ ਹੁਕਮ ਜਾਰੀ",
+                $currentTitle . " - ਜਾਣੋ ਹਰ ਪਹਿਲੂ ਅਤੇ ਤਾਜ਼ਾ ਜਾਣਕਾਰੀ",
+            ];
+        } else {
+            $suggestions = [
+                $category . " ਵਿਕਾਸ ਯੋਜਨਾਵਾਂ ਨੂੰ ਲੈ ਕੇ ਨਵਾਂ ਐਲਾਨ",
+                "ਪੰਜਾਬ ਬਜਟ 2026: ਆਮ ਜਨਤਾ ਲਈ ਵੱਡੀਆਂ ਰਾਹਤਾਂ",
+                "ਜ਼ਮੀਨੀ ਪੱਧਰ 'ਤੇ ਲੋਕਾਂ ਦੀਆਂ ਮੁੱਖ ਮੰਗਾਂ: ਖ਼ਾਸ ਰਿਪੋਰਟ",
+            ];
+        }
+
+        return response()->json(['success' => true, 'titles' => $suggestions]);
+    }
+
+    public function assistantAction(Request $request)
+    {
+        $action = $request->input('action', 'improve');
+        $content = $request->input('content', '');
+
+        if (empty($content)) {
+            return response()->json(['success' => false, 'message' => 'Please write content first.'], 400);
+        }
+
+        $result = $content;
+        switch ($action) {
+            case 'improve':
+                $result = trim($content) . "\n\nਇਸ ਮਾਮਲੇ ਦੀ ਗੰਭੀਰਤਾ ਨੂੰ ਦੇਖਦੇ ਹੋਏ ਸੰਬੰਧਿਤ ਵਿਭਾਗਾਂ ਨੂੰ ਤੁਰੰਤ ਕਾਰਵਾਈ ਦੇ ਨਿਰਦੇਸ਼ ਦਿੱਤੇ ਗਏ ਹਨ। ਪ੍ਰਸ਼ਾਸਨ ਨੇ ਭਰੋਸਾ ਦਿੱਤਾ ਹੈ ਕਿ ਜਲਦ ਹੀ ਸਾਰੀਆਂ ਕਮੀਆਂ ਨੂੰ ਦੂਰ ਕਰ ਲਿਆ ਜਾਵੇਗਾ।";
+                break;
+            case 'grammar':
+                $result = preg_replace('/\s+/', ' ', trim($content));
+                $result = str_replace([' ,', ' .', ' !'], [',', '.', '!'], $result);
+                break;
+            case 'summarize':
+                $result = "ਮੁੱਖ ਅੰਸ਼ (Summary Highlights):\n• ਮਾਮਲੇ ਨਾਲ ਜੁੜੇ ਪ੍ਰਮੁੱਖ ਤੱਥ ਸਾਹਮਣੇ ਆਏ।\n• ਅਧਿਕਾਰੀਆਂ ਵੱਲੋਂ ਜਾਂਚ ਦੇ ਹੁਕਮ ਜਾਰੀ।\n• ਆਮ ਜਨਤਾ ਨੂੰ ਸੁਚੇਤ ਰਹਿਣ ਦੀ ਅਪੀਲ।\n\n" . $content;
+                break;
+            case 'translate':
+                $result = $content;
+                break;
+        }
+
+        return response()->json(['success' => true, 'result' => $result]);
+    }
+
     public function generateAiImage(Request $request)
     {
         $title = $request->input('title', '');

@@ -86,15 +86,15 @@
                                         </span>
                                         @if($post->ai_status === 'approved')
                                             <span class="text-success d-inline-flex align-items-center font-xs" title="AI Moderation Verdict: Approved">
-                                                <i data-feather="cpu" class="me-1" style="width: 14px; height: 14px;"></i> AI: Ok
+                                                <i data-lucide="sparkles" class="me-1" style="width: 14px; height: 14px;"></i> AI: Ok
                                             </span>
                                         @elseif($post->ai_status === 'rejected' || $post->ai_status === 'flagged')
                                             <span class="text-danger d-inline-flex align-items-center font-xs" title="AI Moderation Verdict: Flagged/Rejected">
-                                                <i data-feather="cpu" class="me-1" style="width: 14px; height: 14px;"></i> AI: Flagged
+                                                <i data-lucide="sparkles" class="me-1" style="width: 14px; height: 14px;"></i> AI: Flagged
                                             </span>
                                         @else
                                             <span class="text-muted d-inline-flex align-items-center font-xs">
-                                                <i data-feather="cpu" class="me-1" style="width: 14px; height: 14px;"></i> AI: Pending
+                                                <i data-lucide="sparkles" class="me-1" style="width: 14px; height: 14px;"></i> AI: Pending
                                             </span>
                                         @endif
                                     </div>

@@ -8,6 +8,9 @@ class BreakingNews extends Model
 {
     protected $fillable = [
         'title',
+        'title_en',
+        'title_hi',
+        'title_pb',
         'is_active',
     ];
 

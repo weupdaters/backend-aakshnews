@@ -8,8 +8,10 @@ use App\Http\Resources\Api\v1\ReelResource;
 use App\Http\Resources\Api\v1\VideoResource;
 use App\Models\InstagramVideo;
 use App\Models\UserPost;
+use App\Services\SocialMediaService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class MediaApiController extends Controller
 {
@@ -20,19 +22,57 @@ class MediaApiController extends Controller
      */
     public function videos(Request $request)
     {
-        $perPage = (int) $request->input('per_page', 12);
+        $lang = $request->header('X-Language', $request->input('lang', 'pa'));
+        if (!in_array($lang, ['en', 'hi', 'pa'])) {
+            $lang = 'pa';
+        }
 
-        $paginator = UserPost::where('status', 'published')
-            ->whereNotNull('video_url')
-            ->latest()
-            ->paginate($perPage);
+        $ytVideos = SocialMediaService::getYouTubeChannelVideos($lang);
 
-        $formatted = PaginationHelper::format($paginator, VideoResource::class);
+        // Fetch DB user_posts with video_url if any exist
+        $dbVideos = [];
+        try {
+            $posts = UserPost::where('status', 'published')
+                ->whereNotNull('video_url')
+                ->latest()
+                ->take(6)
+                ->get();
+            if ($posts->isNotEmpty()) {
+                $dbVideos = VideoResource::collection($posts)->resolve();
+            }
+        } catch (\Exception $e) {
+            // ignore if db error
+        }
 
-        return $this->successResponse($formatted['data'], 'Videos fetched successfully.', [
-            'links' => $formatted['links'],
-            'meta'  => $formatted['meta'],
-        ]);
+        $merged = array_merge($ytVideos, $dbVideos);
+
+        $normalized = array_map(function ($item) {
+            $v = is_array($item) ? $item : (array) $item;
+            $id = $v['id'] ?? (string) ($v['videoId'] ?? rand(100, 999));
+            $title = $v['title'] ?? 'Aaksh News Video';
+            $thumb = !empty($v['thumbnailUrl']) ? $v['thumbnailUrl'] : (!empty($v['image']) ? $v['image'] : "https://img.youtube.com/vi/{$id}/hqdefault.jpg");
+            $duration = $v['duration'] ?? '05:00';
+            $views = $v['views'] ?? '1.5K Views';
+            $publishedAt = $v['publishedAt'] ?? ($v['time'] ?? 'Recently');
+            $videoUrl = $v['videoUrl'] ?? ($v['url'] ?? "https://www.youtube.com/watch?v={$id}");
+            $embedUrl = $v['embedUrl'] ?? ($v['embed_url'] ?? "https://www.youtube.com/embed/{$id}?autoplay=1");
+            $category = $v['category'] ?? 'ਖ਼ਬਰਾਂ';
+
+            return [
+                'id'           => (string) $id,
+                'title'        => $title,
+                'slug'         => Str::slug($title) . '-' . $id,
+                'thumbnailUrl' => $thumb,
+                'duration'     => $duration,
+                'views'        => $views,
+                'publishedAt'  => $publishedAt,
+                'videoUrl'     => $videoUrl,
+                'embedUrl'     => $embedUrl,
+                'category'     => $category,
+            ];
+        }, $merged);
+
+        return $this->successResponse(array_values($normalized), 'Videos fetched successfully.');
     }
 
     /**

@@ -10,12 +10,22 @@ class CricketResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'match_title' => $this['match_title'] ?? 'India vs Australia - 3rd ODI',
-            'status'      => $this['status'] ?? 'Live',
-            'team_a'      => $this['team_a'] ?? ['name' => 'India', 'score' => '285/4 (44.2 ov)'],
-            'team_b'      => $this['team_b'] ?? ['name' => 'Australia', 'score' => '280/10 (49.5 ov)'],
-            'summary'     => $this['summary'] ?? 'India need 6 runs in 34 balls',
-            'venue'       => $this['venue'] ?? 'Wankhede Stadium, Mumbai',
+            'matchTitle'  => $this['matchTitle'] ?? ($this['match_title'] ?? 'IPL 2026 - Live'),
+            'status'      => $this['status'] ?? 'Punjab Kings won by 8 wickets',
+            'team1'       => $this['team1'] ?? [
+                'name'  => 'Punjab Kings',
+                'code'  => 'PBKS',
+                'runs'  => '186/2',
+                'overs' => '17.3',
+            ],
+            'team2'       => $this['team2'] ?? [
+                'name'  => 'Delhi Capitals',
+                'code'  => 'DC',
+                'runs'  => '155/8',
+                'overs' => '20',
+            ],
+            'resultNote'  => $this['resultNote'] ?? ($this['summary'] ?? 'Shikhar Dhawan 82* (45 balls)'),
+            'isLive'      => (bool) ($this['isLive'] ?? true),
         ];
     }
 }

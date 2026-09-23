@@ -14,41 +14,69 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Noto+Sans+Gurmukhi:wght@400;500;600;700;800&display=swap');
 
         :root {
-            --bg-color: #F8F9FC;
-            --card-bg: #FFFFFF;
-            --text-color: #4F5E74;
-            --heading-color: #05264E;
-            --border-color: #E8EDF9;
-            --header-bg: #FFFFFF;
-            --sidebar-bg: #FFFFFF;
-            --sidebar-active-bg: #F3E8FF;
-            --sidebar-active-color: #7C3AED;
-            --primary-color: #7C3AED;
-            --badge-bg: #F3E8FF;
-            --badge-color: #7C3AED;
-            --danger-color: #EF4444;
-            --success-color: #10B981;
-            --warning-color: #F59E0B;
-            --purple-color: #7C3AED;
+            /* AAKSH NEWS 24 LOGO BRAND COLOR SYSTEM */
+            --primary-color: #1769D2;       /* Royal Blue */
+            --primary-hover: #0D56B5;       /* Subtle Blue Hover */
+            --navy-deep: #062B63;           /* Deep Navy */
+            --logo-blue: #1557A6;           /* Logo Blue */
+            --cta-yellow: #FFC400;          /* Signature Yellow */
+            --cta-yellow-text: #062B63;     /* Yellow Button Text: Deep Navy */
+            --gold-accent: #F5A900;         /* Gold Accent */
+            
+            --bg-color: #F5F8FC;            /* Page Background */
+            --card-bg: #FFFFFF;            /* Card Background */
+            --text-color: #64748B;          /* Secondary Text */
+            --heading-color: #111827;       /* Primary Text / Headings */
+            --border-color: #E2E8F0;        /* Border */
+            
+            --header-bg: #FFFFFF;           /* Header White */
+            --sidebar-bg: #062B63;          /* Sidebar Deep Navy */
+            --sidebar-text: #E2E8F0;        /* Sidebar Item Text */
+            --sidebar-hover-bg: #0D56B5;    /* Sidebar Hover Subtle Blue */
+            --sidebar-active-bg: #1769D2;   /* Sidebar Active Royal Blue */
+            --sidebar-active-color: #FFFFFF;
+            --sidebar-indicator: #FFC400;   /* Active Navigation Indicator */
+            
+            --badge-bg: #EBF3FC;
+            --badge-color: #1769D2;
+            
+            /* Status Colors */
+            --success-color: #16A34A;       /* Success */
+            --danger-color: #E53935;        /* Breaking / Error */
+            --warning-color: #F59E0B;       /* Warning */
+            --info-color: #2563EB;          /* Info */
         }
 
         .dark-theme {
-            --bg-color: #0F172A;
-            --card-bg: #1E293B;
+            --primary-color: #38BDF8;
+            --primary-hover: #0284C7;
+            --navy-deep: #062B63;
+            --logo-blue: #1557A6;
+            --cta-yellow: #FFC400;
+            --cta-yellow-text: #062B63;
+            --gold-accent: #F5A900;
+
+            --bg-color: #041633;
+            --card-bg: #09214A;
             --text-color: #94A3B8;
             --heading-color: #F8FAFC;
-            --border-color: #334155;
-            --header-bg: #1E293B;
-            --sidebar-bg: #1E293B;
-            --sidebar-active-bg: #334155;
-            --sidebar-active-color: #38BDF8;
-            --primary-color: #38BDF8;
-            --badge-bg: #334155;
-            --badge-color: #E2E8F0;
-            --danger-color: #F87171;
+            --border-color: #1E3A6E;
+
+            --header-bg: #06224E;
+            --sidebar-bg: #03142F;
+            --sidebar-text: #CBD5E1;
+            --sidebar-hover-bg: #0D56B5;
+            --sidebar-active-bg: #1769D2;
+            --sidebar-active-color: #FFFFFF;
+            --sidebar-indicator: #FFC400;
+
+            --badge-bg: #0F2D62;
+            --badge-color: #60A5FA;
+
             --success-color: #4ADE80;
+            --danger-color: #F87171;
             --warning-color: #FBBF24;
-            --purple-color: #A78BFA;
+            --info-color: #60A5FA;
         }
 
         * {
@@ -317,7 +345,7 @@
         .nav-sidebar {
             width: 280px;
             background-color: var(--sidebar-bg);
-            border-right: 1px solid var(--border-color);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
             padding: 24px 16px;
             display: flex;
             flex-direction: column;
@@ -330,6 +358,13 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+        }
+
+        .sidebar-section-title {
+            color: #8EA5C8 !important;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            font-size: 11px;
         }
 
         .main-menu {
@@ -353,31 +388,48 @@
             border-radius: 8px;
             font-weight: 600;
             font-size: 14px;
-            color: var(--text-color);
+            color: var(--sidebar-text);
             text-decoration: none;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             background: transparent;
             border: none;
             width: 100%;
             text-align: left;
             cursor: pointer;
+            position: relative;
         }
 
         .main-menu li button i, .main-menu li a i {
             font-size: 16px;
             width: 20px;
             text-align: center;
-            opacity: 0.8;
+            opacity: 0.9;
+            color: inherit;
         }
 
         .main-menu li button:hover, .main-menu li a:hover {
-            background-color: var(--badge-bg);
-            color: var(--primary-color);
+            background-color: var(--sidebar-hover-bg);
+            color: #FFFFFF;
         }
 
         .main-menu li button.active, .main-menu li a.active {
             background-color: var(--sidebar-active-bg);
             color: var(--sidebar-active-color);
+            font-weight: 700;
+            box-shadow: 0 4px 14px rgba(23, 105, 210, 0.4);
+        }
+
+        /* Active navigation indicator: Signature Yellow #FFC400 */
+        .main-menu li button.active::before, .main-menu li a.active::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 6px;
+            bottom: 6px;
+            width: 4px;
+            background-color: var(--sidebar-indicator);
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 0 8px rgba(255, 196, 0, 0.6);
         }
 
         /* Profile Completed Widget */
@@ -580,12 +632,12 @@
         }
 
         /* Accent classes for images */
-        .bg-primary-light { background: rgba(60, 101, 245, 0.1); color: var(--primary-color); }
-        .bg-success-light { background: rgba(34, 197, 94, 0.1); color: var(--success-color); }
-        .bg-danger-light { background: rgba(239, 68, 68, 0.1); color: var(--danger-color); }
+        .bg-primary-light { background: rgba(23, 105, 210, 0.1); color: var(--primary-color); }
+        .bg-success-light { background: rgba(22, 163, 74, 0.1); color: var(--success-color); }
+        .bg-danger-light { background: rgba(229, 57, 53, 0.1); color: var(--danger-color); }
         .bg-warning-light { background: rgba(245, 158, 11, 0.1); color: var(--warning-color); }
-        .bg-purple-light { background: rgba(139, 92, 246, 0.1); color: var(--purple-color); }
-        .bg-info-light { background: rgba(6, 182, 212, 0.1); color: #06B6D4; }
+        .bg-purple-light { background: rgba(23, 105, 210, 0.1); color: var(--primary-color); }
+        .bg-info-light { background: rgba(37, 99, 235, 0.1); color: #2563EB; }
 
         /* Panel styles */
         .panel-white {
@@ -908,30 +960,137 @@
 
         .input-group input:focus,
         .input-group textarea:focus,
-        .input-group select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(60, 101, 245, 0.15);
-            background-color: var(--card-bg);
+        .input-group select:focus,
+        .form-control:focus {
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 3px rgba(23, 105, 210, 0.18) !important;
+            background-color: var(--card-bg) !important;
         }
 
-        .submit-btn {
-            background-color: var(--primary-color);
-            color: #FFFFFF;
+        .submit-btn, .btn-primary {
+            background-color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+            color: #FFFFFF !important;
             font-size: 13px;
             font-weight: 700;
-            padding: 12px 24px;
+            padding: 10px 22px;
             border-radius: 8px;
-            border: none;
+            border: 1px solid var(--primary-color);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            text-decoration: none;
         }
 
-        .submit-btn:hover {
-            opacity: 0.95;
+        .submit-btn:hover, .btn-primary:hover {
+            background-color: var(--primary-hover) !important;
+            border-color: var(--primary-hover) !important;
+            color: #FFFFFF !important;
             transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(23, 105, 210, 0.3);
+        }
+
+        /* Signature Yellow Publish / Important CTA Button */
+        .btn-cta-yellow, .btn-publish-yellow {
+            background-color: var(--cta-yellow) !important;
+            border: 1px solid var(--gold-accent) !important;
+            color: var(--cta-yellow-text) !important;
+            font-weight: 800 !important;
+            padding: 10px 22px !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            box-shadow: 0 2px 8px rgba(255, 196, 0, 0.3) !important;
+            text-decoration: none !important;
+        }
+
+        .btn-cta-yellow:hover, .btn-publish-yellow:hover {
+            background-color: var(--gold-accent) !important;
+            color: var(--cta-yellow-text) !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 14px rgba(245, 169, 0, 0.45) !important;
+        }
+
+        /* Links */
+        a {
+            color: var(--primary-color);
+            transition: color 0.2s ease;
+        }
+        a:hover {
+            color: var(--primary-hover);
+        }
+
+        /* ========================================================
+           UNIFIED LUCIDE ANIMATION SUITE (Backend & Frontend)
+           ======================================================== */
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        @keyframes iconWiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        @keyframes iconPulseGlow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(23, 105, 210, 0)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 6px rgba(23, 105, 210, 0.6)); }
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+        }
+
+        @keyframes lucideSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .lucide-spin {
+            animation: lucideSpin 0.9s linear infinite !important;
+            display: inline-block;
+        }
+
+        .lucide {
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), stroke 0.2s ease, filter 0.2s ease;
+            vertical-align: middle;
+        }
+
+        .sidebar-btn:hover .lucide,
+        .btn:hover .lucide,
+        .hover-up:hover .lucide {
+            transform: scale(1.18);
+        }
+
+        .icon-hover-bounce:hover,
+        .hover-up:hover .icon-hover-bounce {
+            animation: iconBounce 0.6s ease-in-out;
+        }
+
+        .icon-hover-spin:hover,
+        .hover-up:hover .icon-hover-spin {
+            transform: rotate(180deg);
+        }
+
+        .icon-wiggle-hover:hover,
+        .hover-up:hover .icon-wiggle-hover {
+            animation: iconWiggle 0.4s ease-in-out;
+        }
+
+        .icon-pulse-glow {
+            animation: iconPulseGlow 2s ease-in-out infinite;
+        }
+
+        .icon-float {
+            animation: iconFloat 3s ease-in-out infinite;
         }
     </style>
 </head>
@@ -950,8 +1109,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Feather Icons -->
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <!-- Unified Lucide Icons Library (Matches Next.js Frontend) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
         // Theme toggle logic
@@ -969,9 +1128,18 @@
             });
         }
         
-        // Render Feather Icons
-        if (typeof feather !== 'undefined') {
-            feather.replace();
+        // Auto-upgrade legacy data-feather to data-lucide so 100% of icons render in modern Lucide
+        document.querySelectorAll('[data-feather]').forEach(el => {
+            if (!el.getAttribute('data-lucide')) {
+                let name = el.getAttribute('data-feather');
+                if (name === 'grid') name = 'layout-dashboard';
+                el.setAttribute('data-lucide', name);
+            }
+        });
+
+        // Render Lucide Icons with smooth transitions
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
         }
     </script>
     @yield('scripts')

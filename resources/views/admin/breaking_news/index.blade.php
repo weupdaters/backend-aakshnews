@@ -14,7 +14,7 @@
                 </ul>
             </div>
         </div>
-        <a href="/admin/breaking-news/create" class="submit-btn text-white text-decoration-none d-inline-flex align-items-center gap-2" style="background-color: #8B5CF6; padding: 10px 20px; border-radius: 8px; font-weight: 700; box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.2);">
+        <a href="/admin/breaking-news/create" class="submit-btn text-white text-decoration-none d-inline-flex align-items-center gap-2" style="background-color: #1769D2; padding: 10px 20px; border-radius: 8px; font-weight: 700; box-shadow: 0 4px 12px rgba(23, 105, 210, 0.25);">
             <i data-feather="plus" class="me-1"></i> Add Breaking News
         </a>
     </div>

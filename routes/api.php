@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\v1\CommentApiController;
 use App\Http\Controllers\Api\v1\EngagementApiController;
 use App\Http\Controllers\Api\v1\AuthApiController;
 use App\Http\Controllers\Api\v1\UserApiController;
+use App\Http\Controllers\Api\v1\AdvertisementApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/settings', [HomeController::class, 'settings']);
     Route::get('/ads', [HomeController::class, 'ads']);
     Route::get('/social', [HomeController::class, 'social']);
+    Route::get('/facebook/posts', [HomeController::class, 'facebookPosts']);
+    Route::post('/facebook/posts', [HomeController::class, 'addFacebookPost']);
+    Route::post('/facebook/sync', [HomeController::class, 'syncFacebookPosts']);
 
     // Live Widgets
     Route::get('/live-tv', [HomeController::class, 'liveTv']);
@@ -69,6 +73,8 @@ Route::prefix('v1')->group(function () {
     // -------------------------------------------------------------
     // Categories & Articles
     // -------------------------------------------------------------
+    Route::get('/home/category-sections', [CategoryApiController::class, 'categorySections']);
+    Route::get('/category-sections', [CategoryApiController::class, 'categorySections']);
     Route::get('/categories', [CategoryApiController::class, 'index']);
     Route::get('/categories/{slug}', [CategoryApiController::class, 'show']);
     Route::get('/categories/{slug}/news', [CategoryApiController::class, 'news']);
@@ -83,12 +89,13 @@ Route::prefix('v1')->group(function () {
     Route::get('/featured', [NewsApiController::class, 'featured']);
 
     // -------------------------------------------------------------
-    // Media (Videos & Reels)
+    // Media (Videos, Reels & Advertisements)
     // -------------------------------------------------------------
     Route::get('/videos', [MediaApiController::class, 'videos']);
     Route::get('/videos/{slug}', [MediaApiController::class, 'videoShow']);
     Route::get('/reels', [MediaApiController::class, 'reels']);
     Route::get('/reels/{slug}', [MediaApiController::class, 'reelShow']);
+    Route::get('/advertisements', [AdvertisementApiController::class, 'index']);
 
     // -------------------------------------------------------------
     // Authors & Tags
@@ -112,4 +119,10 @@ Route::prefix('v1')->group(function () {
 
     // Search API
     Route::get('/search', [NewsApiController::class, 'search']);
+
+    // Push Notification APIs
+    Route::post('/push-subscribe', [\App\Http\Controllers\PushNotificationController::class, 'subscribe']);
+    Route::post('/push-unsubscribe', [\App\Http\Controllers\PushNotificationController::class, 'unsubscribe']);
+    Route::post('/send-push', [\App\Http\Controllers\PushNotificationController::class, 'sendPush']);
+    Route::get('/push/status', [\App\Http\Controllers\PushNotificationController::class, 'status']);
 });

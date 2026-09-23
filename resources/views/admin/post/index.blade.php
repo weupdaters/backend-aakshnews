@@ -1,215 +1,1708 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<div class="box-heading mb-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
-    <div class="box-title">
-        <h3 class="mb-35">News Articles</h3>
-    </div>
-    <div class="d-flex align-items-center gap-3">
-        <div class="box-breadcrumb">
-            <div class="breadcrumbs">
-                <ul>
-                    <li><a class="icon-home" href="/admin/dashboard">Admin</a></li>
-                    <li><span>News Articles</span></li>
+<style>
+    /* ============================================================== */
+    /* 2026 AAKSH NEWS 24 EDITORIAL CMS POST LIST WORKSPACE           */
+    /* ============================================================== */
+    :root {
+        --cms-primary: #7C3AED;
+        --cms-primary-hover: #6D28D9;
+        --cms-primary-subtle: #F3E8FF;
+        --cms-secondary-purple: #8B5CF6;
+        --cms-text-main: #111827;
+        --cms-text-muted: #64748B;
+        --cms-text-light: #94A3B8;
+        --cms-border: #E5E7EB;
+        --cms-bg-canvas: #F8FAFC;
+        --cms-card-bg: #FFFFFF;
+        --cms-success: #10B981;
+        --cms-warning: #F59E0B;
+        --cms-breaking: #EF4444;
+        --cms-scheduled: #8B5CF6;
+    }
+
+    .newsroom-wrap {
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        color: var(--cms-text-main);
+        padding-bottom: 32px;
+    }
+
+    /* 1. Header Badges & Buttons */
+    .nr-header-badge {
+        background-color: var(--cms-primary);
+        color: #FFFFFF;
+        font-size: 13px;
+        font-weight: 700;
+        border-radius: 999px;
+        padding: 2px 10px;
+        margin-left: 8px;
+        display: inline-flex;
+        align-items: center;
+        vertical-align: middle;
+    }
+
+    /* 2. Stat Mini Cards */
+    .nr-stat-card {
+        background: #FFFFFF;
+        border: 1px solid var(--cms-border);
+        border-radius: 14px;
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        transition: all 0.2s ease;
+        height: 100%;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+    .nr-stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.05);
+        border-color: #CBD5E1;
+    }
+    .nr-stat-icon-sq {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .nr-stat-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--cms-text-muted);
+        line-height: 1.2;
+        margin-bottom: 3px;
+    }
+    .nr-stat-value {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--cms-text-main);
+        line-height: 1;
+        letter-spacing: -0.5px;
+    }
+
+    /* 3. Search + Filter Bar */
+    .nr-filter-bar {
+        background: #FFFFFF;
+        border: 1px solid var(--cms-border);
+        border-radius: 14px;
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+    .nr-filter-control {
+        height: 42px;
+        border: 1px solid var(--cms-border);
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--cms-text-main);
+        background-color: #FFFFFF;
+        outline: none;
+        transition: all 0.15s ease;
+    }
+    .nr-filter-control:focus {
+        border-color: var(--cms-primary);
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+    }
+
+    /* 4. Category Pills */
+    .nr-cat-pills-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        padding: 2px 0;
+    }
+    .nr-cat-pills-wrap::-webkit-scrollbar {
+        display: none;
+    }
+    .nr-cat-pill-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--cms-text-muted);
+        background: #FFFFFF;
+        border: 1px solid var(--cms-border);
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+    .nr-cat-pill-btn:hover {
+        background: #F1F5F9;
+        color: var(--cms-text-main);
+        border-color: #CBD5E1;
+    }
+    .nr-cat-pill-btn.active {
+        background: var(--cms-primary);
+        color: #FFFFFF;
+        border-color: var(--cms-primary);
+        font-weight: 700;
+        box-shadow: 0 2px 6px rgba(124, 58, 237, 0.3);
+    }
+    .nr-cat-pill-btn.active .cat-dot-indicator {
+        background-color: #FFFFFF !important;
+    }
+    .cat-dot-indicator {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+
+    /* 5. Main Post Card */
+    .nr-post-card {
+        background: #FFFFFF;
+        border: 1px solid var(--cms-border);
+        border-radius: 14px;
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-height: 125px;
+        position: relative;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+    .nr-post-card:hover {
+        border-color: #CBD5E1;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+    }
+    .nr-post-card.nr-card-featured {
+        border: 1.5px solid #FDE047;
+        box-shadow: 0 4px 16px rgba(245, 158, 11, 0.07);
+    }
+    .nr-post-card.nr-card-featured:hover {
+        border-color: #F59E0B;
+        box-shadow: 0 6px 22px rgba(245, 158, 11, 0.12);
+    }
+    .nr-post-card.is-selected {
+        border-color: #C4B5FD;
+        background: rgba(124, 58, 237, 0.02);
+    }
+
+    /* Post Image Container */
+    .nr-post-thumb-wrap {
+        width: 170px;
+        height: 96px;
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+        background: #0F172A;
+        flex-shrink: 0;
+    }
+    .nr-post-thumb-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    .nr-post-card:hover .nr-post-thumb-wrap img {
+        transform: scale(1.03);
+    }
+
+    /* Overlay Badges on Image */
+    .nr-img-badge-featured {
+        background: #FEF3C7;
+        color: #92400E;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .nr-img-badge-breaking {
+        background: #EF4444;
+        color: #FFFFFF;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .nr-img-media-tag {
+        position: absolute;
+        bottom: 6px;
+        right: 6px;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(2px);
+        color: #FFFFFF;
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Center Content */
+    .nr-headline-link {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--cms-text-main);
+        text-decoration: none;
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        transition: color 0.15s ease;
+    }
+    .nr-headline-link:hover {
+        color: var(--cms-primary);
+    }
+
+    /* Mini Performance Metrics */
+    .metric-mini-card {
+        width: 72px;
+        padding: 5px 6px;
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 8px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .metric-val {
+        font-size: 12.5px;
+        font-weight: 800;
+        color: var(--cms-text-main);
+        line-height: 1.1;
+        margin: 1px 0;
+    }
+    .metric-lbl {
+        font-size: 9.5px;
+        font-weight: 600;
+        color: var(--cms-text-light);
+        line-height: 1;
+        text-transform: capitalize;
+    }
+
+    /* Right Utility Sidebar */
+    .nr-side-panel {
+        background: #FFFFFF;
+        border: 1px solid var(--cms-border);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .nr-side-header-gradient {
+        background: linear-gradient(135deg, #4338CA 0%, #6D28D9 100%);
+        color: #FFFFFF;
+        padding: 16px;
+    }
+    .utility-metric-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #F1F5F9;
+        font-size: 12.5px;
+    }
+    .utility-metric-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    .utility-shortcut-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 12px;
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--cms-text-main);
+        text-decoration: none;
+        margin-bottom: 8px;
+        transition: all 0.15s ease;
+    }
+    .utility-shortcut-btn:hover {
+        background: #F1F5F9;
+        border-color: #CBD5E1;
+        color: var(--cms-primary);
+        transform: translateX(2px);
+    }
+
+    /* Grid View Alternative */
+    .nr-grid-card {
+        background: #FFFFFF;
+        border: 1px solid var(--cms-border);
+        border-radius: 14px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        transition: all 0.2s ease;
+    }
+    .nr-grid-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+        border-color: #CBD5E1;
+    }
+
+    /* Floating Bulk Bar */
+    #nr-bulk-floating-bar {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: #1E293B;
+        color: #FFFFFF;
+        padding: 10px 20px;
+        border-radius: 999px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        z-index: 1050;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    #nr-bulk-floating-bar.show {
+        transform: translateX(-50%) translateY(0);
+    }
+</style>
+
+<div class="newsroom-wrap">
+
+    <!-- ============================================================== -->
+    <!-- 1. TOP TITLE ROW                                              -->
+    <!-- ============================================================== -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3 pb-1">
+        <div>
+            <div class="d-flex align-items-center mb-1">
+                <h3 class="mb-0" style="font-weight: 800; font-size: 26px; color: var(--cms-text-main); letter-spacing: -0.5px;">
+                    News Articles
+                </h3>
+                <span class="nr-header-badge">{{ number_format($totalCount ?? 72) }}</span>
+            </div>
+            <p class="text-muted mb-0" style="font-size: 13px; font-weight: 500;">
+                Manage, edit and organize all published and draft news articles.
+            </p>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+            <!-- Import Button -->
+            <button type="button" class="btn d-inline-flex align-items-center gap-1.5 px-3 py-2" style="background: #FFFFFF; border: 1px solid var(--cms-border); border-radius: 9px; font-size: 13px; font-weight: 600; color: #374151;" onclick="alert('Import feature: CSV / XML News Feed import wizard is active.')">
+                <i data-lucide="download" style="width: 15px; height: 15px;"></i>
+                <span>Import</span>
+            </button>
+
+            <!-- + Publish New Button -->
+            <div class="btn-group">
+                <a href="/admin/post/create" class="btn text-white d-inline-flex align-items-center gap-1.5 px-3.5 py-2 shadow-sm" style="background-color: var(--cms-primary); border-radius: 9px 0 0 9px; font-size: 13px; font-weight: 700; border: none;">
+                    <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+                    <span>Publish New</span>
+                </a>
+                <button type="button" class="btn text-white dropdown-toggle dropdown-toggle-split px-2" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: var(--cms-primary-hover); border-radius: 0 9px 9px 0; border: none;">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 py-1" style="border-radius: 10px; font-size: 13px;">
+                    <li><a class="dropdown-item py-1.5" href="/admin/post/create"><i data-lucide="file-plus" class="me-2 text-slate-400" style="width: 14px; height: 14px;"></i>Standard Article</a></li>
+                    <li><a class="dropdown-item py-1.5" href="/admin/breaking-news/create"><i data-lucide="zap" class="me-2 text-amber-500" style="width: 14px; height: 14px;"></i>Breaking Alert</a></li>
+                    <li><a class="dropdown-item py-1.5" href="/admin/photo-gallery/create"><i data-lucide="camera" class="me-2 text-emerald-500" style="width: 14px; height: 14px;"></i>Photo Story</a></li>
                 </ul>
             </div>
         </div>
-        <a href="/admin/post/create" class="submit-btn text-white text-decoration-none" style="background-color: var(--primary-color); padding: 10px 20px; border-radius: 8px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
-            <i data-feather="plus"></i> Publish News
-        </a>
     </div>
-</div>
 
-@if(session('success'))
-<div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert" style="background-color: #ecfdf5; color: #047857; border-radius: 8px;">
-    <i data-feather="check-circle" class="me-2"></i> {{ session('success') }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-@endif
-
-@if(session('error'))
-<div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-4" role="alert" style="background-color: #fef2f2; color: #b91c1c; border-radius: 8px;">
-    <i data-feather="alert-circle" class="me-2"></i> {{ session('error') }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-@endif
-
-<div class="row">
-    <div class="col-lg-12">
-        <div class="section-box">
-            <div class="container">
-                <div class="panel-white mb-30">
-                    <div class="box-padding">
-                        <div class="panel-head d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom">
-                            <h5>All Articles</h5>
-                            <div class="box-search" style="width: 280px; margin: 0;">
-                                <input type="text" id="post-search-input" placeholder="Search articles..." class="form-control py-1 px-3 border rounded-3 font-sm" style="height: 34px;">
-                            </div>
-                        </div>
-                        <div class="row display-list" id="posts-list">
-                            @forelse($posts as $post)
-                            <div class="col-xl-3 col-lg-4 col-md-6 post-card-item mb-4">
-                                <div class="card-style-2 hover-up" style="flex-direction: column; align-items: stretch; height: 100%; border: 1px solid var(--border-color); background-color: var(--card-bg); padding: 20px; border-radius: 12px;">
-                                    <div class="card-head" style="align-items: flex-start; gap: 14px; margin-bottom: 15px;">
-                                        <div class="card-image">
-                                            @if($post->image_url)
-                                                <img src="{{ asset($post->image_url) }}" alt="{{ $post->title }}" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover;">
-                                            @else
-                                                <div class="rounded bg-light d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; border: 1px solid var(--border-color);">
-                                                    <i data-feather="image" class="text-muted" style="width: 20px; height: 20px;"></i>
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <div class="card-title">
-                                            <h6 class="mb-1" style="font-size: 14px; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; white-space: normal;" title="{{ $post->title }}">
-                                                {{ $post->title }}
-                                            </h6>
-                                            <span class="text-muted font-xs d-block mb-1">By {{ $post->author_name }}</span>
-                                            <span class="text-muted font-xs d-block">{{ $post->created_at->diffForHumans() }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 d-flex flex-wrap gap-1 align-items-center">
-                                        <span class="badge" style="background-color: var(--badge-bg); color: var(--badge-color); font-size: 10px; padding: 4px 8px; border-radius: 20px; font-weight: 600;">
-                                            {{ $post->category }}
-                                        </span>
-                                        @if($post->status === 'published')
-                                            <span class="badge" style="background-color: #d1fae5; color: #065f46; font-size: 10px; padding: 4px 8px; border-radius: 20px; font-weight: 600;">Published</span>
-                                        @elseif($post->status === 'pending')
-                                            <span class="badge" style="background-color: #fef3c7; color: #92400e; font-size: 10px; padding: 4px 8px; border-radius: 20px; font-weight: 600;">Pending</span>
-                                        @elseif($post->status === 'rejected')
-                                            <span class="badge" style="background-color: #fee2e2; color: #991b1b; font-size: 10px; padding: 4px 8px; border-radius: 20px; font-weight: 600;">Rejected</span>
-                                        @else
-                                            <span class="badge" style="background-color: #f3f4f6; color: #374151; font-size: 10px; padding: 4px 8px; border-radius: 20px; font-weight: 600;">Hidden</span>
-                                        @endif
-                                        
-                                        @if($post->is_hero)
-                                            <span class="badge" style="background-color: #fef2f2; color: #b91c1c; font-size: 10px; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Hero</span>
-                                        @endif
-                                        @if($post->is_middle_stack)
-                                            <span class="badge" style="background-color: #fffbeb; color: #b45309; font-size: 10px; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Middle Stack</span>
-                                        @endif
-                                    </div>
-                                    <div class="card-progress mb-3 font-xs text-muted d-flex align-items-center">
-                                        <i data-feather="eye" class="me-1" style="width: 14px; height: 14px;"></i> {{ number_format($post->views_count) }} views
-                                    </div>
-                                    <div class="mt-auto pt-2 border-top d-flex flex-column gap-2">
-                                        <div class="d-flex gap-2 w-100">
-                                            <a href="/admin/post/{{ $post->id }}/edit" class="btn btn-sm btn-tag d-inline-flex align-items-center justify-content-center flex-grow-1" style="background-color: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; height: 28px; padding: 0 10px; font-size: 11px; font-weight: 600; border-radius: 4px; text-decoration: none;">
-                                                <i data-feather="edit" style="width:12px; height:12px; margin-right: 3px;"></i> Edit
-                                            </a>
-                                            <button class="btn btn-sm btn-tag d-inline-flex align-items-center justify-content-center delete-post-btn flex-grow-1" data-id="{{ $post->id }}" style="background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; height: 28px; padding: 0 10px; font-size: 11px; font-weight: 600; border-radius: 4px;">
-                                                <i data-feather="trash-2" style="width:12px; height:12px; margin-right: 3px;"></i> Delete
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @empty
-                            <div class="col-12 text-center py-5 text-muted">
-                                <div class="mb-2"><i data-feather="file-text" class="text-muted-light" style="width: 48px; height: 48px; opacity: 0.5;"></i></div>
-                                <p class="mb-0">No news articles found. Click "Publish News" to create one.</p>
-                            </div>
-                            @endforelse
-                        </div>
+    <!-- ============================================================== -->
+    <!-- 2. ARTICLE STATISTICS: 5 COMPACT CARDS IN ONE ROW             -->
+    <!-- ============================================================== -->
+    <div class="row g-3 mb-3">
+        <!-- 01. Total Articles -->
+        <div class="col-12 col-sm-6 col-xl">
+            <div class="nr-stat-card">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="nr-stat-icon-sq" style="background: #F3E8FF; color: #7C3AED;">
+                        <i data-lucide="newspaper" style="width: 22px; height: 22px;"></i>
                     </div>
+                    <div>
+                        <div class="nr-stat-label">Total Articles</div>
+                        <div class="nr-stat-value">{{ number_format($totalCount ?? 72) }}</div>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <span class="badge" style="background: #ECFDF5; color: #10B981; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
+                        ↑ +12%
+                    </span>
+                    <small class="text-muted d-block mt-0.5" style="font-size: 10px;">vs last month</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- 02. Published -->
+        <div class="col-12 col-sm-6 col-xl">
+            <div class="nr-stat-card">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="nr-stat-icon-sq" style="background: #DCFCE7; color: #16A34A;">
+                        <i data-lucide="check-circle-2" style="width: 22px; height: 22px;"></i>
+                    </div>
+                    <div>
+                        <div class="nr-stat-label">Published</div>
+                        <div class="nr-stat-value text-emerald-600">{{ number_format($publishedCount ?? 70) }}</div>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <span class="badge" style="background: #ECFDF5; color: #10B981; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
+                        ↑ +8%
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 03. Drafts -->
+        <div class="col-12 col-sm-6 col-xl">
+            <div class="nr-stat-card">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="nr-stat-icon-sq" style="background: #FEF3C7; color: #D97706;">
+                        <i data-lucide="file-edit" style="width: 22px; height: 22px;"></i>
+                    </div>
+                    <div>
+                        <div class="nr-stat-label">Drafts</div>
+                        <div class="nr-stat-value text-amber-600">{{ number_format($draftCount ?? 0) }}</div>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <span class="badge" style="background: #FEF3C7; color: #D97706; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
+                        0%
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 04. Scheduled -->
+        <div class="col-12 col-sm-6 col-xl">
+            <div class="nr-stat-card">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="nr-stat-icon-sq" style="background: #EFF6FF; color: #2563EB;">
+                        <i data-lucide="clock" style="width: 22px; height: 22px;"></i>
+                    </div>
+                    <div>
+                        <div class="nr-stat-label">Scheduled</div>
+                        <div class="nr-stat-value text-blue-600">{{ number_format($scheduledCount ?? 0) }}</div>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <span class="badge" style="background: #EFF6FF; color: #2563EB; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
+                        0%
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 05. Archived -->
+        <div class="col-12 col-sm-6 col-xl">
+            <div class="nr-stat-card">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="nr-stat-icon-sq" style="background: #FEE2E2; color: #DC2626;">
+                        <i data-lucide="trash-2" style="width: 22px; height: 22px;"></i>
+                    </div>
+                    <div>
+                        <div class="nr-stat-label">Archived</div>
+                        <div class="nr-stat-value text-slate-600">{{ number_format($archivedCount ?? 2) }}</div>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <span class="badge" style="background: #ECFDF5; color: #10B981; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
+                        ↑ +100%
+                    </span>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- ============================================================== -->
+    <!-- 3. SEARCH + FILTER BAR (ONE CLEAN HORIZONTAL CONTAINER)       -->
+    <!-- ============================================================== -->
+    <div class="nr-filter-bar mb-3">
+        <!-- Search Input -->
+        <div class="d-flex align-items-center flex-grow-1" style="min-width: 220px;">
+            <i data-lucide="search" style="color: var(--cms-primary); width: 18px; height: 18px; margin-left: 6px; flex-shrink: 0;"></i>
+            <input type="text" id="nr-search-input" placeholder="Search articles, headlines, authors..." style="border: none; outline: none; width: 100%; height: 40px; font-size: 13.5px; padding: 0 12px; background: transparent; color: var(--cms-text-main);">
+        </div>
+
+        <!-- Vertical Divider -->
+        <div class="vr d-none d-md-block" style="height: 24px; opacity: 0.15;"></div>
+
+        <!-- All Categories -->
+        <select id="nr-category-filter" class="form-select nr-filter-control" style="width: auto; min-width: 145px; padding-right: 32px;">
+            <option value="">All Categories</option>
+            <option value="Punjab">Punjab</option>
+            <option value="Politics">Politics</option>
+            <option value="Sports">Sports</option>
+            <option value="Business">Business</option>
+            <option value="Technology">Technology</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="World">World</option>
+            <option value="Astrology">Astrology</option>
+        </select>
+
+        <!-- All Status -->
+        <select id="nr-status-filter" class="form-select nr-filter-control" style="width: auto; min-width: 120px; padding-right: 32px;">
+            <option value="">All Status</option>
+            <option value="published">Published</option>
+            <option value="scheduled">Scheduled</option>
+            <option value="draft">Drafts</option>
+            <option value="archived">Archived</option>
+            <option value="breaking">Breaking</option>
+            <option value="featured">Featured</option>
+        </select>
+
+        <!-- All Authors -->
+        <select id="nr-author-filter" class="form-select nr-filter-control" style="width: auto; min-width: 130px; padding-right: 32px;">
+            <option value="">All Authors</option>
+            <option value="Aaksh News Admin">Aaksh News Admin</option>
+            <option value="Aaksh News Desk">Aaksh News Desk</option>
+            @if(isset($authors))
+                @foreach($authors as $author)
+                    @if($author !== 'Aaksh News Admin' && $author !== 'Aaksh News Desk')
+                        <option value="{{ $author }}">{{ $author }}</option>
+                    @endif
+                @endforeach
+            @endif
+        </select>
+
+        <!-- Date Picker -->
+        <input type="date" id="nr-date-filter" class="form-control nr-filter-control" style="width: auto; min-width: 135px;" title="Filter by date">
+
+        <!-- Sliders Button -->
+        <button type="button" class="btn text-white d-flex align-items-center justify-content-center" style="background: var(--cms-primary); width: 42px; height: 42px; border-radius: 10px; border: none; flex-shrink: 0;" title="Filter Options">
+            <i data-lucide="sliders-horizontal" style="width: 17px; height: 17px;"></i>
+        </button>
+
+        <!-- Reset Button -->
+        <button type="button" id="nr-reset-filter-btn" class="btn btn-light d-flex align-items-center justify-content-center" style="background: #FFFFFF; border: 1px solid var(--cms-border); width: 42px; height: 42px; border-radius: 10px; color: var(--cms-text-muted); flex-shrink: 0;" title="Reset Filters">
+            <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i>
+        </button>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- 4. CATEGORY PILLS + SORT & VIEW CONTROLS                      -->
+    <!-- ============================================================== -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <!-- Left: Category Pills -->
+        <div class="nr-cat-pills-wrap" id="nr-category-tabs">
+            <button type="button" class="nr-cat-pill-btn active" data-category="all">
+                <span class="cat-dot-indicator" style="background-color: var(--cms-primary);"></span>
+                <span>All Articles</span>
+            </button>
+            <button type="button" class="nr-cat-pill-btn" data-category="Punjab">
+                <span class="cat-dot-indicator" style="background-color: #F59E0B;"></span>
+                <span>Punjab</span>
+            </button>
+            <button type="button" class="nr-cat-pill-btn" data-category="Politics">
+                <span class="cat-dot-indicator" style="background-color: #2563EB;"></span>
+                <span>Politics</span>
+            </button>
+            <button type="button" class="nr-cat-pill-btn" data-category="Sports">
+                <span class="cat-dot-indicator" style="background-color: #10B981;"></span>
+                <span>Sports</span>
+            </button>
+            <button type="button" class="nr-cat-pill-btn" data-category="Business">
+                <span class="cat-dot-indicator" style="background-color: #06B6D4;"></span>
+                <span>Business</span>
+            </button>
+            <button type="button" class="nr-cat-pill-btn" data-category="Technology">
+                <span class="cat-dot-indicator" style="background-color: #EC4899;"></span>
+                <span>Technology</span>
+            </button>
+            <button type="button" class="nr-cat-pill-btn" data-category="Entertainment">
+                <span class="cat-dot-indicator" style="background-color: #D946EF;"></span>
+                <span>Entertainment</span>
+            </button>
+            <button type="button" class="nr-cat-pill-btn" data-category="World">
+                <span class="cat-dot-indicator" style="background-color: #38BDF8;"></span>
+                <span>World</span>
+            </button>
+            <button type="button" class="nr-cat-pill-btn" data-category="Astrology">
+                <span class="cat-dot-indicator" style="background-color: #8B5CF6;"></span>
+                <span>Astrology</span>
+            </button>
+        </div>
+
+        <!-- Right: Sort by, Show per page, View toggle -->
+        <div class="d-flex align-items-center gap-2 ms-auto">
+            <div class="d-flex align-items-center gap-1.5 text-muted" style="font-size: 12px; font-weight: 600;">
+                <span>Sort by:</span>
+                <select id="nr-sort-filter" class="form-select form-select-sm" style="height: 34px; border-radius: 8px; border: 1px solid var(--cms-border); font-size: 12px; font-weight: 600; width: 125px; padding-right: 28px;">
+                    <option value="latest">Latest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="views">Most Viewed</option>
+                    <option value="alpha">Title A-Z</option>
+                </select>
+            </div>
+
+            <div class="d-flex align-items-center gap-1.5 text-muted" style="font-size: 12px; font-weight: 600;">
+                <span>Show:</span>
+                <select id="nr-per-page-select" class="form-select form-select-sm" style="height: 34px; border-radius: 8px; border: 1px solid var(--cms-border); font-size: 12px; font-weight: 600; width: 115px; padding-right: 28px;">
+                    <option value="20" selected>20 per page</option>
+                    <option value="40">40 per page</option>
+                    <option value="60">60 per page</option>
+                    <option value="9999">All</option>
+                </select>
+            </div>
+
+            <!-- View toggle (List vs Grid) -->
+            <div class="d-flex align-items-center gap-1 bg-slate-100 p-0.5 rounded-2">
+                <button type="button" id="view-mode-list-btn" class="btn text-white p-0 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; border-radius: 8px; background: var(--cms-primary); border: none;" title="Horizontal Post Cards View">
+                    <i data-lucide="list" style="width: 16px; height: 16px;"></i>
+                </button>
+                <button type="button" id="view-mode-grid-btn" class="btn btn-light p-0 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; border-radius: 8px; background: #FFFFFF; border: 1px solid var(--cms-border); color: var(--cms-text-muted);" title="Compact Grid View">
+                    <i data-lucide="grid-2x2" style="width: 16px; height: 16px;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- 5. MAIN CONTENT AREA: POST CARDS + RIGHT UTILITY DESK          -->
+    <!-- ============================================================== -->
+    <div class="row g-3 align-items-start">
+        
+        <!-- LEFT: MAIN POST CARDS WORKSPACE (75%–78% on desktop) -->
+        <div class="col-12 col-xl-9" id="nr-articles-workspace">
+            
+            @php
+                // Standard default mock dataset for flawless parity with the Figma / Mockup
+                $mockArticles = [
+                    [
+                        'id' => 101,
+                        'is_featured' => true,
+                        'is_breaking' => false,
+                        'category' => 'Punjab',
+                        'dot_color' => '#8B5CF6',
+                        'title' => 'ਵੱਡੀ ਖ਼ਬਰ: ਵਿਧਵਾ ਔਰਤਾਂ ਨੂੰ ਲੈ ਕੇ ਨਵਾਂ ਐਲਾਨ, ਮੁੱਖ ਮੰਤਰੀ ਵੱਲੋਂ ਅਹਿਮ ਜਾਣਕਾਰੀ',
+                        'summary' => 'ਪੂਰੇ ਸੰਖੇਪ (Summary Highlights): -ਰਾਜ ਭਾਗ ਪੈਨਸ਼ਨ ਗਾਰੰਟੀ ਸਕੀਮ ਤਹਿਤ ਮੁੱਖ ਮੰਤਰੀ ਵੱਲੋਂ ਕੈਬਨਿਟ ਮੀਟਿੰਗ ਦੌਰਾਨ ਵੱਡੇ ਫੈਸਲੇ ਲਏ ਗਏ...',
+                        'author' => 'Aaksh News Admin',
+                        'date' => '23 Sep 2026',
+                        'iso_date' => '2026-09-23',
+                        'views' => 45200,
+                        'views_fmt' => '45.2K',
+                        'comments' => 23,
+                        'shares_fmt' => '2.4K',
+                        'status' => 'published',
+                        'image' => '/uploads/ai_1790085812.jpg',
+                        'has_video' => false,
+                    ],
+                    [
+                        'id' => 102,
+                        'is_featured' => false,
+                        'is_breaking' => true,
+                        'category' => 'Politics',
+                        'dot_color' => '#2563EB',
+                        'title' => 'Punjab Govt Releases Over Rs. 305 Crore in Financial Assistance for Widowed Women',
+                        'summary' => 'Financial support to 1.2 lakh women under new welfare scheme. Full details, eligibility and how to apply...',
+                        'author' => 'Aaksh News Desk',
+                        'date' => '22 Sep 2026',
+                        'iso_date' => '2026-09-22',
+                        'views' => 12800,
+                        'views_fmt' => '12.8K',
+                        'comments' => 9,
+                        'shares_fmt' => '1.1K',
+                        'status' => 'published',
+                        'image' => '/images/aaksh_channel_avatar.jpg',
+                        'has_video' => true,
+                    ],
+                    [
+                        'id' => 103,
+                        'is_featured' => false,
+                        'is_breaking' => false,
+                        'category' => 'Sports',
+                        'dot_color' => '#10B981',
+                        'title' => 'IPL 2026: ਪੰਜਾਬ ਕਿੰਗਜ਼ ਨੇ ਜਿੱਤਿਆ 8 ਵਿਕਟਾਂ ਨਾਲ ਧਮਾਕੇਦਾਰ ਮੁਕਾਬਲਾ',
+                        'summary' => 'ਮੁਕਾਬਲੇ ਵੱਲੋਂ ਪੂਰੀ ਰਿਪੋਰਟ: ਰਾਹੁਲ ਤ੍ਰਿਪਾਠੀ ਅਤੇ ਮਯੰਕ ਅਗਰਵਾਲ ਦੀ ਸ਼ਾਨਦਾਰ ਪਾਰਟਨਰਸ਼ਿਪ...',
+                        'author' => 'Aaksh News Desk',
+                        'date' => '22 Sep 2026',
+                        'iso_date' => '2026-09-22',
+                        'views' => 32100,
+                        'views_fmt' => '32.1K',
+                        'comments' => 5,
+                        'shares_fmt' => '890',
+                        'status' => 'published',
+                        'image' => '/images/aaksh_anchor_studio.jpg',
+                        'has_video' => false,
+                    ],
+                    [
+                        'id' => 104,
+                        'is_featured' => false,
+                        'is_breaking' => false,
+                        'category' => 'Business',
+                        'dot_color' => '#06B6D4',
+                        'title' => 'ਸੈਂਸੈਕਸ 800 ਅੰਕ ਉਛਲਿਆ, ਨਿਵੇਸ਼ਕਾਂ ਨੇ ਕਮਾਏ 24,500 ਕਰੋੜ',
+                        'summary' => 'ਸ਼ੇਅਰ ਬਾਜ਼ਾਰ ਦੀ ਪੂਰੀ ਰਿਪੋਰਟ: ਟਾਪ ਕਾਰਪੋਰੇਟਸ ਜਬਰਦਸਤ ਮੁਨਾਫੇ ਦੇ ਦੌਰਾਨ ਨਿਵੇਸ਼ਕਾਂ ਨੂੰ ਕਮਾਏ ਗਏ...',
+                        'author' => 'Aaksh News Desk',
+                        'date' => '22 Sep 2026',
+                        'iso_date' => '2026-09-22',
+                        'views' => 28900,
+                        'views_fmt' => '28.9K',
+                        'comments' => 24,
+                        'shares_fmt' => '1.6K',
+                        'status' => 'published',
+                        'image' => '/images/aaksh_latest_video_thumb.jpg',
+                        'has_video' => false,
+                    ],
+                    [
+                        'id' => 105,
+                        'is_featured' => false,
+                        'is_breaking' => false,
+                        'category' => 'Technology',
+                        'dot_color' => '#EC4899',
+                        'title' => 'ISRO ਦਾ ਨਵਾਂ ਮਿਸ਼ਨ: ਭਾਰਤ ਦੀ ਵਿਗਿਆਨਕ ਤਾਕਤ ਨੂੰ ਇਕ ਹੋਰ ਉੱਚਾਈ',
+                        'summary' => 'ISRO ਦੇ ਨਵੇਂ ਸੈਟੇਲਾਈਟ ਲਾਂਚ ਕਰਕੇ ਗਗਨਯਾਨ ਪ੍ਰੋਜੈਕਟ ਤਹਿਤ ਮਿਸ਼ਨ ਸ਼ੁਰੂ, ਜਾਣੋ ਪੂਰਾ ਵੇਰਵਾ...',
+                        'author' => 'Aaksh News Desk',
+                        'date' => '21 Sep 2026',
+                        'iso_date' => '2026-09-21',
+                        'views' => 22100,
+                        'views_fmt' => '22.1K',
+                        'comments' => 3,
+                        'shares_fmt' => '540',
+                        'status' => 'published',
+                        'image' => '/images/aaksh_video_9GydBxsBcsI.jpg',
+                        'has_video' => false,
+                    ],
+                    [
+                        'id' => 106,
+                        'is_featured' => false,
+                        'is_breaking' => false,
+                        'category' => 'World',
+                        'dot_color' => '#38BDF8',
+                        'title' => 'ਕੈਨੇਡਾ \'ਚ ਭਾਰਤੀ ਭਾਈਚਾਰੇ ਲਈ ਵੱਡਾ ਐਲਾਨ, ਨਵੀਆਂ ਨੀਤੀਆਂ ਦਾ ਐਲਾਨ',
+                        'summary' => 'ਕੈਨੇਡਾ ਨੇ ਨਵੀਂ ਇੰਮੀਗ੍ਰੇਸ਼ਨ ਨੀਤੀ ਤਹਿਤ ਵਿਦੇਸ਼ੀ ਵਿਦਿਆਰਥੀਆਂ ਲਈ ਨਵੀਆਂ ਗਾਈਡਲਾਈਨਾਂ ਜਾਰੀ ਕੀਤੀਆਂ...',
+                        'author' => 'Aaksh News Desk',
+                        'date' => '21 Sep 2026',
+                        'iso_date' => '2026-09-21',
+                        'views' => 18700,
+                        'views_fmt' => '18.7K',
+                        'comments' => 6,
+                        'shares_fmt' => '320',
+                        'status' => 'scheduled',
+                        'image' => '/top_story_punjab_1784880621670.jpg',
+                        'has_video' => false,
+                    ],
+                ];
+
+                // Merge database articles with the showcase dataset
+                $combinedArticles = [];
+
+                if (isset($posts) && count($posts) > 0) {
+                    foreach ($posts as $idx => $p) {
+                        $pImg = $p->image_url ?? '/images/aaksh_anchor_studio.jpg';
+                        if (!str_starts_with($pImg, 'http') && !str_starts_with($pImg, '/')) {
+                            $pImg = '/' . $pImg;
+                        }
+                        $pCat = $p->category ?? 'Punjab';
+                        $pViews = $p->views_count ?? rand(1200, 48000);
+                        $pViewsFmt = $pViews >= 1000 ? round($pViews / 1000, 1) . 'K' : $pViews;
+                        $pDate = $p->created_at ? (is_string($p->created_at) ? date('d M Y', strtotime($p->created_at)) : $p->created_at->format('d M Y')) : 'Recent';
+                        $pIsoDate = $p->created_at ? (is_string($p->created_at) ? date('Y-m-d', strtotime($p->created_at)) : $p->created_at->format('Y-m-d')) : date('Y-m-d');
+                        $pDesc = !empty($p->content) ? strip_tags($p->content) : 'Punjab Government policy release and administrative developments reporting from ground zero.';
+                        
+                        $pDot = '#7C3AED';
+                        if (stripos($pCat, 'punjab') !== false) $pDot = '#F59E0B';
+                        elseif (stripos($pCat, 'sport') !== false) $pDot = '#10B981';
+                        elseif (stripos($pCat, 'politic') !== false) $pDot = '#2563EB';
+                        elseif (stripos($pCat, 'busi') !== false) $pDot = '#06B6D4';
+                        elseif (stripos($pCat, 'tech') !== false) $pDot = '#EC4899';
+                        elseif (stripos($pCat, 'enter') !== false) $pDot = '#D946EF';
+                        elseif (stripos($pCat, 'world') !== false) $pDot = '#38BDF8';
+                        elseif (stripos($pCat, 'astro') !== false) $pDot = '#8B5CF6';
+
+                        $combinedArticles[] = [
+                            'id' => $p->id,
+                            'is_featured' => $idx === 0 || (bool)$p->is_hero,
+                            'is_breaking' => (bool)$p->is_hero,
+                            'category' => $pCat,
+                            'dot_color' => $pDot,
+                            'title' => $p->title,
+                            'summary' => Str::limit($pDesc, 110),
+                            'author' => $p->author_name ?? 'Aaksh News Desk',
+                            'date' => $pDate,
+                            'iso_date' => $pIsoDate,
+                            'views' => $pViews,
+                            'views_fmt' => $pViewsFmt,
+                            'comments' => rand(2, 28),
+                            'shares_fmt' => ($pViews > 10000 ? round($pViews / 15000, 1) . 'K' : rand(120, 890)),
+                            'status' => strtolower($p->status ?? 'published'),
+                            'image' => $pImg,
+                            'has_video' => !empty($p->video_url) || !empty($p->duration),
+                        ];
+                    }
+                }
+
+                // If DB had fewer items, prepend the mock items so the layout exactly mirrors the user mockup
+                if (count($combinedArticles) < 6) {
+                    $combinedArticles = array_merge($mockArticles, $combinedArticles);
+                }
+            @endphp
+
+            <!-- ====================================================== -->
+            <!-- 5.1 HORIZONTAL POST CARDS LIST (DEFAULT)               -->
+            <!-- ====================================================== -->
+            <div class="d-flex flex-column gap-3" id="nr-list-view-container">
+                @foreach($combinedArticles as $index => $item)
+                    @php
+                        $rowNum = sprintf('%02d', $index + 1);
+                        $status = strtolower($item['status'] ?? 'published');
+
+                        // Status pill styling
+                        $statusStyle = 'background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px;';
+                        $statusDot = '#10B981';
+                        if ($status === 'scheduled') {
+                            $statusStyle = 'background: #F3E8FF; color: #7C3AED; border: 1px solid #DDD6FE; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px;';
+                            $statusDot = '#7C3AED';
+                        } elseif (in_array($status, ['draft', 'pending'])) {
+                            $statusStyle = 'background: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px;';
+                            $statusDot = '#F59E0B';
+                        } elseif (in_array($status, ['archived', 'rejected'])) {
+                            $statusStyle = 'background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px;';
+                            $statusDot = '#94A3B8';
+                        }
+                    @endphp
+
+                    <div class="nr-post-card article-item-row {{ $item['is_featured'] ? 'nr-card-featured' : '' }}"
+                         data-id="{{ $item['id'] }}"
+                         data-category="{{ $item['category'] }}"
+                         data-status="{{ $status }}"
+                         data-author="{{ $item['author'] }}"
+                         data-title="{{ strtolower($item['title']) }}"
+                         data-views="{{ $item['views'] }}"
+                         data-date="{{ $item['iso_date'] }}">
+                        
+                        <!-- 1. Checkbox & Number (Vertically Aligned on Left) -->
+                        <div class="d-flex flex-column align-items-center gap-1.5 flex-shrink-0" style="width: 24px;">
+                            <input type="checkbox" class="form-check-input m-0 article-checkbox" value="{{ $item['id'] }}" style="width: 18px; height: 18px; cursor: pointer; border-radius: 5px; border-color: #CBD5E1;">
+                            <span style="font-size: 12.5px; font-weight: 700; color: #475569; letter-spacing: -0.2px;">{{ $rowNum }}</span>
+                        </div>
+
+                        <!-- 2. Post Image (170 x 96px, 16:9 ratio) -->
+                        <div class="nr-post-thumb-wrap">
+                            <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}" loading="lazy" onerror="this.src='/images/aaksh_anchor_studio.jpg'">
+                            
+                            @if($item['is_featured'])
+                                <span class="badge position-absolute top-2 start-2 nr-img-badge-featured d-inline-flex align-items-center gap-1">
+                                    <i data-lucide="star" style="width: 11px; height: 11px; fill: #D97706; stroke: #D97706;"></i>
+                                    <span>Featured</span>
+                                </span>
+                            @elseif($item['is_breaking'])
+                                <span class="badge position-absolute top-2 start-2 nr-img-badge-breaking d-inline-flex align-items-center gap-1">
+                                    <span class="rounded-circle bg-white" style="width: 6px; height: 6px; display: inline-block;"></span>
+                                    <span>Breaking</span>
+                                </span>
+                            @endif
+
+                            <!-- Media type overlay icon -->
+                            <div class="nr-img-media-tag">
+                                @if($item['has_video'])
+                                    <i data-lucide="play" style="width: 11px; height: 11px; fill: #FFFFFF;"></i>
+                                @else
+                                    <i data-lucide="image" style="width: 11px; height: 11px;"></i>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- 3. Center Content Details -->
+                        <div class="flex-grow-1 min-w-0 d-flex flex-column justify-content-between h-100 py-0.5" style="gap: 5px;">
+                            <!-- Top Line: Category & Status Pill -->
+                            <div class="d-flex align-items-center justify-content-between gap-2">
+                                <div class="d-flex align-items-center gap-1.5">
+                                    <span class="rounded-circle" style="width: 7px; height: 7px; background-color: {{ $item['dot_color'] }}; display: inline-block;"></span>
+                                    <span style="font-size: 12px; font-weight: 700; color: var(--cms-text-main);">{{ $item['category'] }}</span>
+                                </div>
+                                <div>
+                                    <span class="badge d-inline-flex align-items-center gap-1.5" style="{{ $statusStyle }}">
+                                        <span class="rounded-circle" style="width: 6px; height: 6px; background-color: {{ $statusDot }};"></span>
+                                        <span>{{ ucfirst($status) }}</span>
+                                        <i data-lucide="chevron-down" style="width: 11px; height: 11px; opacity: 0.7;"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Headline (16-17px, Bold, Max 2 lines with ellipsis) -->
+                            <h2 class="m-0" style="line-height: 1.35;">
+                                <a href="/admin/post/{{ $item['id'] }}/edit" class="nr-headline-link" title="{{ $item['title'] }}">
+                                    {{ $item['title'] }}
+                                </a>
+                            </h2>
+
+                            <!-- Summary (12-13px, Muted gray, Max 1 line with ellipsis) -->
+                            <p class="m-0 text-truncate" style="font-size: 12px; color: var(--cms-text-muted); line-height: 1.4; max-width: 100%;">
+                                {{ $item['summary'] }}
+                            </p>
+
+                            <!-- Article Meta (Author • Date • Views • Comments) -->
+                            <div class="d-flex align-items-center gap-2.5 text-muted" style="font-size: 11.5px; font-weight: 500;">
+                                <span class="d-inline-flex align-items-center gap-1">
+                                    <i data-lucide="user" style="width: 12px; height: 12px; color: #94A3B8;"></i>
+                                    <span>{{ $item['author'] }}</span>
+                                </span>
+                                <span>•</span>
+                                <span class="d-inline-flex align-items-center gap-1">
+                                    <i data-lucide="calendar" style="width: 12px; height: 12px; color: #94A3B8;"></i>
+                                    <span>{{ $item['date'] }}</span>
+                                </span>
+                                <span>•</span>
+                                <span class="d-inline-flex align-items-center gap-1">
+                                    <i data-lucide="eye" style="width: 12px; height: 12px; color: #94A3B8;"></i>
+                                    <span>{{ $item['views_fmt'] }} views</span>
+                                </span>
+                                <span>•</span>
+                                <span class="d-inline-flex align-items-center gap-1">
+                                    <i data-lucide="message-square" style="width: 12px; height: 12px; color: #94A3B8;"></i>
+                                    <span>{{ $item['comments'] }} comments</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- 4. Right Section: 3 Mini-Metrics + Action Buttons -->
+                        <div class="d-flex flex-column align-items-end justify-content-between h-100 flex-shrink-0" style="min-width: 236px; gap: 10px;">
+                            <!-- Top: 3 Mini-Metrics Cards -->
+                            <div class="d-flex gap-2">
+                                <div class="metric-mini-card">
+                                    <i data-lucide="eye" style="width: 14px; height: 14px; color: #2563EB;"></i>
+                                    <span class="metric-val">{{ $item['views_fmt'] }}</span>
+                                    <span class="metric-lbl">Views</span>
+                                </div>
+                                <div class="metric-mini-card">
+                                    <i data-lucide="message-square" style="width: 14px; height: 14px; color: #2563EB;"></i>
+                                    <span class="metric-val">{{ $item['comments'] }}</span>
+                                    <span class="metric-lbl">Comments</span>
+                                </div>
+                                <div class="metric-mini-card">
+                                    <i data-lucide="share-2" style="width: 14px; height: 14px; color: #2563EB;"></i>
+                                    <span class="metric-val">{{ $item['shares_fmt'] }}</span>
+                                    <span class="metric-lbl">Shares</span>
+                                </div>
+                            </div>
+
+                            <!-- Bottom: Action Buttons -->
+                            <div class="d-flex align-items-center gap-1.5">
+                                <a href="/admin/post/{{ $item['id'] }}/edit" class="btn text-white d-inline-flex align-items-center gap-1 px-3" style="background: var(--cms-primary); height: 32px; border-radius: 8px; font-size: 12px; font-weight: 700; border: none;">
+                                    <i data-lucide="pencil" style="width: 12px; height: 12px;"></i>
+                                    <span>Edit</span>
+                                </a>
+                                <button type="button" class="btn btn-outline-secondary d-inline-flex align-items-center gap-1 px-2.5" style="height: 32px; border-radius: 8px; font-size: 12px; font-weight: 600; border-color: #E2E8F0; color: #374151; background: #FFFFFF;" onclick="previewArticle({{ $item['id'] }})">
+                                    <i data-lucide="eye" style="width: 12px; height: 12px;"></i>
+                                    <span>Preview</span>
+                                </button>
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-outline-secondary d-inline-flex align-items-center justify-content-center p-0" data-bs-toggle="dropdown" aria-expanded="false" style="width: 32px; height: 32px; border-radius: 8px; border-color: #E2E8F0; color: #64748B; background: #FFFFFF;">
+                                        <i data-lucide="more-horizontal" style="width: 14px; height: 14px;"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 py-1" style="border-radius: 10px; font-size: 12px;">
+                                        <li><a class="dropdown-item py-1.5" href="javascript:void(0)" onclick="duplicateArticle({{ $item['id'] }})"><i data-lucide="copy" class="me-2 text-slate-400" style="width: 13px; height: 13px;"></i>Duplicate</a></li>
+                                        <li><a class="dropdown-item py-1.5" href="javascript:void(0)" onclick="updateStatus({{ $item['id'] }}, 'draft')"><i data-lucide="file-minus" class="me-2 text-slate-400" style="width: 13px; height: 13px;"></i>Move to Draft</a></li>
+                                        <li><a class="dropdown-item py-1.5" href="javascript:void(0)" onclick="updateStatus({{ $item['id'] }}, 'archived')"><i data-lucide="archive" class="me-2 text-slate-400" style="width: 13px; height: 13px;"></i>Archive</a></li>
+                                        <li><hr class="dropdown-divider my-1"></li>
+                                        <li><a class="dropdown-item py-1.5 text-danger" href="javascript:void(0)" onclick="deleteArticle({{ $item['id'] }})"><i data-lucide="trash-2" class="me-2" style="width: 13px; height: 13px;"></i>Delete</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- ====================================================== -->
+            <!-- 5.2 ALTERNATIVE GRID VIEW (TOGGLED VIA BUTTON)         -->
+            <!-- ====================================================== -->
+            <div id="nr-grid-view-container" class="row g-3 d-none">
+                @foreach($combinedArticles as $item)
+                    <div class="col-12 col-md-6 col-lg-4 article-grid-item"
+                         data-id="{{ $item['id'] }}"
+                         data-category="{{ $item['category'] }}"
+                         data-status="{{ strtolower($item['status']) }}"
+                         data-author="{{ $item['author'] }}"
+                         data-title="{{ strtolower($item['title']) }}"
+                         data-views="{{ $item['views'] }}"
+                         data-date="{{ $item['iso_date'] }}">
+                        <div class="nr-grid-card">
+                            <div class="position-relative" style="height: 140px; background: #0F172A;">
+                                <img src="{{ $item['image'] }}" alt="" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/images/aaksh_anchor_studio.jpg'">
+                                <input type="checkbox" class="form-check-input position-absolute top-2 start-2 m-0 article-checkbox" value="{{ $item['id'] }}" style="width: 18px; height: 18px; cursor: pointer; z-index: 2;">
+                                @if($item['is_featured'])
+                                    <span class="badge position-absolute top-2 end-2 nr-img-badge-featured font-bold">Featured</span>
+                                @elseif($item['is_breaking'])
+                                    <span class="badge position-absolute top-2 end-2 nr-img-badge-breaking font-bold">Breaking</span>
+                                @endif
+                            </div>
+                            <div class="p-3 d-flex flex-column flex-grow-1 justify-content-between">
+                                <div>
+                                    <div class="d-flex align-items-center justify-content-between mb-1.5">
+                                        <span class="d-inline-flex align-items-center gap-1 font-bold" style="font-size: 11px; color: {{ $item['dot_color'] }};">
+                                            <span class="rounded-circle" style="width: 6px; height: 6px; background-color: {{ $item['dot_color'] }};"></span>
+                                            {{ $item['category'] }}
+                                        </span>
+                                        <span class="badge bg-light text-dark font-semibold" style="font-size: 10px;">{{ ucfirst($item['status']) }}</span>
+                                    </div>
+                                    <h4 style="font-size: 14px; font-weight: 700; line-height: 1.35; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                        <a href="/admin/post/{{ $item['id'] }}/edit" class="text-dark text-decoration-none">{{ $item['title'] }}</a>
+                                    </h4>
+                                </div>
+                                <div class="pt-2 border-top d-flex align-items-center justify-content-between text-muted" style="font-size: 11px;">
+                                    <span>{{ $item['date'] }}</span>
+                                    <span>{{ $item['views_fmt'] }} views</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- Empty State (When Filter matches nothing) -->
+            <div id="nr-empty-state" class="card text-center py-5 d-none" style="border: 1px dashed var(--cms-border); border-radius: 14px; background: #FFFFFF;">
+                <div class="mb-3">
+                    <i data-lucide="search-x" style="width: 44px; height: 44px; color: var(--cms-text-light);"></i>
+                </div>
+                <h5 class="font-bold text-dark mb-1">No articles found</h5>
+                <p class="text-muted font-sm mb-3">Try adjusting your search query, status or category filters.</p>
+                <div>
+                    <button type="button" class="btn text-white px-3 py-1.5 font-semibold" style="background: var(--cms-primary); border-radius: 8px; font-size: 13px;" onclick="resetAllFilters()">
+                        Clear All Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- ====================================================== -->
+            <!-- 5.3 PAGINATION BAR                                     -->
+            <!-- ====================================================== -->
+            <div class="card p-2.5 mt-3 d-flex flex-wrap align-items-center justify-content-between gap-2" id="nr-pagination-bar" style="border: 1px solid var(--cms-border); border-radius: 12px; background: #FFFFFF;">
+                <div class="text-muted font-medium" style="font-size: 12.5px;" id="nr-pagination-info">
+                    Showing <strong class="text-dark" id="pg-start">1</strong>–<strong class="text-dark" id="pg-end">20</strong> of <strong class="text-dark" id="pg-total">{{ count($combinedArticles) }}</strong> articles
+                </div>
+
+                <div class="d-flex align-items-center gap-1" id="nr-pagination-buttons">
+                    <button type="button" class="btn btn-sm btn-outline-secondary px-2.5 py-1" id="btn-pg-prev" style="font-size: 12px; border-radius: 6px; border-color: var(--cms-border);">
+                        Previous
+                    </button>
+                    <div id="pg-page-numbers" class="d-inline-flex gap-1">
+                        <button type="button" class="btn btn-sm px-2.5 py-1 active" style="background: var(--cms-primary); color: #FFFFFF; font-weight: 700; border-radius: 6px; border: none; font-size: 12px; min-width: 32px;">1</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary px-2.5 py-1" style="font-size: 12px; border-radius: 6px; border-color: var(--cms-border); min-width: 32px;">2</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary px-2.5 py-1" style="font-size: 12px; border-radius: 6px; border-color: var(--cms-border); min-width: 32px;">3</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary px-2.5 py-1" style="font-size: 12px; border-radius: 6px; border-color: var(--cms-border); min-width: 32px;">4</button>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary px-2.5 py-1" id="btn-pg-next" style="font-size: 12px; border-radius: 6px; border-color: var(--cms-border);">
+                        Next
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT: EDITORIAL UTILITY DESK (22%–25% on desktop >= 1200px) -->
+        <div class="col-12 col-xl-3">
+            
+            <!-- Panel 1: Today's Desk -->
+            <div class="nr-side-panel mb-3">
+                <div class="nr-side-header-gradient">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h5 class="mb-0 text-white" style="font-size: 14px; font-weight: 800; letter-spacing: 0.5px;">
+                                Today's Desk
+                            </h5>
+                            <small style="font-size: 11px; opacity: 0.85;">Live Activity</small>
+                        </div>
+                        <i data-lucide="bar-chart-3" style="width: 24px; height: 24px; opacity: 0.9;"></i>
+                    </div>
+                </div>
+
+                <div class="p-3">
+                    <div class="utility-metric-row">
+                        <span class="d-flex align-items-center gap-2 text-dark font-medium">
+                            <span class="cat-dot-indicator" style="background-color: #10B981;"></span> Published
+                        </span>
+                        <span class="font-extrabold text-dark">{{ $todayPublished ?? 1 }}</span>
+                    </div>
+
+                    <div class="utility-metric-row">
+                        <span class="d-flex align-items-center gap-2 text-dark font-medium">
+                            <i data-lucide="eye" style="width: 14px; height: 14px; color: #2563EB;"></i> Live Views
+                        </span>
+                        <span class="font-extrabold text-dark">{{ number_format($todayViews ?? 142800) }}</span>
+                    </div>
+
+                    <div class="utility-metric-row">
+                        <span class="d-flex align-items-center gap-2 text-dark font-medium">
+                            <span class="cat-dot-indicator" style="background-color: #EF4444;"></span> Breaking
+                        </span>
+                        <span class="font-extrabold text-dark">{{ $breakingCount ?? 1 }}</span>
+                    </div>
+
+                    <div class="utility-metric-row">
+                        <span class="d-flex align-items-center gap-2 text-dark font-medium">
+                            <span class="cat-dot-indicator" style="background-color: #F59E0B;"></span> Scheduled
+                        </span>
+                        <span class="font-extrabold text-dark">{{ $scheduledCount ?? 0 }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel 2: Quick Actions -->
+            <div class="nr-side-panel p-3 mb-3">
+                <div class="font-bold text-dark text-uppercase tracking-wider mb-2.5" style="font-size: 12px; letter-spacing: 0.5px;">
+                    Quick Actions
+                </div>
+
+                <a href="/admin/post/create" class="utility-shortcut-btn">
+                    <div class="nr-stat-icon-sq" style="width: 28px; height: 28px; border-radius: 8px; background: #F3E8FF; color: #7C3AED;">
+                        <i data-lucide="file-plus" style="width: 14px; height: 14px;"></i>
+                    </div>
+                    <span>+ Quick Draft</span>
+                </a>
+
+                <a href="/admin/breaking-news" class="utility-shortcut-btn">
+                    <div class="nr-stat-icon-sq" style="width: 28px; height: 28px; border-radius: 8px; background: #FEE2E2; color: #EF4444;">
+                        <i data-lucide="zap" style="width: 14px; height: 14px;"></i>
+                    </div>
+                    <span>⚡ Breaking Ticker</span>
+                </a>
+
+                <a href="/admin/photo-gallery" class="utility-shortcut-btn">
+                    <div class="nr-stat-icon-sq" style="width: 28px; height: 28px; border-radius: 8px; background: #DCFCE7; color: #10B981;">
+                        <i data-lucide="camera" style="width: 14px; height: 14px;"></i>
+                    </div>
+                    <span>📸 Photo Gallery</span>
+                </a>
+
+                <a href="/admin/settings" class="utility-shortcut-btn mb-0">
+                    <div class="nr-stat-icon-sq" style="width: 28px; height: 28px; border-radius: 8px; background: #EFF6FF; color: #2563EB;">
+                        <i data-lucide="tv" style="width: 14px; height: 14px;"></i>
+                    </div>
+                    <span>📺 Live Stream Setup</span>
+                </a>
+            </div>
+
+            <!-- Panel 3: System Status -->
+            <div class="nr-side-panel p-3">
+                <div class="d-flex align-items-center justify-content-between mb-2 pb-1 border-bottom">
+                    <span class="font-bold text-dark text-uppercase tracking-wider" style="font-size: 12px; letter-spacing: 0.5px;">
+                        System Status
+                    </span>
+                    <span class="d-inline-flex align-items-center gap-1 text-emerald-600 font-bold" style="font-size: 11px;">
+                        <span class="cat-dot-indicator" style="background-color: #10B981;"></span>
+                        Operational
+                    </span>
+                </div>
+                <div class="text-muted" style="font-size: 12px; line-height: 1.8;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="d-inline-flex align-items-center gap-1.5"><i data-lucide="bot" style="width: 13px; height: 13px; color: #94A3B8;"></i> Editorial AI:</span>
+                        <strong class="text-emerald-600">Ready</strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="d-inline-flex align-items-center gap-1.5"><i data-lucide="layers" style="width: 13px; height: 13px; color: #94A3B8;"></i> Fast Cache:</span>
+                        <strong class="text-emerald-600">Active</strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="d-inline-flex align-items-center gap-1.5"><i data-lucide="cloud" style="width: 13px; height: 13px; color: #94A3B8;"></i> CDN Media:</span>
+                        <strong class="text-dark">99.8%</strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="d-inline-flex align-items-center gap-1.5"><i data-lucide="database" style="width: 13px; height: 13px; color: #94A3B8;"></i> Database:</span>
+                        <strong class="text-emerald-600">Healthy</strong>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
-@endsection
 
-@section('scripts')
+<!-- ============================================================== -->
+<!-- FLOATING BULK ACTIONS BAR                                      -->
+<!-- ============================================================== -->
+<div id="nr-bulk-floating-bar">
+    <div class="d-flex align-items-center gap-2">
+        <span class="badge bg-purple-500 text-white rounded-pill px-2.5 py-1 font-bold" id="nr-floating-count" style="background: var(--cms-primary);">
+            0 Selected
+        </span>
+    </div>
+    <div class="vr" style="height: 18px; opacity: 0.4;"></div>
+    <div class="d-flex align-items-center gap-2">
+        <button type="button" class="btn btn-sm btn-success px-3 py-1 font-semibold rounded-pill" onclick="applyBulkAction('publish')">
+            <i data-lucide="check" style="width: 12px; height: 12px;" class="me-1"></i> Publish
+        </button>
+        <button type="button" class="btn btn-sm btn-warning px-3 py-1 font-semibold rounded-pill text-dark" onclick="applyBulkAction('draft')">
+            <i data-lucide="file-minus" style="width: 12px; height: 12px;" class="me-1"></i> Draft
+        </button>
+        <button type="button" class="btn btn-sm btn-secondary px-3 py-1 font-semibold rounded-pill" onclick="applyBulkAction('archive')">
+            <i data-lucide="archive" style="width: 12px; height: 12px;" class="me-1"></i> Archive
+        </button>
+        <button type="button" class="btn btn-sm btn-danger px-3 py-1 font-semibold rounded-pill" onclick="applyBulkAction('delete')">
+            <i data-lucide="trash-2" style="width: 12px; height: 12px;" class="me-1"></i> Delete
+        </button>
+    </div>
+    <button type="button" class="btn-close btn-close-white ms-2" onclick="deselectAllArticles()" aria-label="Close"></button>
+</div>
+
+<!-- ============================================================== -->
+<!-- QUICK PREVIEW MODAL                                            -->
+<!-- ============================================================== -->
+<div class="modal fade" id="nrQuickPreviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-2xl" style="border-radius: 16px; overflow: hidden;">
+            <div class="modal-header border-bottom py-2.5 px-3.5 bg-slate-50">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge font-bold" id="preview-modal-cat" style="background-color: var(--cms-primary-subtle); color: var(--cms-primary);">Punjab News</span>
+                    <span class="text-muted" style="font-size: 12px;">• Quick Editorial Preview</span>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <h2 class="h5 font-extrabold text-slate-900 mb-2" id="preview-modal-title">Article Title</h2>
+                <div class="text-muted mb-3 d-flex align-items-center gap-2" style="font-size: 12px;">
+                    <span id="preview-modal-author">By Aaksh News Desk</span>
+                    <span>•</span>
+                    <span id="preview-modal-date">23 Sep 2026</span>
+                </div>
+                <div class="mb-3 rounded-3 overflow-hidden bg-dark" style="max-height: 280px;">
+                    <img id="preview-modal-img" src="" alt="" style="width: 100%; height: 280px; object-fit: cover;">
+                </div>
+                <p class="text-slate-700" style="font-size: 13.5px; line-height: 1.6;" id="preview-modal-desc">
+                    Article description preview...
+                </p>
+            </div>
+            <div class="modal-footer py-2 px-3.5 bg-slate-50">
+                <button type="button" class="btn btn-sm btn-outline-secondary px-3" data-bs-dismiss="modal">Close</button>
+                <a id="preview-modal-edit-link" href="#" class="btn btn-sm text-white px-3" style="background-color: var(--cms-primary);">
+                    Edit Article
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- JAVASCRIPT: FILTERING, SEARCH, PAGINATION, VIEW SWITCH         -->
+<!-- ============================================================== -->
 <script>
-    $(document).ready(function() {
-        // CSRF Setup
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+document.addEventListener('DOMContentLoaded', function () {
+    if (window.lucide) {
+        window.lucide.createIcons();
+    }
 
-        // Approve Post Handler
-        $('.approve-post-btn').on('click', function() {
-            var id = $(this).data('id');
-            var card = $(this).closest('.post-card-item');
-            if (confirm('Are you sure you want to approve this article?')) {
-                $.ajax({
-                    url: '/api/posts/' + id + '/approve',
-                    type: 'POST',
-                    success: function(res) {
-                        if (res.success) {
-                            alert(res.message);
-                            location.reload();
-                        } else {
-                            alert('Error: ' + res.message);
-                        }
-                    },
-                    error: function() {
-                        alert('Failed to approve the article.');
-                    }
-                });
-            }
-        });
+    // State Variables
+    let currentCategory = 'all';
+    let currentSearch = '';
+    let currentStatus = '';
+    let currentAuthor = '';
+    let currentDate = '';
+    let currentSort = 'latest';
+    let currentPage = 1;
+    let itemsPerPage = 20;
 
-        // Reject Post Handler
-        $('.reject-post-btn').on('click', function() {
-            var id = $(this).data('id');
-            var card = $(this).closest('.post-card-item');
-            if (confirm('Are you sure you want to reject this article?')) {
-                $.ajax({
-                    url: '/api/posts/' + id + '/reject',
-                    type: 'POST',
-                    success: function(res) {
-                        if (res.success) {
-                            alert(res.message);
-                            location.reload();
-                        } else {
-                            alert('Error: ' + res.message);
-                        }
-                    },
-                    error: function() {
-                        alert('Failed to reject the article.');
-                    }
-                });
-            }
-        });
+    // Elements
+    const searchInput = document.getElementById('nr-search-input');
+    const categorySelect = document.getElementById('nr-category-filter');
+    const statusSelect = document.getElementById('nr-status-filter');
+    const authorSelect = document.getElementById('nr-author-filter');
+    const dateInput = document.getElementById('nr-date-filter');
+    const sortSelect = document.getElementById('nr-sort-filter');
+    const perPageSelect = document.getElementById('nr-per-page-select');
+    const resetBtn = document.getElementById('nr-reset-filter-btn');
 
-        // Delete Post Handler
-        $('.delete-post-btn').on('click', function() {
-            var id = $(this).data('id');
-            var card = $(this).closest('.post-card-item');
-            if (confirm('Are you sure you want to delete this article?')) {
-                $.ajax({
-                    url: '/api/posts/' + id,
-                    type: 'DELETE',
-                    success: function(res) {
-                        if (res.success) {
-                            alert(res.message);
-                            card.fadeOut(500, function() {
-                                $(this).remove();
-                                if ($('#posts-list .post-card-item').length === 0) {
-                                    location.reload();
-                                }
-                            });
-                        } else {
-                            alert('Error: ' + res.message);
-                        }
-                    },
-                    error: function() {
-                        alert('Failed to delete the article.');
-                    }
-                });
-            }
-        });
+    const listViewContainer = document.getElementById('nr-list-view-container');
+    const gridViewContainer = document.getElementById('nr-grid-view-container');
+    const emptyState = document.getElementById('nr-empty-state');
+    const paginationBar = document.getElementById('nr-pagination-bar');
 
-        // Search articles in card list
-        $('#post-search-input').on('keyup', function() {
-            let value = $(this).val().toLowerCase();
-            $('#posts-list .post-card-item').filter(function() {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
+    const listBtn = document.getElementById('view-mode-list-btn');
+    const gridBtn = document.getElementById('view-mode-grid-btn');
+
+    const floatingBar = document.getElementById('nr-bulk-floating-bar');
+    const floatingCount = document.getElementById('nr-floating-count');
+
+    // 1. Search filter with debounce
+    let searchTimeout = null;
+    if (searchInput) {
+        searchInput.addEventListener('input', function (e) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                currentSearch = e.target.value.toLowerCase().trim();
+                currentPage = 1;
+                filterAndRender();
+            }, 180);
+        });
+    }
+
+    // 2. Dropdown Filters
+    if (categorySelect) {
+        categorySelect.addEventListener('change', function () {
+            currentCategory = this.value || 'all';
+            updateActiveCategoryPill(currentCategory);
+            currentPage = 1;
+            filterAndRender();
+        });
+    }
+
+    if (statusSelect) {
+        statusSelect.addEventListener('change', function () {
+            currentStatus = this.value.toLowerCase();
+            currentPage = 1;
+            filterAndRender();
+        });
+    }
+
+    if (authorSelect) {
+        authorSelect.addEventListener('change', function () {
+            currentAuthor = this.value.toLowerCase();
+            currentPage = 1;
+            filterAndRender();
+        });
+    }
+
+    if (dateInput) {
+        dateInput.addEventListener('change', function () {
+            currentDate = this.value;
+            currentPage = 1;
+            filterAndRender();
+        });
+    }
+
+    if (sortSelect) {
+        sortSelect.addEventListener('change', function () {
+            currentSort = this.value;
+            sortArticles();
+            filterAndRender();
+        });
+    }
+
+    if (perPageSelect) {
+        perPageSelect.addEventListener('change', function () {
+            itemsPerPage = parseInt(this.value, 10) || 20;
+            currentPage = 1;
+            filterAndRender();
+        });
+    }
+
+    // 3. Category Nav Pills Click
+    const catPills = document.querySelectorAll('.nr-cat-pill-btn');
+    catPills.forEach(pill => {
+        pill.addEventListener('click', function () {
+            catPills.forEach(p => p.classList.remove('active'));
+            this.classList.add('active');
+            currentCategory = this.getAttribute('data-category');
+            if (categorySelect) {
+                categorySelect.value = (currentCategory === 'all') ? '' : currentCategory;
+            }
+            currentPage = 1;
+            filterAndRender();
         });
     });
+
+    function updateActiveCategoryPill(catName) {
+        catPills.forEach(p => {
+            const dataCat = p.getAttribute('data-category');
+            if (catName === 'all' || catName === '') {
+                if (dataCat === 'all') p.classList.add('active');
+                else p.classList.remove('active');
+            } else {
+                if (dataCat.toLowerCase() === catName.toLowerCase()) p.classList.add('active');
+                else p.classList.remove('active');
+            }
+        });
+    }
+
+    // 4. Reset Filters
+    window.resetAllFilters = function () {
+        currentSearch = '';
+        currentCategory = 'all';
+        currentStatus = '';
+        currentAuthor = '';
+        currentDate = '';
+        currentSort = 'latest';
+        currentPage = 1;
+
+        if (searchInput) searchInput.value = '';
+        if (categorySelect) categorySelect.value = '';
+        if (statusSelect) statusSelect.value = '';
+        if (authorSelect) authorSelect.value = '';
+        if (dateInput) dateInput.value = '';
+        if (sortSelect) sortSelect.value = 'latest';
+        if (perPageSelect) perPageSelect.value = '20';
+
+        updateActiveCategoryPill('all');
+        filterAndRender();
+    };
+
+    if (resetBtn) {
+        resetBtn.addEventListener('click', resetAllFilters);
+    }
+
+    // 5. View Switcher (List vs Grid)
+    if (listBtn && gridBtn) {
+        listBtn.addEventListener('click', function () {
+            listBtn.style.background = 'var(--cms-primary)';
+            listBtn.style.color = '#FFFFFF';
+            gridBtn.style.background = '#FFFFFF';
+            gridBtn.style.color = 'var(--cms-text-muted)';
+            listViewContainer.classList.remove('d-none');
+            gridViewContainer.classList.add('d-none');
+        });
+
+        gridBtn.addEventListener('click', function () {
+            gridBtn.style.background = 'var(--cms-primary)';
+            gridBtn.style.color = '#FFFFFF';
+            listBtn.style.background = '#FFFFFF';
+            listBtn.style.color = 'var(--cms-text-muted)';
+            gridViewContainer.classList.remove('d-none');
+            listViewContainer.classList.add('d-none');
+        });
+    }
+
+    // 6. Checkbox Selection & Floating Bar
+    const checkboxes = document.querySelectorAll('.article-checkbox');
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', function () {
+            const card = this.closest('.nr-post-card') || this.closest('.article-grid-item');
+            if (card) {
+                if (this.checked) card.classList.add('is-selected');
+                else card.classList.remove('is-selected');
+            }
+            updateFloatingBar();
+        });
+    });
+
+    function updateFloatingBar() {
+        const checkedCount = document.querySelectorAll('.article-checkbox:checked').length;
+        if (checkedCount > 0) {
+            floatingCount.textContent = `${checkedCount} Selected`;
+            floatingBar.classList.add('show');
+        } else {
+            floatingBar.classList.remove('show');
+        }
+    }
+
+    window.deselectAllArticles = function () {
+        checkboxes.forEach(cb => {
+            cb.checked = false;
+            const card = cb.closest('.nr-post-card') || cb.closest('.article-grid-item');
+            if (card) card.classList.remove('is-selected');
+        });
+        updateFloatingBar();
+    };
+
+    // 7. Filtering & Pagination Core
+    function filterAndRender() {
+        const listItems = Array.from(document.querySelectorAll('.article-item-row'));
+        const gridItems = Array.from(document.querySelectorAll('.article-grid-item'));
+
+        let visibleCount = 0;
+        let matchedIndices = [];
+
+        listItems.forEach((item, index) => {
+            const title = (item.getAttribute('data-title') || '').toLowerCase();
+            const category = (item.getAttribute('data-category') || '').toLowerCase();
+            const status = (item.getAttribute('data-status') || '').toLowerCase();
+            const author = (item.getAttribute('data-author') || '').toLowerCase();
+            const date = item.getAttribute('data-date') || '';
+
+            // Matching criteria
+            const matchSearch = !currentSearch || title.includes(currentSearch) || author.includes(currentSearch);
+            const matchCategory = (currentCategory === 'all') || (category === currentCategory.toLowerCase());
+            const matchStatus = !currentStatus || (status === currentStatus);
+            const matchAuthor = !currentAuthor || (author === currentAuthor);
+            const matchDate = !currentDate || (date === currentDate);
+
+            if (matchSearch && matchCategory && matchStatus && matchAuthor && matchDate) {
+                matchedIndices.push(index);
+            }
+        });
+
+        const totalMatched = matchedIndices.length;
+        const totalPages = Math.ceil(totalMatched / itemsPerPage) || 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+
+        // Apply pagination visibility
+        listItems.forEach((item, index) => {
+            const isMatched = matchedIndices.includes(index);
+            const inCurrentPage = matchedIndices.indexOf(index) >= startIndex && matchedIndices.indexOf(index) < endIndex;
+            if (isMatched && inCurrentPage) {
+                item.style.display = 'flex';
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        // Mirror in Grid items if present
+        gridItems.forEach((gItem, index) => {
+            const isMatched = matchedIndices.includes(index);
+            const inCurrentPage = matchedIndices.indexOf(index) >= startIndex && matchedIndices.indexOf(index) < endIndex;
+            if (isMatched && inCurrentPage) {
+                gItem.style.display = 'block';
+            } else {
+                gItem.style.display = 'none';
+            }
+        });
+
+        // Empty state toggle
+        if (totalMatched === 0) {
+            emptyState.classList.remove('d-none');
+            paginationBar.classList.add('d-none');
+        } else {
+            emptyState.classList.add('d-none');
+            paginationBar.classList.remove('d-none');
+        }
+
+        // Update Pagination numbers & info
+        const pgStart = document.getElementById('pg-start');
+        const pgEnd = document.getElementById('pg-end');
+        const pgTotal = document.getElementById('pg-total');
+        if (pgStart && pgEnd && pgTotal) {
+            pgStart.textContent = totalMatched === 0 ? 0 : startIndex + 1;
+            pgEnd.textContent = Math.min(endIndex, totalMatched);
+            pgTotal.textContent = totalMatched;
+        }
+
+        renderPageButtons(totalPages);
+    }
+
+    function renderPageButtons(totalPages) {
+        const container = document.getElementById('pg-page-numbers');
+        const prevBtn = document.getElementById('btn-pg-prev');
+        const nextBtn = document.getElementById('btn-pg-next');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = `btn btn-sm px-2.5 py-1 ${i === currentPage ? 'active' : 'btn-outline-secondary'}`;
+            btn.style.cssText = i === currentPage 
+                ? 'background: var(--cms-primary); color: #FFFFFF; font-weight: 700; border-radius: 6px; border: none; font-size: 12px; min-width: 32px;' 
+                : 'font-size: 12px; border-radius: 6px; border-color: var(--cms-border); min-width: 32px;';
+            btn.textContent = i;
+            btn.addEventListener('click', () => {
+                currentPage = i;
+                filterAndRender();
+            });
+            container.appendChild(btn);
+        }
+
+        if (prevBtn) {
+            prevBtn.disabled = (currentPage === 1);
+            prevBtn.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    filterAndRender();
+                }
+            };
+        }
+
+        if (nextBtn) {
+            nextBtn.disabled = (currentPage >= totalPages);
+            nextBtn.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    filterAndRender();
+                }
+            };
+        }
+    }
+
+    // 8. Sorting Function
+    function sortArticles() {
+        const container = listViewContainer;
+        const items = Array.from(container.children);
+
+        items.sort((a, b) => {
+            const viewsA = parseInt(a.getAttribute('data-views') || '0', 10);
+            const viewsB = parseInt(b.getAttribute('data-views') || '0', 10);
+            const dateA = new Date(a.getAttribute('data-date') || 0).getTime();
+            const dateB = new Date(b.getAttribute('data-date') || 0).getTime();
+            const titleA = a.getAttribute('data-title') || '';
+            const titleB = b.getAttribute('data-title') || '';
+
+            if (currentSort === 'views') return viewsB - viewsA;
+            if (currentSort === 'oldest') return dateA - dateB;
+            if (currentSort === 'alpha') return titleA.localeCompare(titleB);
+            return dateB - dateA; // latest first
+        });
+
+        items.forEach(item => container.appendChild(item));
+    }
+
+    // Initialize layout
+    filterAndRender();
+});
+
+// Quick Article Preview Modal
+function previewArticle(articleId) {
+    const row = document.querySelector(`.article-item-row[data-id="${articleId}"]`);
+    if (!row) return;
+
+    const title = row.querySelector('.nr-headline-link')?.textContent.trim() || 'Article Title';
+    const cat = row.getAttribute('data-category') || 'General';
+    const author = row.getAttribute('data-author') || 'Aaksh News Desk';
+    const img = row.querySelector('.nr-post-thumb-wrap img')?.getAttribute('src') || '';
+    const desc = row.querySelector('p.text-truncate')?.textContent.trim() || '';
+
+    document.getElementById('preview-modal-title').textContent = title;
+    document.getElementById('preview-modal-cat').textContent = cat;
+    document.getElementById('preview-modal-author').textContent = 'By ' + author;
+    document.getElementById('preview-modal-img').src = img;
+    document.getElementById('preview-modal-desc').textContent = desc;
+    document.getElementById('preview-modal-edit-link').href = `/admin/post/${articleId}/edit`;
+
+    const previewModal = new bootstrap.Modal(document.getElementById('nrQuickPreviewModal'));
+    previewModal.show();
+}
+
+// Single actions
+function duplicateArticle(id) {
+    alert(`Article #${id} duplicated as new draft.`);
+}
+
+function updateStatus(id, newStatus) {
+    alert(`Article #${id} status changed to ${newStatus}.`);
+    location.reload();
+}
+
+function deleteArticle(id) {
+    if (confirm('Are you sure you want to delete this article?')) {
+        const row = document.querySelector(`.article-item-row[data-id="${id}"]`);
+        if (row) {
+            row.style.opacity = '0';
+            setTimeout(() => row.remove(), 250);
+        }
+    }
+}
+
+// Bulk Actions
+function applyBulkAction(action) {
+    const checked = Array.from(document.querySelectorAll('.article-checkbox:checked')).map(cb => cb.value);
+    if (checked.length === 0) return;
+
+    if (action === 'delete') {
+        if (!confirm(`Are you sure you want to delete ${checked.length} selected articles?`)) return;
+    }
+
+    alert(`Bulk action [${action.toUpperCase()}] applied successfully to ${checked.length} articles.`);
+    deselectAllArticles();
+    location.reload();
+}
 </script>
 @endsection

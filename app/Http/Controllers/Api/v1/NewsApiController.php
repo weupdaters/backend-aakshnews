@@ -201,9 +201,22 @@ class NewsApiController extends Controller
      */
     public function breakingNews()
     {
-        $breaking = BreakingNews::where('is_active', true)->latest()->get(['id', 'title', 'created_at']);
+        $lang = strtolower(request()->header('X-Language', request()->query('lang', 'pa')));
+        if ($lang === 'pa') {
+            $lang = 'pb';
+        }
 
-        return $this->successResponse($breaking, 'Breaking news fetched.');
+        $items = BreakingNews::where('is_active', true)->latest()->get()->map(function ($item) use ($lang) {
+            $title = match ($lang) {
+                'en' => $item->title_en ?: $item->title,
+                'hi' => $item->title_hi ?: ($item->title_en ?: $item->title),
+                'pb' => $item->title_pb ?: $item->title,
+                default => $item->title,
+            };
+            return $title;
+        });
+
+        return $this->successResponse($items, 'Breaking news fetched.');
     }
 
     /**

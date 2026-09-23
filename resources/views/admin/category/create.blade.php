@@ -3,7 +3,7 @@
 @section('content')
 <div class="box-heading mb-4">
     <div class="box-title">
-        <h3 class="mb-1">Add Category</h3>
+        <h3 class="mb-1 font-bold">Add Category</h3>
     </div>
     <div class="box-breadcrumb">
         <div class="breadcrumbs">
@@ -24,19 +24,108 @@
                     @csrf
                     
                     <div class="row">
-                        <!-- Category Name -->
+                        <!-- Primary Category Name -->
                         <div class="col-lg-6 mb-4">
                             <div class="input-group d-block">
-                                <label class="font-sm color-text-mutted mb-2">Category Name <span class="text-danger">*</span></label>
-                                <input type="text" name="name" id="category-name" class="form-control w-100" required placeholder="Enter category name">
+                                <label class="font-sm color-text-mutted mb-2 font-bold">Category Name (English/Default) <span class="text-danger">*</span></label>
+                                <input type="text" name="name" id="category-name" class="form-control w-100" required placeholder="e.g. Politics, Sports, Business">
                             </div>
                         </div>
 
                         <!-- Slug -->
                         <div class="col-lg-6 mb-4">
                             <div class="input-group d-block">
-                                <label class="font-sm color-text-mutted mb-2">Slug <span class="text-danger">*</span></label>
-                                <input type="text" name="slug" id="category-slug" class="form-control w-100" required placeholder="Enter category slug">
+                                <label class="font-sm color-text-mutted mb-2 font-bold">Slug <span class="text-danger">*</span></label>
+                                <input type="text" name="slug" id="category-slug" class="form-control w-100" required placeholder="e.g. politics, sports, business">
+                            </div>
+                        </div>
+
+                        <!-- Punjabi Name -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="input-group d-block">
+                                <label class="font-sm color-text-mutted mb-2 font-bold">ਨਾਮ ਪੰਜਾਬੀ ਵਿੱਚ (Punjabi Name)</label>
+                                <input type="text" name="name_pb" class="form-control w-100" placeholder="e.g. ਰਾਜਨੀਤੀ, ਖੇਡਾਂ, ਕਾਰੋਬਾਰ">
+                            </div>
+                        </div>
+
+                        <!-- Hindi Name -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="input-group d-block">
+                                <label class="font-sm color-text-mutted mb-2 font-bold">नाम हिंदी में (Hindi Name)</label>
+                                <input type="text" name="name_hi" class="form-control w-100" placeholder="e.g. राजनीति, खेल, व्यापार">
+                            </div>
+                        </div>
+
+                        <!-- CATEGORY ICON SELECTOR (Requested for Landing Page Display) -->
+                        <div class="col-lg-12 mb-4">
+                            <div class="input-group d-block">
+                                <label class="font-sm color-text-mutted mb-2 font-bold d-flex align-items-center justify-content-between">
+                                    <span>Category Icon (Shown on Landing Page)</span>
+                                    <span class="text-muted" style="font-size: 11px;">Select an icon or type custom Lucide icon name</span>
+                                </label>
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <div class="p-2.5 rounded-3 border bg-light d-flex align-items-center justify-content-center" id="icon-preview-box" style="width: 44px; height: 44px;">
+                                        <i data-lucide="newspaper" id="selected-icon-preview" style="width: 22px; height: 22px; color: #1769D2;"></i>
+                                    </div>
+                                    <input type="text" name="icon" id="category-icon-input" class="form-control" value="newspaper" placeholder="e.g. vote, trophy, bar-chart-2, sparkles">
+                                </div>
+
+                                <!-- Popular Icon Pills -->
+                                <div class="d-flex flex-wrap gap-2 pt-1" id="icon-picker-pills">
+                                    @php
+                                        $iconPresets = [
+                                            ['name' => 'vote', 'label' => 'Politics (Vote)'],
+                                            ['name' => 'trophy', 'label' => 'Sports (Trophy)'],
+                                            ['name' => 'bar-chart-2', 'label' => 'Business (Chart)'],
+                                            ['name' => 'sparkles', 'label' => 'Punjab (Sparkles)'],
+                                            ['name' => 'globe', 'label' => 'World (Globe)'],
+                                            ['name' => 'tv', 'label' => 'Entertainment (TV)'],
+                                            ['name' => 'cpu', 'label' => 'Tech (CPU)'],
+                                            ['name' => 'flag', 'label' => 'National (Flag)'],
+                                            ['name' => 'shield', 'label' => 'Crime (Shield)'],
+                                            ['name' => 'heart', 'label' => 'Health (Heart)'],
+                                            ['name' => 'book-open', 'label' => 'Education (Book)'],
+                                            ['name' => 'sun', 'label' => 'Weather (Sun)'],
+                                            ['name' => 'newspaper', 'label' => 'General (News)'],
+                                        ];
+                                    @endphp
+                                    @foreach($iconPresets as $preset)
+                                        <button type="button" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1.5 py-1 px-2.5 icon-preset-btn" data-icon="{{ $preset['name'] }}" style="border-radius: 8px; font-size: 11.5px; font-weight: 600;">
+                                            <i data-lucide="{{ $preset['name'] }}" style="width: 13px; height: 13px;"></i>
+                                            <span>{{ $preset['label'] }}</span>
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CATEGORY COLOR (With Quick Preset Palette) -->
+                        <div class="col-lg-12 mb-4">
+                            <div class="input-group d-block">
+                                <label class="font-sm color-text-mutted mb-2 font-bold">Category Color Theme <span class="text-danger">*</span></label>
+                                <div class="d-flex align-items-center gap-3">
+                                    <input type="color" name="color" id="category-color" class="form-control form-control-color p-0 border-0 shadow-sm" style="width: 50px; height: 42px; cursor: pointer; border-radius: 8px;" value="#DC2626" required>
+                                    <input type="text" id="category-color-text" class="form-control font-monospace" style="width: 120px; height: 42px;" value="#DC2626">
+                                    
+                                    <!-- Quick Color Swatches -->
+                                    <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                                        @php
+                                            $colorSwatches = [
+                                                ['color' => '#DC2626', 'title' => 'Red (Politics)'],
+                                                ['color' => '#16A34A', 'title' => 'Green (Sports)'],
+                                                ['color' => '#2563EB', 'title' => 'Blue (Business)'],
+                                                ['color' => '#7C3AED', 'title' => 'Purple (Tech)'],
+                                                ['color' => '#D97706', 'title' => 'Amber (Punjab)'],
+                                                ['color' => '#DB2777', 'title' => 'Pink (Entertainment)'],
+                                                ['color' => '#0D9488', 'title' => 'Teal (World)'],
+                                                ['color' => '#EA580C', 'title' => 'Orange (National)'],
+                                            ];
+                                        @endphp
+                                        @foreach($colorSwatches as $swatch)
+                                            <span class="color-swatch-btn rounded-circle shadow-xs" data-color="{{ $swatch['color'] }}" title="{{ $swatch['title'] }}" style="width: 26px; height: 26px; background-color: {{ $swatch['color'] }}; cursor: pointer; border: 2px solid white; outline: 1px solid #CBD5E1;"></span>
+                                        @endforeach
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -64,52 +153,10 @@
                             </div>
                         </div>
 
-                        <!-- Image Upload -->
-                        <div class="col-lg-12 mb-4">
-                            <div class="input-group d-block mb-3">
-                                <label class="font-sm color-text-mutted mb-2">Upload (Single Image)</label>
-                                <div class="d-flex gap-2">
-                                    <input type="text" class="form-control" placeholder="Choose file..." readonly id="file-name-text" style="background-color: var(--bg-color);">
-                                    <label class="btn btn-primary d-flex align-items-center justify-content-center px-4" style="background-color: #3b82f6; border-color: #3b82f6; cursor: pointer; border-radius: 8px; font-size: 13px; font-weight: 700; height: 46px; color: white;">
-                                        Browse
-                                        <input type="file" name="image" id="category-image-file" accept="image/*" class="d-none">
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Image preview box -->
-                            <div class="text-center p-4 border border-dashed rounded-3 bg-light" id="preview-box" style="border-color: #cbd5e1 !important; background-color: #f8fafc !important;">
-                                <div id="placeholder-graphics" class="py-3">
-                                    <div class="position-relative d-inline-block" style="width: 200px; height: 120px;">
-                                        <!-- Mockup image cards stack -->
-                                        <div class="position-absolute bg-white border rounded shadow-sm" style="top: 10px; left: 40px; width: 120px; height: 80px; opacity: 0.4; z-index: 1; border-color: #e2e8f0 !important;"></div>
-                                        <div class="position-absolute bg-white border rounded shadow-sm" style="top: 5px; left: 20px; width: 120px; height: 80px; opacity: 0.7; z-index: 2; border-color: #e2e8f0 !important;"></div>
-                                        <div class="position-absolute bg-white border rounded shadow-sm d-flex flex-column align-items-center justify-content-center" style="top: 0; left: 0; width: 120px; height: 80px; z-index: 3; border-color: #cbd5e1 !important;">
-                                            <div style="width: 8px; height: 8px; border-radius: 50%; background-color: #ef4444; position: absolute; top: 8px; left: 8px;"></div>
-                                            <svg viewBox="0 0 100 60" width="60" height="36" style="margin-top: 8px;">
-                                                <polygon points="10,60 40,25 70,60" fill="#3b82f6" />
-                                                <polygon points="40,60 65,35 90,60" fill="#3b82f6" opacity="0.8" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <p class="text-muted mt-2 mb-0 font-sm">No image uploaded yet</p>
-                                </div>
-                                <img id="image-preview" src="#" alt="Preview" class="img-fluid rounded d-none" style="max-height: 180px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                            </div>
-                        </div>
-
-                        <!-- Color -->
-                        <div class="col-lg-12 mb-4">
-                            <div class="input-group d-block">
-                                <label class="font-sm color-text-mutted mb-2">Color <span class="text-danger">*</span></label>
-                                <input type="color" name="color" id="category-color" class="form-control form-control-color w-100 p-0 border-0" style="height: 50px; cursor: pointer; border-radius: 8px;" value="#000000" required>
-                            </div>
-                        </div>
-
                         <!-- Status Select -->
                         <div class="col-lg-12 mb-4">
                             <div class="input-group d-block">
-                                <label class="font-sm color-text-mutted mb-2">Status Select</label>
+                                <label class="font-sm color-text-mutted mb-2 font-bold">Status Select</label>
                                 <select name="status" class="form-control w-100" style="height: 46px;">
                                     <option value="active">Active</option>
                                     <option value="inactive">Inactive</option>
@@ -120,7 +167,7 @@
 
                     <!-- Submit Button -->
                     <div class="d-flex justify-content-end mt-3">
-                        <button type="submit" class="submit-btn" style="background-color: var(--primary-color); border: none; padding: 12px 28px; border-radius: 8px; font-weight: 700; color: white;">
+                        <button type="submit" class="submit-btn text-white font-bold" style="background-color: #1769D2; border: none; padding: 12px 28px; border-radius: 8px; box-shadow: 0 4px 12px rgba(23, 105, 210, 0.25);">
                             Add Category
                         </button>
                     </div>
@@ -134,28 +181,58 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
-        // Automatically generate slug from category name
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
+
+        // Generate slug from category name
         $('#category-name').on('input', function() {
             let name = $(this).val();
             let slug = name.toLowerCase()
-                .replace(/[^a-z0-9\s-]/g, '') // remove invalid chars
-                .replace(/\s+/g, '-')         // collapse whitespace and replace by -
-                .replace(/-+/g, '-');        // collapse dashes
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-');
             $('#category-slug').val(slug);
         });
 
-        // Handle file change
-        $('#category-image-file').on('change', function(e) {
-            let fileName = e.target.files[0] ? e.target.files[0].name : '';
-            $('#file-name-text').val(fileName);
-            
-            if (e.target.files && e.target.files[0]) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#placeholder-graphics').addClass('d-none');
-                    $('#image-preview').attr('src', e.target.result).removeClass('d-none');
-                }
-                reader.readAsDataURL(e.target.files[0]);
+        // Icon picker pills
+        $('.icon-preset-btn').on('click', function() {
+            let iconName = $(this).attr('data-icon');
+            $('#category-icon-input').val(iconName);
+            updateIconPreview(iconName);
+        });
+
+        $('#category-icon-input').on('input', function() {
+            updateIconPreview($(this).val().trim());
+        });
+
+        function updateIconPreview(iconName) {
+            let color = $('#category-color').val() || '#1769D2';
+            $('#icon-preview-box').html(`<i data-lucide="${iconName || 'newspaper'}" style="width: 22px; height: 22px; color: ${color};"></i>`);
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+        }
+
+        // Color swatches
+        $('.color-swatch-btn').on('click', function() {
+            let col = $(this).attr('data-color');
+            $('#category-color').val(col);
+            $('#category-color-text').val(col);
+            updateIconPreview($('#category-icon-input').val());
+        });
+
+        $('#category-color').on('input', function() {
+            let col = $(this).val();
+            $('#category-color-text').val(col);
+            updateIconPreview($('#category-icon-input').val());
+        });
+
+        $('#category-color-text').on('input', function() {
+            let col = $(this).val();
+            if (/^#[0-9A-Fa-f]{6}$/.test(col)) {
+                $('#category-color').val(col);
+                updateIconPreview($('#category-icon-input').val());
             }
         });
     });

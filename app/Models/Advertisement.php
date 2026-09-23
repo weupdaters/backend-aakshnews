@@ -9,6 +9,7 @@ class Advertisement extends Model
     protected $fillable = [
         'name',
         'image_url',
+        'link_url',
         'status'
     ];
 }

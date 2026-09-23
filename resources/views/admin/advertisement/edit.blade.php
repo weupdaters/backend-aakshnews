@@ -69,6 +69,13 @@
                         @enderror
                     </div>
 
+                    <!-- Destination Link URL (Optional) -->
+                    <div class="mb-4">
+                        <label class="font-sm color-text-mutted mb-2" style="font-weight: 600;">Destination / Target URL (Optional)</label>
+                        <input type="url" name="link_url" value="{{ old('link_url', $advertisement->link_url) }}" class="form-control w-100" placeholder="https://example.com or sponsor website" style="height: 46px; border-radius: 8px;">
+                        <small class="text-muted font-xs">When users click the banner, they will be redirected to this link. Leave blank for unclickable banner.</small>
+                    </div>
+
                     <!-- Status Select -->
                     <div class="mb-4">
                         <label class="font-sm color-text-mutted mb-2" style="font-weight: 600;">Status Select</label>
@@ -80,7 +87,7 @@
 
                     <!-- Submit Button -->
                     <div class="d-flex justify-content-end mt-4">
-                        <button type="submit" class="btn text-white px-4 py-2" style="background-color: #8B5CF6; border-radius: 8px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.2);">
+                        <button type="submit" class="btn text-white px-4 py-2" style="background-color: #1769D2; border-radius: 8px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 12px rgba(23, 105, 210, 0.25); border: none;">
                             Update Advertisement
                         </button>
                     </div>

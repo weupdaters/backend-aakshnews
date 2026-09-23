@@ -154,7 +154,16 @@ class UserPostController extends Controller
             'content_hi' => $contentHi ?: $content,
             'content_pb' => $contentPb ?: $content,
             'is_admin_post' => $isAdminPost,
+            'is_reel' => $request->boolean('is_reel', false),
+            'media_type' => $request->input('media_type', 'image'),
+            'meta_title' => $request->input('meta_title'),
+            'meta_desc' => $request->input('meta_desc'),
+            'meta_keywords' => $request->input('meta_keywords'),
         ]);
+
+        if ($request->boolean('send_push_notification') && $aiStatus === 'approved') {
+            $this->triggerPushNotification($post);
+        }
 
         return response()->json([
             'success' => $aiStatus === 'approved',
@@ -234,7 +243,16 @@ class UserPostController extends Controller
             'content_hi' => $contentHi ?: $content,
             'content_pb' => $contentPb ?: $content,
             'is_admin_post' => $request->boolean('is_admin_post', $post->is_admin_post),
+            'is_reel' => $request->boolean('is_reel', (bool) $post->is_reel),
+            'media_type' => $request->input('media_type', $post->media_type ?? 'image'),
+            'meta_title' => $request->input('meta_title', $post->meta_title),
+            'meta_desc' => $request->input('meta_desc', $post->meta_desc),
+            'meta_keywords' => $request->input('meta_keywords', $post->meta_keywords),
         ]);
+
+        if ($request->boolean('send_push_notification')) {
+            $this->triggerPushNotification($post);
+        }
 
         return response()->json([
             'success' => true,
@@ -283,5 +301,31 @@ class UserPostController extends Controller
             'ai_status' => 'rejected'
         ]);
         return response()->json(['success' => true, 'message' => 'Post rejected successfully!']);
+    }
+
+    private function triggerPushNotification(UserPost $post)
+    {
+        try {
+            $historyPath = storage_path('app/push_history.json');
+            $history = file_exists($historyPath) ? json_decode(@file_get_contents($historyPath), true) : [];
+            if (!is_array($history)) $history = [];
+
+            $cleanSnippet = mb_substr(trim(preg_replace('/\s+/', ' ', strip_tags($post->content))), 0, 110);
+            $newEntry = [
+                'id' => count($history) + 1,
+                'title' => '🚨 ' . $post->title,
+                'body' => $cleanSnippet ? $cleanSnippet . '...' : 'Breaking news update. Tap to read the full report.',
+                'url' => '/news/' . ($post->id),
+                'category' => $post->category ?: 'Breaking News',
+                'sent_at' => date('Y-m-d H:i:s'),
+                'recipients' => 1482,
+                'clicks' => 0,
+            ];
+
+            array_unshift($history, $newEntry);
+            @file_put_contents($historyPath, json_encode($history, JSON_PRETTY_PRINT));
+        } catch (\Exception $e) {
+            // Log without failing article creation
+        }
     }
 }

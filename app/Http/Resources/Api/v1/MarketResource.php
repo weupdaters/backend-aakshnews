@@ -10,21 +10,33 @@ class MarketResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'sensex' => [
-                'value'  => $this['sensex']['value'] ?? '79,850.25',
-                'change' => $this['sensex']['change'] ?? '+320.15 (+0.40%)',
-                'status' => 'up',
-            ],
             'nifty' => [
-                'value'  => $this['nifty']['value'] ?? '24,310.80',
-                'change' => $this['nifty']['change'] ?? '+95.40 (+0.39%)',
-                'status' => 'up',
+                'name'          => 'NIFTY 50',
+                'value'         => $this['nifty']['value'] ?? '24,512.50',
+                'change'        => $this['nifty']['change'] ?? '+128.45',
+                'percentChange' => '(+0.53%)',
+                'isPositive'    => true,
             ],
-            'usd_inr' => [
-                'value'  => $this['usd_inr']['value'] ?? '83.65',
-                'change' => '-0.02 (-0.02%)',
-                'status' => 'down',
+            'sensex' => [
+                'name'          => 'SENSEX',
+                'value'         => $this['sensex']['value'] ?? '80,123.45',
+                'change'        => $this['sensex']['change'] ?? '+367.90',
+                'percentChange' => '(+0.46%)',
+                'isPositive'    => true,
             ],
+            'gold24k' => [
+                'price'      => '₹72,580',
+                'change'     => '+320 (0.44%)',
+                'isPositive' => true,
+            ],
+            'silver' => [
+                'price'      => '₹89,500',
+                'change'     => '+410 (0.46%)',
+                'isPositive' => true,
+            ],
+            'petrol' => '₹96.72 /L',
+            'diesel' => '₹89.62 /L',
+            'cng'    => '₹78.50 /kg',
         ];
     }
 }

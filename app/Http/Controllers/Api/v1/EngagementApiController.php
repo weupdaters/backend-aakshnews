@@ -23,9 +23,15 @@ class EngagementApiController extends Controller
      */
     public function newsletter(NewsletterRequest $request)
     {
+        $email = $request->input('email');
+        \App\Models\Subscriber::firstOrCreate(
+            ['email' => $email],
+            ['status' => 'active']
+        );
+
         return $this->successResponse([
             'subscribed' => true,
-            'email'      => $request->input('email'),
+            'email'      => $email,
         ], 'Subscribed to newsletter successfully!');
     }
 

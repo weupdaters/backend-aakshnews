@@ -35,6 +35,7 @@ Route::get('/api/user', [AuthController::class, 'user']);
 
 // User Posts Routes
 Route::get('/api/posts', [UserPostController::class, 'index']);
+Route::get('/api/category-sections', [\App\Http\Controllers\Api\v1\CategoryApiController::class, 'categorySections']);
 Route::post('/api/posts', [UserPostController::class, 'store']);
 Route::post('/api/posts/{id}/update', [UserPostController::class, 'update']);
 Route::delete('/api/posts/{id}', [UserPostController::class, 'destroy']);
@@ -60,6 +61,8 @@ Route::delete('/api/photo-gallery/{id}', [PhotoGalleryController::class, 'destro
 Route::post('/api/translate', [TranslationController::class, 'translate']);
 Route::post('/api/generate-description', [AiToolController::class, 'generateDescription']);
 Route::post('/api/generate-ai-image', [AiToolController::class, 'generateAiImage']);
+Route::post('/api/ai-suggest-title', [AiToolController::class, 'suggestTitle']);
+Route::post('/api/ai-assistant', [AiToolController::class, 'assistantAction']);
 
 // Miscellaneous & Media Routes
 Route::post('/api/subscribe', [NewsletterController::class, 'subscribe']);
@@ -69,5 +72,12 @@ Route::get('/test-yt', [SocialVideoController::class, 'testYt']);
 Route::get('/api/youtube-videos', [SocialVideoController::class, 'youtubeVideos']);
 Route::get('/api/facebook-videos', [SocialVideoController::class, 'facebookVideos']);
 
+// Push Notification Routes
+Route::post('/api/push-subscribe', [\App\Http\Controllers\PushNotificationController::class, 'subscribe']);
+Route::post('/api/push-unsubscribe', [\App\Http\Controllers\PushNotificationController::class, 'unsubscribe']);
+Route::post('/api/send-push', [\App\Http\Controllers\PushNotificationController::class, 'sendPush']);
+Route::get('/api/push/status', [\App\Http\Controllers\PushNotificationController::class, 'status']);
+
 // Fallback Route
 Route::fallback([HomeController::class, 'fallback']);
+

@@ -11,7 +11,7 @@
         
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background: linear-gradient(135deg, #062B63 0%, #0B1E3F 50%, #0F172A 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -22,14 +22,14 @@
         }
 
         .login-card {
-            background: rgba(30, 41, 59, 0.7);
+            background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 24px;
             padding: 40px;
             width: 100%;
             max-width: 440px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
             animation: fadeInUp 0.6s ease;
         }
 
@@ -48,7 +48,7 @@
             height: 54px;
             border-radius: 50%;
             margin-bottom: 12px;
-            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.4);
+            box-shadow: 0 4px 15px rgba(23, 105, 210, 0.4);
         }
 
         .brand-header h2 {
@@ -58,8 +58,19 @@
             color: #ffffff;
         }
 
-        .brand-header h2 span {
-            color: #e53e3e;
+        .brand-header h2 span.news-blue {
+            color: #1769D2;
+        }
+
+        .brand-header h2 span.badge-yellow {
+            background-color: #FFC400;
+            color: #062B63;
+            padding: 2px 7px;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            font-weight: 900;
+            vertical-align: middle;
+            margin-left: 2px;
         }
 
         .brand-header p {
@@ -107,18 +118,18 @@
         }
 
         .form-control-custom:focus {
-            border-color: #e53e3e;
-            box-shadow: 0 0 0 4px rgba(229, 62, 62, 0.15);
+            border-color: #1769D2;
+            box-shadow: 0 0 0 4px rgba(23, 105, 210, 0.2);
             background: rgba(15, 23, 42, 0.9);
         }
 
         .form-control-custom:focus + i {
-            color: #e53e3e;
+            color: #1769D2;
         }
 
         .btn-submit {
             width: 100%;
-            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+            background: #1769D2;
             color: white;
             border: none;
             border-radius: 12px;
@@ -127,13 +138,14 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 8px 20px rgba(229, 62, 62, 0.3);
+            box-shadow: 0 8px 20px rgba(23, 105, 210, 0.35);
             margin-top: 10px;
         }
 
         .btn-submit:hover {
+            background: #0D56B5;
             transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(229, 62, 62, 0.4);
+            box-shadow: 0 12px 25px rgba(23, 105, 210, 0.45);
         }
 
         .alert-custom {
@@ -167,7 +179,7 @@
     <div class="login-card">
         <div class="brand-header">
             <img src="/images/logo.png" alt="Aaksh News 24 Logo" onerror="this.src='https://via.placeholder.com/54'">
-            <h2>AAKSH <span>NEWS 24</span></h2>
+            <h2>AAKSH <span class="news-blue">NEWS</span> <span class="badge-yellow">24</span></h2>
             <p>Admin Dashboard Portal Access</p>
         </div>
 

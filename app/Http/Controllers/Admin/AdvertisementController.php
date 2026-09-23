@@ -35,6 +35,7 @@ class AdvertisementController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'link_url' => 'nullable|string|max:255',
             'image' => 'required|image|max:4096',
             'status' => 'required|string|in:active,inactive',
         ]);
@@ -57,6 +58,7 @@ class AdvertisementController extends Controller
         Advertisement::create([
             'name' => $request->input('name'),
             'image_url' => $imagePath,
+            'link_url' => $request->input('link_url'),
             'status' => $request->input('status', 'active'),
         ]);
 
@@ -90,6 +92,7 @@ class AdvertisementController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'link_url' => 'nullable|string|max:255',
             'image' => 'nullable|image|max:4096',
             'status' => 'required|string|in:active,inactive',
         ]);
@@ -116,6 +119,7 @@ class AdvertisementController extends Controller
         $advertisement->update([
             'name' => $request->input('name'),
             'image_url' => $imagePath,
+            'link_url' => $request->input('link_url'),
             'status' => $request->input('status'),
         ]);
 

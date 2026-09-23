@@ -58,7 +58,7 @@
 
                     <!-- Submit Button -->
                     <div class="d-flex justify-content-end mt-4">
-                        <button type="submit" class="btn text-white px-4 py-2" style="background-color: #3182ce; border-radius: 8px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 6px -1px rgba(49, 130, 206, 0.2);">
+                        <button type="submit" class="btn text-white px-4 py-2" style="background-color: #1769D2; border-radius: 8px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 12px rgba(23, 105, 210, 0.25); border: none;">
                             Save Photo
                         </button>
                     </div>
