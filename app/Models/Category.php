@@ -32,6 +32,11 @@ class Category extends Model
             ['name' => 'Entertainment', 'name_en' => 'Entertainment', 'name_hi' => 'मनोरंजन', 'name_pb' => 'ਮਨੋਰੰਜਨ', 'slug' => 'entertainment', 'color' => '#DB2777', 'icon' => 'tv', 'status' => 'active'],
             ['name' => 'Technology', 'name_en' => 'Technology', 'name_hi' => 'तकनीक', 'name_pb' => 'ਤਕਨਾਲੋਜੀ', 'slug' => 'technology', 'color' => '#7C3AED', 'icon' => 'cpu', 'status' => 'active'],
             ['name' => 'National', 'name_en' => 'National', 'name_hi' => 'राष्ट्रीय', 'name_pb' => 'ਰਾਸ਼ਟਰੀ', 'slug' => 'national', 'color' => '#EA580C', 'icon' => 'flag', 'status' => 'active'],
+            ['name' => 'Patiala', 'name_en' => 'Patiala', 'name_hi' => 'पटियाला', 'name_pb' => 'ਪਟਿਆਲਾ', 'slug' => 'patiala', 'color' => '#E11D48', 'icon' => 'sparkles', 'status' => 'active'],
+            ['name' => 'Crime', 'name_en' => 'Crime', 'name_hi' => 'अपराध', 'name_pb' => 'ਅਪਰਾਧ', 'slug' => 'crime', 'color' => '#DC2626', 'icon' => 'shield', 'status' => 'active'],
+            ['name' => 'Haryana', 'name_en' => 'Haryana', 'name_hi' => 'हरियाणा', 'name_pb' => 'ਹਰਿਆਣਾ', 'slug' => 'haryana', 'color' => '#059669', 'icon' => 'flag', 'status' => 'active'],
+            ['name' => 'Latest Update', 'name_en' => 'Latest Update', 'name_hi' => 'ताज़ा अपडेट', 'name_pb' => 'ਤਾਜ਼ਾ ਅਪਡੇਟ', 'slug' => 'latest-update', 'color' => '#2563EB', 'icon' => 'flame', 'status' => 'active'],
+            ['name' => 'General', 'name_en' => 'General', 'name_hi' => 'सामान्य', 'name_pb' => 'ਆਮ', 'slug' => 'general', 'color' => '#475569', 'icon' => 'newspaper', 'status' => 'active'],
         ];
 
         foreach ($defaults as $cat) {

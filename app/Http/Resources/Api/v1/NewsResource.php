@@ -45,7 +45,13 @@ class NewsResource extends JsonResource
         $wordCount = str_word_count(strip_tags($content ?? ''));
         $readingTimeMinutes = max(1, (int) ceil($wordCount / 200));
 
-        $slug = Str::slug($this->title ?: 'news') . '-' . $this->id;
+        $rawCategory = $this->category ?: 'Punjab';
+        $categoryInfo = static::resolveCategory($rawCategory, $lang);
+        $displayCategory = $categoryInfo['name'];
+        $categorySlug = $categoryInfo['slug'];
+
+        $cleanTitleSlug = Str::slug($this->title_en ?: $this->title);
+        $slug = !empty($cleanTitleSlug) ? "{$cleanTitleSlug}-{$this->id}" : "{$categorySlug}-{$this->id}";
 
         return [
             'id'             => (string) $this->id,
@@ -53,8 +59,8 @@ class NewsResource extends JsonResource
             'slug'           => $slug,
             'summary'        => Str::limit(strip_tags($content ?? ''), 180),
             'content'        => $content,
-            'category'       => $this->category ?? 'PUNJAB NEWS',
-            'categorySlug'   => Str::slug($this->category ?? 'punjab'),
+            'category'       => $displayCategory,
+            'categorySlug'   => $categorySlug,
             'author_name'    => $this->author_name ?? ($this->user?->name ?? 'Aakash News Desk'),
             'author'         => [
                 'id'     => $this->user_id,
@@ -100,4 +106,48 @@ class NewsResource extends JsonResource
             'updated_at'     => $this->updated_at?->toIso8601String(),
         ];
     }
+
+    protected static $categoryCache = null;
+
+    protected static function resolveCategory(?string $rawCategory, string $lang): array
+    {
+        if (empty($rawCategory)) {
+            return ['name' => 'Punjab', 'slug' => 'punjab'];
+        }
+
+        if (self::$categoryCache === null) {
+            self::$categoryCache = \App\Models\Category::all();
+        }
+
+        $norm = strtolower(trim($rawCategory));
+        $matched = self::$categoryCache->first(function ($cat) use ($norm, $rawCategory) {
+            return strtolower($cat->name) === $norm
+                || strtolower($cat->slug) === $norm
+                || ($cat->name_en && strtolower($cat->name_en) === $norm)
+                || ($cat->name_pb && strtolower($cat->name_pb) === $norm)
+                || ($cat->name_hi && strtolower($cat->name_hi) === $norm)
+                || str_contains($norm, strtolower($cat->slug))
+                || str_contains(strtolower($cat->name), $norm)
+                || ($cat->name_en && str_contains($norm, strtolower($cat->name_en)));
+        });
+
+        if ($matched) {
+            $name = match ($lang) {
+                'pb', 'pa' => $matched->name_pb ?: $matched->name,
+                'hi' => $matched->name_hi ?: ($matched->name_en ?: $matched->name),
+                'en' => $matched->name_en ?: $matched->name,
+                default => $matched->name,
+            };
+            return [
+                'name' => $name ?: $rawCategory,
+                'slug' => $matched->slug,
+            ];
+        }
+
+        return [
+            'name' => $rawCategory,
+            'slug' => Str::slug($rawCategory) ?: 'news',
+        ];
+    }
 }
+

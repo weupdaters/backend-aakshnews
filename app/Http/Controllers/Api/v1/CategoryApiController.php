@@ -50,15 +50,24 @@ class CategoryApiController extends Controller
      */
     public function news(Request $request, string $slug)
     {
-        $category = Category::where('slug', $slug)->first();
-        $catName = $category ? $category->name : $slug;
+        $category = Category::where('slug', $slug)
+            ->orWhere('name', $slug)
+            ->orWhere('name_en', $slug)
+            ->orWhere('name_pb', $slug)
+            ->first();
 
         $perPage = (int) $request->input('per_page', 12);
 
         $paginator = UserPost::where('status', 'published')
-            ->where(function ($q) use ($catName, $slug) {
-                $q->where('category', $catName)
-                  ->orWhere('category', 'LIKE', "%{$slug}%");
+            ->where(function ($q) use ($category, $slug) {
+                $q->where('category', 'LIKE', "%{$slug}%");
+                if ($category) {
+                    if ($category->name) $q->orWhere('category', 'LIKE', "%{$category->name}%");
+                    if ($category->name_en) $q->orWhere('category', 'LIKE', "%{$category->name_en}%");
+                    if ($category->name_pb) $q->orWhere('category', 'LIKE', "%{$category->name_pb}%");
+                    if ($category->name_hi) $q->orWhere('category', 'LIKE', "%{$category->name_hi}%");
+                    if ($category->slug) $q->orWhere('category', 'LIKE', "%{$category->slug}%");
+                }
             })
             ->latest()
             ->paginate($perPage);

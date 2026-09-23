@@ -31,7 +31,26 @@ class NewsApiController extends Controller
         $query = UserPost::query()->where('status', 'published');
 
         if ($request->filled('category')) {
-            $query->where('category', 'LIKE', '%' . $request->input('category') . '%');
+            $catInput = trim($request->input('category'));
+            if (!in_array(strtolower($catInput), ['all', 'ਸਭੀ', 'सभी'])) {
+                $matchedCat = \App\Models\Category::where('slug', $catInput)
+                    ->orWhere('name', $catInput)
+                    ->orWhere('name_en', $catInput)
+                    ->orWhere('name_pb', $catInput)
+                    ->orWhere('name_hi', $catInput)
+                    ->first();
+
+                $query->where(function ($q) use ($catInput, $matchedCat) {
+                    $q->where('category', 'LIKE', '%' . $catInput . '%');
+                    if ($matchedCat) {
+                        if ($matchedCat->name) $q->orWhere('category', 'LIKE', '%' . $matchedCat->name . '%');
+                        if ($matchedCat->name_en) $q->orWhere('category', 'LIKE', '%' . $matchedCat->name_en . '%');
+                        if ($matchedCat->name_pb) $q->orWhere('category', 'LIKE', '%' . $matchedCat->name_pb . '%');
+                        if ($matchedCat->name_hi) $q->orWhere('category', 'LIKE', '%' . $matchedCat->name_hi . '%');
+                        if ($matchedCat->slug) $q->orWhere('category', 'LIKE', '%' . $matchedCat->slug . '%');
+                    }
+                });
+            }
         }
 
         if ($request->filled('author')) {
@@ -82,14 +101,27 @@ class NewsApiController extends Controller
         if (is_numeric($slug)) {
             $post = UserPost::find($slug);
         } else {
-            // Extract ID from slug format title-slug-123
+            // 1. Try end of slug if numeric: title-slug-123
             $parts = explode('-', $slug);
             $possibleId = end($parts);
             if (is_numeric($possibleId)) {
                 $post = UserPost::find($possibleId);
             }
+
+            // 2. Try trailing digits with regex
+            if (!$post && preg_match('/(\d+)$/', $slug, $matches)) {
+                $post = UserPost::find($matches[1]);
+            }
+
+            // 3. Try any embedded digits
+            if (!$post && preg_match('/(\d+)/', $slug, $matches)) {
+                $post = UserPost::find($matches[1]);
+            }
+
+            // 4. Try matching title directly
             if (!$post) {
-                $post = UserPost::where('title', 'LIKE', str_replace('-', ' ', $slug))->first();
+                $cleanTitle = trim(str_replace('-', ' ', $slug));
+                $post = UserPost::where('title', 'LIKE', "%{$cleanTitle}%")->first();
             }
         }
 

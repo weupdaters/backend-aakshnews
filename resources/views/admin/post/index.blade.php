@@ -165,30 +165,30 @@
     /* 5. Main Post Card */
     .nr-post-card {
         background: #FFFFFF;
-        border: 1px solid var(--cms-border);
-        border-radius: 16px;
-        padding: 14px 18px;
+        border: 1px solid #E2E8F0;
+        border-radius: 18px;
+        padding: 18px 22px;
         display: flex;
         align-items: center;
-        gap: 16px;
-        min-height: 126px;
+        gap: 20px;
+        min-height: 134px;
         position: relative;
         transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 1px 2px rgba(15, 23, 42, 0.02);
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
     }
     .nr-post-card:hover {
         border-color: #CBD5E1;
         transform: translateY(-2px);
-        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.07), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
+        box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
     }
     .nr-post-card.nr-card-featured {
         border: 1.5px solid #FCD34D;
-        background: linear-gradient(to right, #FFFDF5, #FFFFFF 20%);
+        background: linear-gradient(to right, #FFFDF5, #FFFFFF 25%);
         box-shadow: 0 4px 16px rgba(245, 158, 11, 0.08);
     }
     .nr-post-card.nr-card-featured:hover {
         border-color: #F59E0B;
-        box-shadow: 0 8px 24px rgba(245, 158, 11, 0.14);
+        box-shadow: 0 10px 28px rgba(245, 158, 11, 0.14);
     }
     .nr-post-card.is-selected {
         border-color: var(--cms-primary);
@@ -202,22 +202,26 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 6px;
-        width: 30px;
+        gap: 9px;
+        width: 38px;
         flex-shrink: 0;
     }
     .nr-lead-idx {
         font-size: 11px;
-        font-weight: 700;
-        color: #94A3B8;
+        font-weight: 800;
+        color: #64748B;
+        background: #F1F5F9;
+        border: 1px solid #E2E8F0;
+        border-radius: 6px;
+        padding: 2.5px 6px;
         letter-spacing: -0.2px;
         font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
         line-height: 1;
     }
     .nr-lead-cell .article-checkbox {
-        width: 18px;
-        height: 18px;
-        border-radius: 5px;
+        width: 19px;
+        height: 19px;
+        border-radius: 6px;
         border: 1.5px solid #CBD5E1;
         margin: 0;
         cursor: pointer;
@@ -230,14 +234,15 @@
 
     /* Post Image Container */
     .nr-post-thumb-wrap {
-        width: 160px;
-        height: 96px;
-        border-radius: 12px;
+        width: 168px;
+        height: 104px;
+        border-radius: 14px;
         overflow: hidden;
         position: relative;
         background: #0F172A;
         flex-shrink: 0;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(0, 0, 0, 0.06);
     }
     .nr-post-thumb-wrap img {
         width: 100%;
@@ -272,14 +277,14 @@
     }
     .nr-img-media-tag {
         position: absolute;
-        bottom: 6px;
-        right: 6px;
-        background: rgba(15, 23, 42, 0.72);
-        backdrop-filter: blur(3px);
+        bottom: 7px;
+        right: 7px;
+        background: rgba(15, 23, 42, 0.76);
+        backdrop-filter: blur(4px);
         color: #FFFFFF;
-        width: 22px;
-        height: 22px;
-        border-radius: 6px;
+        width: 24px;
+        height: 24px;
+        border-radius: 7px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -287,43 +292,47 @@
 
     /* Center Content Details */
     .nr-post-content {
-        flex: 1 1 auto;
+        flex: 1 1 0;
         min-width: 0;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap: 5px;
+        gap: 7px;
     }
     .nr-badges-cluster {
         display: flex;
         align-items: center;
         gap: 8px;
         flex-wrap: wrap;
+        margin-bottom: 1px;
     }
     .nr-cat-badge {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        font-size: 11.5px;
-        font-weight: 700;
-        color: var(--cms-text-main);
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #1E293B;
         background: #F1F5F9;
-        padding: 2px 9px;
-        border-radius: 6px;
+        border: 1px solid #E2E8F0;
+        padding: 3px 10px;
+        border-radius: 999px;
     }
     .nr-status-badge {
         font-size: 11px;
-        font-weight: 600;
-        padding: 2.5px 9px;
+        font-weight: 700;
+        padding: 3px 10px;
         border-radius: 999px;
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: 6px;
     }
     .nr-badge-tag {
-        font-size: 10.5px;
+        font-size: 11px;
         font-weight: 700;
-        padding: 2px 7px;
+        padding: 2.5px 8px;
         border-radius: 6px;
         display: inline-flex;
         align-items: center;
@@ -353,11 +362,11 @@
 
     .nr-headline-wrap {
         margin: 0;
-        line-height: 1.38;
+        line-height: 1.4;
     }
     .nr-headline-link {
-        font-size: 15.5px;
-        font-weight: 700;
+        font-size: 16px;
+        font-weight: 800;
         color: #0F172A;
         text-decoration: none;
         display: -webkit-box;
@@ -365,14 +374,15 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
         transition: color 0.15s ease;
+        letter-spacing: -0.2px;
     }
     .nr-headline-link:hover {
         color: var(--cms-primary);
     }
     .nr-summary-snippet {
-        font-size: 12.5px;
+        font-size: 13px;
         color: #64748B;
-        line-height: 1.45;
+        line-height: 1.5;
         margin: 0;
         display: -webkit-box;
         -webkit-line-clamp: 1;
@@ -382,18 +392,30 @@
     .nr-post-meta-strip {
         display: flex;
         align-items: center;
-        gap: 8px;
-        font-size: 11.5px;
+        gap: 12px;
+        font-size: 12px;
         color: #64748B;
         font-weight: 500;
+        flex-wrap: wrap;
+        margin-top: 3px;
     }
-    .nr-post-meta-strip i {
-        width: 12px;
-        height: 12px;
+    .nr-meta-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 5.5px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    .nr-post-meta-strip i,
+    .nr-meta-item i {
+        width: 13.5px;
+        height: 13.5px;
         color: #94A3B8;
+        flex-shrink: 0;
     }
     .nr-meta-dot {
         color: #CBD5E1;
+        flex-shrink: 0;
     }
 
     /* Right Section: Compact Performance Metrics + Actions */
@@ -402,9 +424,9 @@
         flex-direction: column;
         align-items: flex-end;
         justify-content: center;
-        gap: 10px;
+        gap: 12px;
         flex-shrink: 0;
-        min-width: 224px;
+        padding-left: 10px;
     }
 
     /* Sleek Segmented Metrics Strip */
@@ -413,46 +435,46 @@
         align-items: center;
         background: #F8FAFC;
         border: 1px solid #E2E8F0;
-        border-radius: 10px;
-        padding: 5px 10px;
-        gap: 10px;
+        border-radius: 12px;
+        padding: 6px 14px;
+        gap: 14px;
         transition: all 0.2s ease;
     }
     .nr-post-card:hover .nr-stats-cluster {
         background: #FFFFFF;
         border-color: #CBD5E1;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
     }
     .nr-stat-node {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 7px;
     }
     .nr-stat-node i {
-        width: 13.5px;
-        height: 13.5px;
+        width: 14px;
+        height: 14px;
         flex-shrink: 0;
     }
     .nr-stat-body {
         display: flex;
         flex-direction: column;
-        line-height: 1;
+        line-height: 1.1;
     }
     .nr-stat-count {
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 800;
         color: #0F172A;
         letter-spacing: -0.3px;
     }
     .nr-stat-tag {
-        font-size: 9.5px;
+        font-size: 10px;
         font-weight: 600;
         color: #94A3B8;
         margin-top: 1px;
     }
     .nr-stat-divider {
         width: 1px;
-        height: 18px;
+        height: 20px;
         background-color: #E2E8F0;
     }
 
@@ -460,42 +482,42 @@
     .nr-btn-toolbar {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
     }
     .nr-btn-edit {
-        background: var(--cms-primary);
+        background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
         color: #FFFFFF;
-        height: 32px;
-        padding: 0 13px;
-        border-radius: 8px;
-        font-size: 12px;
+        height: 34px;
+        padding: 0 15px;
+        border-radius: 9px;
+        font-size: 12.5px;
         font-weight: 700;
         border: none;
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: 6px;
         text-decoration: none;
         transition: all 0.15s ease;
-        box-shadow: 0 1px 3px rgba(124, 58, 237, 0.25);
+        box-shadow: 0 2px 6px rgba(124, 58, 237, 0.25);
     }
     .nr-btn-edit:hover {
-        background: var(--cms-primary-hover);
+        background: linear-gradient(135deg, #6D28D9 0%, #5B21B6 100%);
         color: #FFFFFF;
         transform: translateY(-1px);
-        box-shadow: 0 3px 8px rgba(124, 58, 237, 0.35);
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
     }
     .nr-btn-preview {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
         color: #334155;
-        height: 32px;
-        padding: 0 11px;
-        border-radius: 8px;
-        font-size: 12px;
+        height: 34px;
+        padding: 0 13px;
+        border-radius: 9px;
+        font-size: 12.5px;
         font-weight: 600;
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: 6px;
         transition: all 0.15s ease;
     }
     .nr-btn-preview:hover {
@@ -505,9 +527,9 @@
         transform: translateY(-1px);
     }
     .nr-btn-more {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
         border: 1px solid #E2E8F0;
         color: #64748B;
         background: #FFFFFF;
@@ -523,7 +545,126 @@
         color: #0F172A;
     }
 
+    /* Redesigned Pagination Card */
+    .nr-pagination-card {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 16px;
+        padding: 14px 22px;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 24px;
+    }
+    .nr-pagination-info-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .nr-pg-badge {
+        background: #F1F5F9;
+        color: #475569;
+        font-size: 11.5px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 8px;
+        letter-spacing: 0.2px;
+    }
+    .nr-pg-text {
+        font-size: 13px;
+        color: #64748B;
+        font-weight: 500;
+    }
+    .nr-pg-text strong {
+        color: #0F172A;
+        font-weight: 800;
+    }
+    .nr-pagination-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .nr-pg-nav-btn {
+        height: 36px;
+        padding: 0 14px;
+        border-radius: 10px;
+        font-size: 12.5px;
+        font-weight: 700;
+        color: #475569;
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: all 0.18s ease;
+    }
+    .nr-pg-nav-btn:hover:not(:disabled) {
+        background: #F8FAFC;
+        border-color: #CBD5E1;
+        color: var(--cms-primary);
+        transform: translateY(-1px);
+    }
+    .nr-pg-nav-btn:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        background: #F8FAFC;
+    }
+    .nr-pg-nav-btn i {
+        width: 15px;
+        height: 15px;
+    }
+    .nr-pg-pages-cluster {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .nr-pg-num-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #475569;
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.18s ease;
+    }
+    .nr-pg-num-btn:hover {
+        background: #F8FAFC;
+        border-color: #CBD5E1;
+        color: var(--cms-primary);
+    }
+    .nr-pg-num-btn.active {
+        background: var(--cms-primary);
+        color: #FFFFFF;
+        border-color: var(--cms-primary);
+        font-weight: 800;
+        box-shadow: 0 3px 8px rgba(124, 58, 237, 0.3);
+    }
+
     /* Responsive adjustments */
+    @media (max-width: 1280px) {
+        .nr-post-card {
+            padding: 16px 18px;
+            gap: 16px;
+        }
+        .nr-post-thumb-wrap {
+            width: 150px;
+            height: 94px;
+        }
+        .nr-stats-cluster {
+            padding: 5px 10px;
+            gap: 10px;
+        }
+    }
     @media (max-width: 991.98px) {
         .nr-post-card {
             flex-wrap: wrap;
@@ -535,19 +676,26 @@
             justify-content: space-between;
             align-items: center;
             border-top: 1px solid #F1F5F9;
-            padding-top: 10px;
-            margin-top: 5px;
+            padding-top: 12px;
+            margin-top: 6px;
+            padding-left: 0;
         }
     }
     @media (max-width: 575.98px) {
         .nr-post-card {
-            padding: 12px;
-            gap: 12px;
+            padding: 14px;
+            gap: 14px;
         }
         .nr-post-thumb-wrap {
-            width: 100px;
-            height: 70px;
+            width: 110px;
+            height: 76px;
         }
+        .nr-pagination-card {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+    }
         .nr-headline-link {
             font-size: 14px;
         }
@@ -807,14 +955,25 @@
         <!-- All Categories -->
         <select id="nr-category-filter" class="form-select nr-filter-control" style="width: auto; min-width: 145px; padding-right: 32px;">
             <option value="">All Categories</option>
-            <option value="Punjab">Punjab</option>
-            <option value="Politics">Politics</option>
-            <option value="Sports">Sports</option>
-            <option value="Business">Business</option>
-            <option value="Technology">Technology</option>
-            <option value="Entertainment">Entertainment</option>
-            <option value="World">World</option>
-            <option value="Astrology">Astrology</option>
+            @if(isset($categories) && count($categories) > 0)
+                @foreach($categories as $cat)
+                    <option value="{{ $cat->name }}">{{ $cat->name }}</option>
+                @endforeach
+            @else
+                <option value="Punjab">Punjab</option>
+                <option value="Patiala">Patiala</option>
+                <option value="National">National</option>
+                <option value="Politics">Politics</option>
+                <option value="Crime">Crime</option>
+                <option value="Sports">Sports</option>
+                <option value="Business">Business</option>
+                <option value="Technology">Technology</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="World">World</option>
+                <option value="Haryana">Haryana</option>
+                <option value="Latest Update">Latest Update</option>
+                <option value="General">General</option>
+            @endif
         </select>
 
         <!-- All Status -->
@@ -866,38 +1025,38 @@
                 <span class="cat-dot-indicator" style="background-color: var(--cms-primary);"></span>
                 <span>All Articles</span>
             </button>
-            <button type="button" class="nr-cat-pill-btn" data-category="Punjab">
-                <span class="cat-dot-indicator" style="background-color: #F59E0B;"></span>
-                <span>Punjab</span>
-            </button>
-            <button type="button" class="nr-cat-pill-btn" data-category="Politics">
-                <span class="cat-dot-indicator" style="background-color: #2563EB;"></span>
-                <span>Politics</span>
-            </button>
-            <button type="button" class="nr-cat-pill-btn" data-category="Sports">
-                <span class="cat-dot-indicator" style="background-color: #10B981;"></span>
-                <span>Sports</span>
-            </button>
-            <button type="button" class="nr-cat-pill-btn" data-category="Business">
-                <span class="cat-dot-indicator" style="background-color: #06B6D4;"></span>
-                <span>Business</span>
-            </button>
-            <button type="button" class="nr-cat-pill-btn" data-category="Technology">
-                <span class="cat-dot-indicator" style="background-color: #EC4899;"></span>
-                <span>Technology</span>
-            </button>
-            <button type="button" class="nr-cat-pill-btn" data-category="Entertainment">
-                <span class="cat-dot-indicator" style="background-color: #D946EF;"></span>
-                <span>Entertainment</span>
-            </button>
-            <button type="button" class="nr-cat-pill-btn" data-category="World">
-                <span class="cat-dot-indicator" style="background-color: #38BDF8;"></span>
-                <span>World</span>
-            </button>
-            <button type="button" class="nr-cat-pill-btn" data-category="Astrology">
-                <span class="cat-dot-indicator" style="background-color: #8B5CF6;"></span>
-                <span>Astrology</span>
-            </button>
+            @if(isset($categories) && count($categories) > 0)
+                @foreach($categories as $cat)
+                    @php
+                        $dotColor = $cat->color ?? '#6366F1';
+                    @endphp
+                    <button type="button" class="nr-cat-pill-btn" data-category="{{ $cat->name }}">
+                        <span class="cat-dot-indicator" style="background-color: {{ $dotColor }};"></span>
+                        <span>{{ $cat->name }}</span>
+                    </button>
+                @endforeach
+            @else
+                @php
+                    $defaultPills = [
+                        ['name' => 'Punjab', 'color' => '#F59E0B'],
+                        ['name' => 'Patiala', 'color' => '#E11D48'],
+                        ['name' => 'National', 'color' => '#EA580C'],
+                        ['name' => 'Politics', 'color' => '#2563EB'],
+                        ['name' => 'Crime', 'color' => '#DC2626'],
+                        ['name' => 'Sports', 'color' => '#10B981'],
+                        ['name' => 'Business', 'color' => '#06B6D4'],
+                        ['name' => 'Technology', 'color' => '#EC4899'],
+                        ['name' => 'Entertainment', 'color' => '#D946EF'],
+                        ['name' => 'World', 'color' => '#38BDF8'],
+                    ];
+                @endphp
+                @foreach($defaultPills as $dp)
+                    <button type="button" class="nr-cat-pill-btn" data-category="{{ $dp['name'] }}">
+                        <span class="cat-dot-indicator" style="background-color: {{ $dp['color'] }};"></span>
+                        <span>{{ $dp['name'] }}</span>
+                    </button>
+                @endforeach
+            @endif
         </div>
 
         <!-- Right: Sort by, Show per page, View toggle -->
@@ -1130,7 +1289,7 @@
             <!-- ====================================================== -->
             <!-- 5.1 HORIZONTAL POST CARDS LIST (DEFAULT)               -->
             <!-- ====================================================== -->
-            <div class="d-flex flex-column gap-3" id="nr-list-view-container">
+            <div class="d-flex flex-column" id="nr-list-view-container" style="gap: 18px !important;">
                 @foreach($combinedArticles as $index => $item)
                     @php
                         $rowNum = sprintf('%02d', $index + 1);
@@ -1234,17 +1393,17 @@
 
                             <!-- Article Meta (Author • Date • Read time) -->
                             <div class="nr-post-meta-strip">
-                                <span class="d-inline-flex align-items-center gap-1">
+                                <span class="nr-meta-item">
                                     <i data-lucide="user"></i>
                                     <span>{{ $item['author'] }}</span>
                                 </span>
                                 <span class="nr-meta-dot">•</span>
-                                <span class="d-inline-flex align-items-center gap-1">
+                                <span class="nr-meta-item">
                                     <i data-lucide="calendar"></i>
                                     <span>{{ $item['date'] }}</span>
                                 </span>
                                 <span class="nr-meta-dot">•</span>
-                                <span class="d-inline-flex align-items-center gap-1 text-slate-400">
+                                <span class="nr-meta-item text-slate-400">
                                     <i data-lucide="clock"></i>
                                     <span>2 min read</span>
                                 </span>
@@ -1373,23 +1532,25 @@
             <!-- ====================================================== -->
             <!-- 5.3 PAGINATION BAR                                     -->
             <!-- ====================================================== -->
-            <div class="card p-2.5 mt-3 d-flex flex-wrap align-items-center justify-content-between gap-2" id="nr-pagination-bar" style="border: 1px solid var(--cms-border); border-radius: 12px; background: #FFFFFF;">
-                <div class="text-muted font-medium" style="font-size: 12.5px;" id="nr-pagination-info">
-                    Showing <strong class="text-dark" id="pg-start">1</strong>–<strong class="text-dark" id="pg-end">20</strong> of <strong class="text-dark" id="pg-total">{{ count($combinedArticles) }}</strong> articles
+            <div class="nr-pagination-card" id="nr-pagination-bar">
+                <div class="nr-pagination-info-wrap" id="nr-pagination-info">
+                    <span class="nr-pg-badge" id="pg-current-page">Page 1 of {{ max(1, (int)ceil(count($combinedArticles) / 20)) }}</span>
+                    <span class="nr-pg-text">
+                        Showing <strong id="pg-start">1</strong>–<strong id="pg-end">20</strong> of <strong id="pg-total">{{ count($combinedArticles) }}</strong> articles
+                    </span>
                 </div>
 
-                <div class="d-flex align-items-center gap-1" id="nr-pagination-buttons">
-                    <button type="button" class="btn btn-sm btn-outline-secondary px-2.5 py-1" id="btn-pg-prev" style="font-size: 12px; border-radius: 6px; border-color: var(--cms-border);">
-                        Previous
+                <div class="nr-pagination-controls" id="nr-pagination-buttons">
+                    <button type="button" class="nr-pg-nav-btn" id="btn-pg-prev">
+                        <i data-lucide="chevron-left"></i>
+                        <span>Previous</span>
                     </button>
-                    <div id="pg-page-numbers" class="d-inline-flex gap-1">
-                        <button type="button" class="btn btn-sm px-2.5 py-1 active" style="background: var(--cms-primary); color: #FFFFFF; font-weight: 700; border-radius: 6px; border: none; font-size: 12px; min-width: 32px;">1</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary px-2.5 py-1" style="font-size: 12px; border-radius: 6px; border-color: var(--cms-border); min-width: 32px;">2</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary px-2.5 py-1" style="font-size: 12px; border-radius: 6px; border-color: var(--cms-border); min-width: 32px;">3</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary px-2.5 py-1" style="font-size: 12px; border-radius: 6px; border-color: var(--cms-border); min-width: 32px;">4</button>
+                    <div id="pg-page-numbers" class="nr-pg-pages-cluster">
+                        <!-- Populated by JS -->
                     </div>
-                    <button type="button" class="btn btn-sm btn-outline-secondary px-2.5 py-1" id="btn-pg-next" style="font-size: 12px; border-radius: 6px; border-color: var(--cms-border);">
-                        Next
+                    <button type="button" class="nr-pg-nav-btn" id="btn-pg-next">
+                        <span>Next</span>
+                        <i data-lucide="chevron-right"></i>
                     </button>
                 </div>
             </div>
@@ -1873,21 +2034,36 @@ document.addEventListener('DOMContentLoaded', function () {
         const container = document.getElementById('pg-page-numbers');
         const prevBtn = document.getElementById('btn-pg-prev');
         const nextBtn = document.getElementById('btn-pg-next');
+        const pgCurrentPage = document.getElementById('pg-current-page');
         if (!container) return;
+
+        if (pgCurrentPage) {
+            pgCurrentPage.textContent = `Page ${currentPage} of ${Math.max(1, totalPages)}`;
+        }
 
         container.innerHTML = '';
 
-        for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+        // Sliding window of up to 5 buttons
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + 4);
+        if (endPage - startPage < 4) {
+            startPage = Math.max(1, endPage - 4);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
             const btn = document.createElement('button');
             btn.type = 'button';
-            btn.className = `btn btn-sm px-2.5 py-1 ${i === currentPage ? 'active' : 'btn-outline-secondary'}`;
-            btn.style.cssText = i === currentPage 
-                ? 'background: var(--cms-primary); color: #FFFFFF; font-weight: 700; border-radius: 6px; border: none; font-size: 12px; min-width: 32px;' 
-                : 'font-size: 12px; border-radius: 6px; border-color: var(--cms-border); min-width: 32px;';
+            btn.className = `nr-pg-num-btn ${i === currentPage ? 'active' : ''}`;
             btn.textContent = i;
             btn.addEventListener('click', () => {
-                currentPage = i;
-                filterAndRender();
+                if (currentPage !== i) {
+                    currentPage = i;
+                    filterAndRender();
+                    const topTarget = document.getElementById('nr-list-view-container') || document.querySelector('.nr-filter-bar');
+                    if (topTarget) {
+                        topTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
             });
             container.appendChild(btn);
         }
@@ -1898,6 +2074,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (currentPage > 1) {
                     currentPage--;
                     filterAndRender();
+                    const topTarget = document.getElementById('nr-list-view-container') || document.querySelector('.nr-filter-bar');
+                    if (topTarget) topTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             };
         }
@@ -1908,8 +2086,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (currentPage < totalPages) {
                     currentPage++;
                     filterAndRender();
+                    const topTarget = document.getElementById('nr-list-view-container') || document.querySelector('.nr-filter-bar');
+                    if (topTarget) topTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             };
+        }
+
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
         }
     }
 
