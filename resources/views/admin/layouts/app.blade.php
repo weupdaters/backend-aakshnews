@@ -1095,6 +1095,11 @@
     </style>
 </head>
 <body>
+    <!-- Top Loading Progress Line -->
+    <div id="admin-top-loading-line" style="position: fixed; top: 0; left: 0; right: 0; height: 3.5px; z-index: 9999999; pointer-events: none; opacity: 0; transition: opacity 0.2s ease;">
+        <div id="admin-top-loading-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #7C3AED 0%, #2563EB 50%, #06B6D4 100%); box-shadow: 0 0 12px rgba(124, 58, 237, 0.8), 0 0 6px rgba(37, 99, 235, 0.6); transition: width 0.2s cubic-bezier(0.12, 0.45, 0.25, 1);"></div>
+    </div>
+
     @include('admin.layouts.header')
     
     <div class="main">
@@ -1113,6 +1118,70 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
+        // Admin Top Loading Line Logic
+        (function() {
+            const line = document.getElementById('admin-top-loading-line');
+            const bar = document.getElementById('admin-top-loading-bar');
+            let timer = null;
+
+            function startLoading() {
+                if (!line || !bar) return;
+                clearInterval(timer);
+                line.style.opacity = '1';
+                bar.style.width = '18%';
+
+                let progress = 18;
+                timer = setInterval(function() {
+                    if (progress < 60) {
+                        progress += Math.random() * 10 + 5;
+                    } else if (progress < 85) {
+                        progress += Math.random() * 3 + 1;
+                    } else if (progress < 94) {
+                        progress += 0.4;
+                    }
+                    bar.style.width = progress + '%';
+                }, 100);
+            }
+
+            function stopLoading() {
+                if (!line || !bar) return;
+                clearInterval(timer);
+                bar.style.width = '100%';
+                setTimeout(function() {
+                    line.style.opacity = '0';
+                    setTimeout(function() {
+                        bar.style.width = '0%';
+                    }, 300);
+                }, 200);
+            }
+
+            window.addEventListener('click', function(e) {
+                const a = e.target.closest('a');
+                if (!a) return;
+                const href = a.getAttribute('href');
+                if (!href || href.startsWith('#') || href.startsWith('javascript:') || a.target === '_blank' || a.hasAttribute('download') || e.ctrlKey || e.metaKey) return;
+                
+                try {
+                    const url = new URL(href, window.location.href);
+                    if (url.origin === window.location.origin && (url.pathname !== window.location.pathname || url.search !== window.location.search)) {
+                        startLoading();
+                    }
+                } catch(err) {
+                    if (href.startsWith('/') && href !== window.location.pathname) {
+                        startLoading();
+                    }
+                }
+            }, true);
+
+            window.addEventListener('submit', function() {
+                startLoading();
+            });
+
+            window.addEventListener('pageshow', function() {
+                stopLoading();
+            });
+        })();
+
         // Theme toggle logic
         const themeBtn = document.getElementById('theme-btn');
         const lightText = "{{ $lang === 'hi' ? '☀️ लाइट मोड' : ($lang === 'pb' ? '☀️ ਲਾਈਟ ਮੋਡ' : '☀️ Light Mode') }}";
