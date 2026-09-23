@@ -83,8 +83,6 @@ class CategoryApiController extends Controller
     {
         Category::ensureDefaults();
         $categories = Category::where('status', 'active')->get();
-        $allPosts = UserPost::where('status', 'published')->latest()->get();
-
         $sections = [];
 
         foreach ($categories as $cat) {
@@ -93,23 +91,26 @@ class CategoryApiController extends Controller
             $nameHi = $cat->name_hi;
             $slug = $cat->slug;
 
-            // Match posts for this category
-            $catPosts = $allPosts->filter(function ($p) use ($cat, $nameEn, $namePb, $nameHi, $slug) {
-                $c = $p->category ?? '';
-                if (strcasecmp($c, $cat->name) === 0 || strcasecmp($c, $slug) === 0) return true;
-                if ($nameEn && stripos($c, $nameEn) !== false) return true;
-                if ($namePb && stripos($c, $namePb) !== false) return true;
-                if ($nameHi && stripos($c, $nameHi) !== false) return true;
-                if (stripos($c, $slug) !== false) return true;
-                return false;
-            })->values();
+            // Query only matching posts for this category with limit 10
+            $query = UserPost::where('status', 'published')
+                ->where(function ($q) use ($cat, $nameEn, $namePb, $nameHi, $slug) {
+                    $q->where('category', $cat->name)
+                      ->orWhere('category', $slug);
+                    if ($nameEn) $q->orWhere('category', 'LIKE', '%' . $nameEn . '%');
+                    if ($namePb) $q->orWhere('category', 'LIKE', '%' . $namePb . '%');
+                    if ($nameHi) $q->orWhere('category', 'LIKE', '%' . $nameHi . '%');
+                });
 
-            $count = $catPosts->count();
+            $count = (clone $query)->count();
 
             // Rule: "jis catroy news nhai uss na show karo" -> Do NOT show empty categories
             if ($count === 0) {
                 continue;
             }
+
+            $catPosts = $query->latest()
+                ->take(10)
+                ->get(['id', 'title', 'content', 'author_name', 'category', 'image_url', 'video_url', 'is_hero', 'views_count', 'created_at']);
 
             // Lead/Featured Story (First post)
             $leadPost = $catPosts->first();
@@ -208,7 +209,7 @@ class CategoryApiController extends Controller
         });
 
         // Top 5 Trending News for Right Sidebar
-        $trendingPosts = $allPosts->sortByDesc('views_count')->take(5)->values();
+        $trendingPosts = UserPost::where('status', 'published')->orderBy('views_count', 'desc')->take(5)->get();
         $trendingNews = [];
         foreach ($trendingPosts as $rIndex => $tp) {
             $tpImg = $tp->image_url ?? '/images/aaksh_anchor_studio.jpg';

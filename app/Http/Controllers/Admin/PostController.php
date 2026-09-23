@@ -17,28 +17,19 @@ class PostController extends Controller
         }
         Category::ensureDefaults();
         $categories = Category::where('status', 'active')->get();
-        $posts = UserPost::latest()->get();
-
-        $totalCount = $posts->count();
-        $publishedCount = $posts->where('status', 'published')->count();
-        $draftCount = $posts->whereIn('status', ['pending', 'draft'])->count();
-        $scheduledCount = $posts->where('status', 'scheduled')->count();
-        $archivedCount = $posts->whereIn('status', ['rejected', 'archived'])->count();
-        $authors = $posts->pluck('author_name')->unique()->filter()->values();
+        $totalCount = UserPost::count();
+        $publishedCount = UserPost::where('status', 'published')->count();
+        $draftCount = UserPost::whereIn('status', ['pending', 'draft'])->count();
+        $scheduledCount = UserPost::where('status', 'scheduled')->count();
+        $archivedCount = UserPost::whereIn('status', ['rejected', 'archived'])->count();
+        $authors = UserPost::distinct()->whereNotNull('author_name')->pluck('author_name');
 
         // Right side utility panel data
-        $todayPublished = $posts->where('status', 'published')->where('created_at', '>=', now()->startOfDay())->count();
-        if ($todayPublished === 0) {
-            $todayPublished = min(18, $publishedCount);
-        }
-        $todayViews = $posts->where('created_at', '>=', now()->startOfDay())->sum('views_count');
-        if ($todayViews === 0) {
-            $todayViews = 142800;
-        }
-        $breakingCount = $posts->where('is_hero', true)->count();
-        if ($breakingCount === 0) {
-            $breakingCount = 4;
-        }
+        $todayPublished = UserPost::where('status', 'published')->where('created_at', '>=', now()->startOfDay())->count() ?: min(18, $publishedCount);
+        $todayViews = UserPost::where('created_at', '>=', now()->startOfDay())->sum('views_count') ?: 142800;
+        $breakingCount = UserPost::where('is_hero', true)->count() ?: 4;
+
+        $posts = UserPost::latest()->take(100)->get();
 
         return view('admin.post.index', compact(
             'posts',
@@ -60,7 +51,7 @@ class PostController extends Controller
         if (!Auth::check()) {
             return redirect('/admin/login')->with('error', 'Please log in first.');
         }
-        $posts = UserPost::where('is_admin_post', false)->latest()->get();
+        $posts = UserPost::where('is_admin_post', false)->latest()->take(100)->get();
         return view('admin.reader_corner.index', compact('posts'));
     }
 
