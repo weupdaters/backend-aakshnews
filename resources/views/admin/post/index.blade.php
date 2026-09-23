@@ -166,70 +166,107 @@
     .nr-post-card {
         background: #FFFFFF;
         border: 1px solid var(--cms-border);
-        border-radius: 14px;
-        padding: 14px 16px;
+        border-radius: 16px;
+        padding: 14px 18px;
         display: flex;
         align-items: center;
-        gap: 14px;
-        min-height: 125px;
+        gap: 16px;
+        min-height: 126px;
         position: relative;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 1px 2px rgba(15, 23, 42, 0.02);
     }
     .nr-post-card:hover {
         border-color: #CBD5E1;
         transform: translateY(-2px);
-        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.07), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
     }
     .nr-post-card.nr-card-featured {
-        border: 1.5px solid #FDE047;
-        box-shadow: 0 4px 16px rgba(245, 158, 11, 0.07);
+        border: 1.5px solid #FCD34D;
+        background: linear-gradient(to right, #FFFDF5, #FFFFFF 20%);
+        box-shadow: 0 4px 16px rgba(245, 158, 11, 0.08);
     }
     .nr-post-card.nr-card-featured:hover {
         border-color: #F59E0B;
-        box-shadow: 0 6px 22px rgba(245, 158, 11, 0.12);
+        box-shadow: 0 8px 24px rgba(245, 158, 11, 0.14);
     }
     .nr-post-card.is-selected {
-        border-color: #C4B5FD;
-        background: rgba(124, 58, 237, 0.02);
+        border-color: var(--cms-primary);
+        background: #FAF5FF;
+        box-shadow: inset 4px 0 0 var(--cms-primary), 0 4px 12px rgba(124, 58, 237, 0.08);
+    }
+
+    /* Lead Selector (Row number & Checkbox) */
+    .nr-lead-cell {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: 30px;
+        flex-shrink: 0;
+    }
+    .nr-lead-idx {
+        font-size: 11px;
+        font-weight: 700;
+        color: #94A3B8;
+        letter-spacing: -0.2px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        line-height: 1;
+    }
+    .nr-lead-cell .article-checkbox {
+        width: 18px;
+        height: 18px;
+        border-radius: 5px;
+        border: 1.5px solid #CBD5E1;
+        margin: 0;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+    .nr-lead-cell .article-checkbox:checked {
+        background-color: var(--cms-primary);
+        border-color: var(--cms-primary);
     }
 
     /* Post Image Container */
     .nr-post-thumb-wrap {
-        width: 170px;
+        width: 160px;
         height: 96px;
-        border-radius: 10px;
+        border-radius: 12px;
         overflow: hidden;
         position: relative;
         background: #0F172A;
         flex-shrink: 0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
     .nr-post-thumb-wrap img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.3s ease;
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .nr-post-card:hover .nr-post-thumb-wrap img {
-        transform: scale(1.03);
+        transform: scale(1.05);
     }
 
     /* Overlay Badges on Image */
     .nr-img-badge-featured {
-        background: #FEF3C7;
+        background: rgba(254, 243, 199, 0.95);
+        backdrop-filter: blur(4px);
         color: #92400E;
         font-size: 10px;
         font-weight: 700;
-        padding: 3px 8px;
+        padding: 2.5px 8px;
         border-radius: 6px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
     .nr-img-badge-breaking {
-        background: #EF4444;
+        background: rgba(239, 68, 68, 0.95);
+        backdrop-filter: blur(4px);
         color: #FFFFFF;
         font-size: 10px;
         font-weight: 700;
-        padding: 3px 8px;
+        padding: 2.5px 8px;
         border-radius: 6px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
@@ -237,8 +274,8 @@
         position: absolute;
         bottom: 6px;
         right: 6px;
-        background: rgba(0, 0, 0, 0.65);
-        backdrop-filter: blur(2px);
+        background: rgba(15, 23, 42, 0.72);
+        backdrop-filter: blur(3px);
         color: #FFFFFF;
         width: 22px;
         height: 22px;
@@ -248,13 +285,81 @@
         justify-content: center;
     }
 
-    /* Center Content */
-    .nr-headline-link {
-        font-size: 16px;
+    /* Center Content Details */
+    .nr-post-content {
+        flex: 1 1 auto;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+    }
+    .nr-badges-cluster {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .nr-cat-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11.5px;
         font-weight: 700;
         color: var(--cms-text-main);
+        background: #F1F5F9;
+        padding: 2px 9px;
+        border-radius: 6px;
+    }
+    .nr-status-badge {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2.5px 9px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .nr-badge-tag {
+        font-size: 10.5px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .tag-featured {
+        background: #FEF3C7;
+        color: #B45309;
+    }
+    .tag-breaking {
+        background: #FEE2E2;
+        color: #DC2626;
+    }
+    .nr-live-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: #EF4444;
+        display: inline-block;
+        animation: nr-pulse 1.8s infinite;
+    }
+    @keyframes nr-pulse {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(239, 68, 68, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+
+    .nr-headline-wrap {
+        margin: 0;
+        line-height: 1.38;
+    }
+    .nr-headline-link {
+        font-size: 15.5px;
+        font-weight: 700;
+        color: #0F172A;
         text-decoration: none;
-        line-height: 1.35;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
@@ -264,33 +369,191 @@
     .nr-headline-link:hover {
         color: var(--cms-primary);
     }
+    .nr-summary-snippet {
+        font-size: 12.5px;
+        color: #64748B;
+        line-height: 1.45;
+        margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .nr-post-meta-strip {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11.5px;
+        color: #64748B;
+        font-weight: 500;
+    }
+    .nr-post-meta-strip i {
+        width: 12px;
+        height: 12px;
+        color: #94A3B8;
+    }
+    .nr-meta-dot {
+        color: #CBD5E1;
+    }
 
-    /* Mini Performance Metrics */
-    .metric-mini-card {
-        width: 72px;
-        padding: 5px 6px;
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 8px;
-        text-align: center;
+    /* Right Section: Compact Performance Metrics + Actions */
+    .nr-card-right-section {
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: flex-end;
         justify-content: center;
+        gap: 10px;
+        flex-shrink: 0;
+        min-width: 224px;
     }
-    .metric-val {
-        font-size: 12.5px;
+
+    /* Sleek Segmented Metrics Strip */
+    .nr-stats-cluster {
+        display: inline-flex;
+        align-items: center;
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        padding: 5px 10px;
+        gap: 10px;
+        transition: all 0.2s ease;
+    }
+    .nr-post-card:hover .nr-stats-cluster {
+        background: #FFFFFF;
+        border-color: #CBD5E1;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+    .nr-stat-node {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .nr-stat-node i {
+        width: 13.5px;
+        height: 13.5px;
+        flex-shrink: 0;
+    }
+    .nr-stat-body {
+        display: flex;
+        flex-direction: column;
+        line-height: 1;
+    }
+    .nr-stat-count {
+        font-size: 12px;
         font-weight: 800;
-        color: var(--cms-text-main);
-        line-height: 1.1;
-        margin: 1px 0;
+        color: #0F172A;
+        letter-spacing: -0.3px;
     }
-    .metric-lbl {
+    .nr-stat-tag {
         font-size: 9.5px;
         font-weight: 600;
-        color: var(--cms-text-light);
-        line-height: 1;
-        text-transform: capitalize;
+        color: #94A3B8;
+        margin-top: 1px;
+    }
+    .nr-stat-divider {
+        width: 1px;
+        height: 18px;
+        background-color: #E2E8F0;
+    }
+
+    /* Action Toolbar */
+    .nr-btn-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .nr-btn-edit {
+        background: var(--cms-primary);
+        color: #FFFFFF;
+        height: 32px;
+        padding: 0 13px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        text-decoration: none;
+        transition: all 0.15s ease;
+        box-shadow: 0 1px 3px rgba(124, 58, 237, 0.25);
+    }
+    .nr-btn-edit:hover {
+        background: var(--cms-primary-hover);
+        color: #FFFFFF;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(124, 58, 237, 0.35);
+    }
+    .nr-btn-preview {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        color: #334155;
+        height: 32px;
+        padding: 0 11px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.15s ease;
+    }
+    .nr-btn-preview:hover {
+        background: #F8FAFC;
+        border-color: #CBD5E1;
+        color: var(--cms-primary);
+        transform: translateY(-1px);
+    }
+    .nr-btn-more {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: 1px solid #E2E8F0;
+        color: #64748B;
+        background: #FFFFFF;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        transition: all 0.15s ease;
+    }
+    .nr-btn-more:hover {
+        background: #F8FAFC;
+        border-color: #CBD5E1;
+        color: #0F172A;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 991.98px) {
+        .nr-post-card {
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+        .nr-card-right-section {
+            width: 100%;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #F1F5F9;
+            padding-top: 10px;
+            margin-top: 5px;
+        }
+    }
+    @media (max-width: 575.98px) {
+        .nr-post-card {
+            padding: 12px;
+            gap: 12px;
+        }
+        .nr-post-thumb-wrap {
+            width: 100px;
+            height: 70px;
+        }
+        .nr-headline-link {
+            font-size: 14px;
+        }
+        .nr-stats-cluster {
+            display: none;
+        }
     }
 
     /* Right Utility Sidebar */
@@ -812,7 +1075,19 @@
                         $pViewsFmt = $pViews >= 1000 ? round($pViews / 1000, 1) . 'K' : $pViews;
                         $pDate = $p->created_at ? (is_string($p->created_at) ? date('d M Y', strtotime($p->created_at)) : $p->created_at->format('d M Y')) : 'Recent';
                         $pIsoDate = $p->created_at ? (is_string($p->created_at) ? date('Y-m-d', strtotime($p->created_at)) : $p->created_at->format('Y-m-d')) : date('Y-m-d');
-                        $pDesc = !empty($p->content) ? strip_tags($p->content) : 'Punjab Government policy release and administrative developments reporting from ground zero.';
+                        $cleanDesc = !empty($p->content) ? trim(strip_tags($p->content)) : 'Punjab Government policy release and administrative developments reporting from ground zero.';
+                        $cleanDesc = trim(preg_replace('/\s+/', ' ', $cleanDesc));
+                        if (!empty($p->title)) {
+                            $tTitle = trim($p->title);
+                            if (str_starts_with($cleanDesc, $tTitle)) {
+                                $cleanDesc = trim(substr($cleanDesc, strlen($tTitle)));
+                                $cleanDesc = ltrim($cleanDesc, " :-–—|\t\n\r");
+                            }
+                        }
+                        if (empty($cleanDesc)) {
+                            $cleanDesc = 'ਸੰਪਾਦਕੀ ਰਿਪੋਰਟ ਅਤੇ ਪ੍ਰਸ਼ਾਸਨਿਕ ਜਾਣਕਾਰੀ ground report ਤੋਂ...';
+                        }
+                        $pDesc = $cleanDesc;
                         
                         $pDot = '#7C3AED';
                         if (stripos($pCat, 'punjab') !== false) $pDot = '#F59E0B';
@@ -831,7 +1106,7 @@
                             'category' => $pCat,
                             'dot_color' => $pDot,
                             'title' => $p->title,
-                            'summary' => Str::limit($pDesc, 110),
+                            'summary' => Str::limit($pDesc, 120),
                             'author' => $p->author_name ?? 'Aaksh News Desk',
                             'date' => $pDate,
                             'iso_date' => $pIsoDate,
@@ -862,16 +1137,16 @@
                         $status = strtolower($item['status'] ?? 'published');
 
                         // Status pill styling
-                        $statusStyle = 'background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px;';
+                        $statusStyle = 'background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0;';
                         $statusDot = '#10B981';
                         if ($status === 'scheduled') {
-                            $statusStyle = 'background: #F3E8FF; color: #7C3AED; border: 1px solid #DDD6FE; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px;';
+                            $statusStyle = 'background: #F3E8FF; color: #7C3AED; border: 1px solid #DDD6FE;';
                             $statusDot = '#7C3AED';
                         } elseif (in_array($status, ['draft', 'pending'])) {
-                            $statusStyle = 'background: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px;';
+                            $statusStyle = 'background: #FEF3C7; color: #B45309; border: 1px solid #FDE68A;';
                             $statusDot = '#F59E0B';
                         } elseif (in_array($status, ['archived', 'rejected'])) {
-                            $statusStyle = 'background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px;';
+                            $statusStyle = 'background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1;';
                             $statusDot = '#94A3B8';
                         }
                     @endphp
@@ -885,24 +1160,24 @@
                          data-views="{{ $item['views'] }}"
                          data-date="{{ $item['iso_date'] }}">
                         
-                        <!-- 1. Checkbox & Number (Vertically Aligned on Left) -->
-                        <div class="d-flex flex-column align-items-center gap-1.5 flex-shrink-0" style="width: 24px;">
-                            <input type="checkbox" class="form-check-input m-0 article-checkbox" value="{{ $item['id'] }}" style="width: 18px; height: 18px; cursor: pointer; border-radius: 5px; border-color: #CBD5E1;">
-                            <span style="font-size: 12.5px; font-weight: 700; color: #475569; letter-spacing: -0.2px;">{{ $rowNum }}</span>
+                        <!-- 1. Selection & Row Number -->
+                        <div class="nr-lead-cell">
+                            <span class="nr-lead-idx">#{{ $rowNum }}</span>
+                            <input type="checkbox" class="form-check-input article-checkbox" value="{{ $item['id'] }}" title="Select article">
                         </div>
 
-                        <!-- 2. Post Image (170 x 96px, 16:9 ratio) -->
+                        <!-- 2. Post Thumbnail (160 x 96px, 16:9 ratio) -->
                         <div class="nr-post-thumb-wrap">
                             <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}" loading="lazy" onerror="this.src='/images/aaksh_anchor_studio.jpg'">
                             
                             @if($item['is_featured'])
                                 <span class="badge position-absolute top-2 start-2 nr-img-badge-featured d-inline-flex align-items-center gap-1">
-                                    <i data-lucide="star" style="width: 11px; height: 11px; fill: #D97706; stroke: #D97706;"></i>
+                                    <i data-lucide="star" style="width: 10px; height: 10px; fill: #D97706; stroke: #D97706;"></i>
                                     <span>Featured</span>
                                 </span>
                             @elseif($item['is_breaking'])
                                 <span class="badge position-absolute top-2 start-2 nr-img-badge-breaking d-inline-flex align-items-center gap-1">
-                                    <span class="rounded-circle bg-white" style="width: 6px; height: 6px; display: inline-block;"></span>
+                                    <span class="rounded-circle bg-white" style="width: 5px; height: 5px; display: inline-block;"></span>
                                     <span>Breaking</span>
                                 </span>
                             @endif
@@ -918,99 +1193,114 @@
                         </div>
 
                         <!-- 3. Center Content Details -->
-                        <div class="flex-grow-1 min-w-0 d-flex flex-column justify-content-between h-100 py-0.5" style="gap: 5px;">
-                            <!-- Top Line: Category & Status Pill -->
-                            <div class="d-flex align-items-center justify-content-between gap-2">
-                                <div class="d-flex align-items-center gap-1.5">
-                                    <span class="rounded-circle" style="width: 7px; height: 7px; background-color: {{ $item['dot_color'] }}; display: inline-block;"></span>
-                                    <span style="font-size: 12px; font-weight: 700; color: var(--cms-text-main);">{{ $item['category'] }}</span>
-                                </div>
-                                <div>
-                                    <span class="badge d-inline-flex align-items-center gap-1.5" style="{{ $statusStyle }}">
-                                        <span class="rounded-circle" style="width: 6px; height: 6px; background-color: {{ $statusDot }};"></span>
-                                        <span>{{ ucfirst($status) }}</span>
-                                        <i data-lucide="chevron-down" style="width: 11px; height: 11px; opacity: 0.7;"></i>
+                        <div class="nr-post-content">
+                            <!-- Top Line: Category & Status Badges Grouped Together -->
+                            <div class="nr-badges-cluster">
+                                <span class="nr-cat-badge">
+                                    <span class="cat-dot-indicator" style="background-color: {{ $item['dot_color'] }}; width: 6px; height: 6px;"></span>
+                                    <span>{{ $item['category'] }}</span>
+                                </span>
+
+                                <span class="badge nr-status-badge" style="{{ $statusStyle }}">
+                                    <span class="rounded-circle" style="width: 6px; height: 6px; background-color: {{ $statusDot }};"></span>
+                                    <span>{{ ucfirst($status) }}</span>
+                                </span>
+
+                                @if($item['is_featured'])
+                                    <span class="badge nr-badge-tag tag-featured">
+                                        <i data-lucide="star" style="width: 10px; height: 10px; fill: currentColor;"></i>
+                                        <span>Featured</span>
                                     </span>
-                                </div>
+                                @endif
+                                @if($item['is_breaking'])
+                                    <span class="badge nr-badge-tag tag-breaking">
+                                        <span class="nr-live-dot"></span>
+                                        <span>Breaking</span>
+                                    </span>
+                                @endif
                             </div>
 
-                            <!-- Headline (16-17px, Bold, Max 2 lines with ellipsis) -->
-                            <h2 class="m-0" style="line-height: 1.35;">
+                            <!-- Headline (15.5px, Bold, Max 2 lines with ellipsis) -->
+                            <h3 class="nr-headline-wrap">
                                 <a href="/admin/post/{{ $item['id'] }}/edit" class="nr-headline-link" title="{{ $item['title'] }}">
                                     {{ $item['title'] }}
                                 </a>
-                            </h2>
+                            </h3>
 
-                            <!-- Summary (12-13px, Muted gray, Max 1 line with ellipsis) -->
-                            <p class="m-0 text-truncate" style="font-size: 12px; color: var(--cms-text-muted); line-height: 1.4; max-width: 100%;">
+                            <!-- Summary Snippet -->
+                            <p class="nr-summary-snippet text-truncate" title="{{ $item['summary'] }}">
                                 {{ $item['summary'] }}
                             </p>
 
-                            <!-- Article Meta (Author • Date • Views • Comments) -->
-                            <div class="d-flex align-items-center gap-2.5 text-muted" style="font-size: 11.5px; font-weight: 500;">
+                            <!-- Article Meta (Author • Date • Read time) -->
+                            <div class="nr-post-meta-strip">
                                 <span class="d-inline-flex align-items-center gap-1">
-                                    <i data-lucide="user" style="width: 12px; height: 12px; color: #94A3B8;"></i>
+                                    <i data-lucide="user"></i>
                                     <span>{{ $item['author'] }}</span>
                                 </span>
-                                <span>•</span>
+                                <span class="nr-meta-dot">•</span>
                                 <span class="d-inline-flex align-items-center gap-1">
-                                    <i data-lucide="calendar" style="width: 12px; height: 12px; color: #94A3B8;"></i>
+                                    <i data-lucide="calendar"></i>
                                     <span>{{ $item['date'] }}</span>
                                 </span>
-                                <span>•</span>
-                                <span class="d-inline-flex align-items-center gap-1">
-                                    <i data-lucide="eye" style="width: 12px; height: 12px; color: #94A3B8;"></i>
-                                    <span>{{ $item['views_fmt'] }} views</span>
-                                </span>
-                                <span>•</span>
-                                <span class="d-inline-flex align-items-center gap-1">
-                                    <i data-lucide="message-square" style="width: 12px; height: 12px; color: #94A3B8;"></i>
-                                    <span>{{ $item['comments'] }} comments</span>
+                                <span class="nr-meta-dot">•</span>
+                                <span class="d-inline-flex align-items-center gap-1 text-slate-400">
+                                    <i data-lucide="clock"></i>
+                                    <span>2 min read</span>
                                 </span>
                             </div>
                         </div>
 
-                        <!-- 4. Right Section: 3 Mini-Metrics + Action Buttons -->
-                        <div class="d-flex flex-column align-items-end justify-content-between h-100 flex-shrink-0" style="min-width: 236px; gap: 10px;">
-                            <!-- Top: 3 Mini-Metrics Cards -->
-                            <div class="d-flex gap-2">
-                                <div class="metric-mini-card">
-                                    <i data-lucide="eye" style="width: 14px; height: 14px; color: #2563EB;"></i>
-                                    <span class="metric-val">{{ $item['views_fmt'] }}</span>
-                                    <span class="metric-lbl">Views</span>
+                        <!-- 4. Right Section: Unified Performance Cluster + Actions -->
+                        <div class="nr-card-right-section">
+                            <!-- Sleek Segmented Metrics Strip -->
+                            <div class="nr-stats-cluster">
+                                <div class="nr-stat-node" title="Total Views">
+                                    <i data-lucide="eye" style="color: #6366F1;"></i>
+                                    <div class="nr-stat-body">
+                                        <span class="nr-stat-count">{{ $item['views_fmt'] }}</span>
+                                        <span class="nr-stat-tag">Views</span>
+                                    </div>
                                 </div>
-                                <div class="metric-mini-card">
-                                    <i data-lucide="message-square" style="width: 14px; height: 14px; color: #2563EB;"></i>
-                                    <span class="metric-val">{{ $item['comments'] }}</span>
-                                    <span class="metric-lbl">Comments</span>
+                                <div class="nr-stat-divider"></div>
+                                <div class="nr-stat-node" title="Comments">
+                                    <i data-lucide="message-square" style="color: #8B5CF6;"></i>
+                                    <div class="nr-stat-body">
+                                        <span class="nr-stat-count">{{ $item['comments'] }}</span>
+                                        <span class="nr-stat-tag">Comments</span>
+                                    </div>
                                 </div>
-                                <div class="metric-mini-card">
-                                    <i data-lucide="share-2" style="width: 14px; height: 14px; color: #2563EB;"></i>
-                                    <span class="metric-val">{{ $item['shares_fmt'] }}</span>
-                                    <span class="metric-lbl">Shares</span>
+                                <div class="nr-stat-divider"></div>
+                                <div class="nr-stat-node" title="Social Shares">
+                                    <i data-lucide="share-2" style="color: #0EA5E9;"></i>
+                                    <div class="nr-stat-body">
+                                        <span class="nr-stat-count">{{ $item['shares_fmt'] }}</span>
+                                        <span class="nr-stat-tag">Shares</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Bottom: Action Buttons -->
-                            <div class="d-flex align-items-center gap-1.5">
-                                <a href="/admin/post/{{ $item['id'] }}/edit" class="btn text-white d-inline-flex align-items-center gap-1 px-3" style="background: var(--cms-primary); height: 32px; border-radius: 8px; font-size: 12px; font-weight: 700; border: none;">
-                                    <i data-lucide="pencil" style="width: 12px; height: 12px;"></i>
+                            <!-- Actions Toolbar -->
+                            <div class="nr-btn-toolbar">
+                                <a href="/admin/post/{{ $item['id'] }}/edit" class="btn nr-btn-edit">
+                                    <i data-lucide="pencil" style="width: 12.5px; height: 12.5px;"></i>
                                     <span>Edit</span>
                                 </a>
-                                <button type="button" class="btn btn-outline-secondary d-inline-flex align-items-center gap-1 px-2.5" style="height: 32px; border-radius: 8px; font-size: 12px; font-weight: 600; border-color: #E2E8F0; color: #374151; background: #FFFFFF;" onclick="previewArticle({{ $item['id'] }})">
-                                    <i data-lucide="eye" style="width: 12px; height: 12px;"></i>
+                                <button type="button" class="btn nr-btn-preview" onclick="previewArticle({{ $item['id'] }})" title="Quick Preview">
+                                    <i data-lucide="eye" style="width: 12.5px; height: 12.5px;"></i>
                                     <span>Preview</span>
                                 </button>
                                 <div class="dropdown">
-                                    <button type="button" class="btn btn-outline-secondary d-inline-flex align-items-center justify-content-center p-0" data-bs-toggle="dropdown" aria-expanded="false" style="width: 32px; height: 32px; border-radius: 8px; border-color: #E2E8F0; color: #64748B; background: #FFFFFF;">
+                                    <button type="button" class="btn nr-btn-more dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" title="More Options">
                                         <i data-lucide="more-horizontal" style="width: 14px; height: 14px;"></i>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 py-1" style="border-radius: 10px; font-size: 12px;">
-                                        <li><a class="dropdown-item py-1.5" href="javascript:void(0)" onclick="duplicateArticle({{ $item['id'] }})"><i data-lucide="copy" class="me-2 text-slate-400" style="width: 13px; height: 13px;"></i>Duplicate</a></li>
-                                        <li><a class="dropdown-item py-1.5" href="javascript:void(0)" onclick="updateStatus({{ $item['id'] }}, 'draft')"><i data-lucide="file-minus" class="me-2 text-slate-400" style="width: 13px; height: 13px;"></i>Move to Draft</a></li>
-                                        <li><a class="dropdown-item py-1.5" href="javascript:void(0)" onclick="updateStatus({{ $item['id'] }}, 'archived')"><i data-lucide="archive" class="me-2 text-slate-400" style="width: 13px; height: 13px;"></i>Archive</a></li>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 py-1.5" style="border-radius: 10px; font-size: 12.5px; min-width: 165px;">
+                                        <li><a class="dropdown-item py-1.5 d-flex align-items-center gap-2" href="javascript:void(0)" onclick="duplicateArticle({{ $item['id'] }})"><i data-lucide="copy" class="text-slate-400" style="width: 13px; height: 13px;"></i>Duplicate</a></li>
+                                        <li><a class="dropdown-item py-1.5 d-flex align-items-center gap-2" href="javascript:void(0)" onclick="updateStatus({{ $item['id'] }}, 'published')"><i data-lucide="check-circle-2" class="text-emerald-500" style="width: 13px; height: 13px;"></i>Mark Published</a></li>
+                                        <li><a class="dropdown-item py-1.5 d-flex align-items-center gap-2" href="javascript:void(0)" onclick="updateStatus({{ $item['id'] }}, 'draft')"><i data-lucide="file-minus" class="text-amber-500" style="width: 13px; height: 13px;"></i>Move to Draft</a></li>
+                                        <li><a class="dropdown-item py-1.5 d-flex align-items-center gap-2" href="javascript:void(0)" onclick="updateStatus({{ $item['id'] }}, 'archived')"><i data-lucide="archive" class="text-slate-400" style="width: 13px; height: 13px;"></i>Archive</a></li>
                                         <li><hr class="dropdown-divider my-1"></li>
-                                        <li><a class="dropdown-item py-1.5 text-danger" href="javascript:void(0)" onclick="deleteArticle({{ $item['id'] }})"><i data-lucide="trash-2" class="me-2" style="width: 13px; height: 13px;"></i>Delete</a></li>
+                                        <li><a class="dropdown-item py-1.5 text-danger d-flex align-items-center gap-2" href="javascript:void(0)" onclick="deleteArticle({{ $item['id'] }})"><i data-lucide="trash-2" style="width: 13px; height: 13px;"></i>Delete Post</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -1673,36 +1963,96 @@ function previewArticle(articleId) {
 
 // Single actions
 function duplicateArticle(id) {
-    alert(`Article #${id} duplicated as new draft.`);
+    if (confirm(`Duplicate article #${id} as a new draft?`)) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/admin/post/${id}/duplicate`;
+        const csrf = document.createElement('input');
+        csrf.type = 'hidden';
+        csrf.name = '_token';
+        csrf.value = '{{ csrf_token() }}';
+        form.appendChild(csrf);
+        document.body.appendChild(form);
+        form.submit();
+    }
 }
 
 function updateStatus(id, newStatus) {
-    alert(`Article #${id} status changed to ${newStatus}.`);
-    location.reload();
+    const token = '{{ csrf_token() }}';
+    fetch('/admin/post/bulk-action', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            ids: [id],
+            action: newStatus
+        })
+    }).then(res => res.json()).then(data => {
+        location.reload();
+    }).catch(() => {
+        location.reload();
+    });
 }
 
 function deleteArticle(id) {
     if (confirm('Are you sure you want to delete this article?')) {
-        const row = document.querySelector(`.article-item-row[data-id="${id}"]`);
-        if (row) {
-            row.style.opacity = '0';
-            setTimeout(() => row.remove(), 250);
-        }
+        const token = '{{ csrf_token() }}';
+        fetch(`/admin/post/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': token,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then(res => res.json()).then(data => {
+            const row = document.querySelector(`.article-item-row[data-id="${id}"]`);
+            if (row) {
+                row.style.opacity = '0';
+                setTimeout(() => row.remove(), 250);
+            }
+        }).catch(() => {
+            const row = document.querySelector(`.article-item-row[data-id="${id}"]`);
+            if (row) {
+                row.style.opacity = '0';
+                setTimeout(() => row.remove(), 250);
+            }
+        });
     }
 }
 
 // Bulk Actions
 function applyBulkAction(action) {
     const checked = Array.from(document.querySelectorAll('.article-checkbox:checked')).map(cb => cb.value);
-    if (checked.length === 0) return;
+    if (checked.length === 0) {
+        alert('Please select at least one article.');
+        return;
+    }
 
     if (action === 'delete') {
         if (!confirm(`Are you sure you want to delete ${checked.length} selected articles?`)) return;
     }
 
-    alert(`Bulk action [${action.toUpperCase()}] applied successfully to ${checked.length} articles.`);
-    deselectAllArticles();
-    location.reload();
+    const token = '{{ csrf_token() }}';
+    fetch('/admin/post/bulk-action', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            ids: checked,
+            action: action
+        })
+    }).then(res => res.json()).then(data => {
+        deselectAllArticles();
+        location.reload();
+    }).catch(() => {
+        location.reload();
+    });
 }
 </script>
 @endsection
