@@ -229,6 +229,43 @@ class NewsApiController extends Controller
     }
 
     /**
+     * POST /api/v1/news/{id}/react (Public / Optional Auth)
+     */
+    public function react($id, Request $request)
+    {
+        $post = UserPost::find($id);
+        if (!$post) {
+            if (!is_numeric($id) && preg_match('/(\d+)$/', $id, $matches)) {
+                $post = UserPost::find($matches[1]);
+            }
+        }
+
+        $type = $request->input('type', 'like'); // like, dislike, or emoji like '❤️'
+        $action = $request->input('action', 'add'); // add, remove
+
+        // If user is authenticated, sync with PostLike table
+        $user = Auth::guard('sanctum')->user() ?: Auth::user();
+        if ($user && $post) {
+            $existing = PostLike::where('user_id', $user->id)->where('user_post_id', $post->id)->first();
+            if ($action === 'remove' || ($type === 'dislike' && $existing)) {
+                if ($existing) $existing->delete();
+            } elseif ($type === 'like' && !$existing) {
+                PostLike::create([
+                    'user_id'      => $user->id,
+                    'user_post_id' => $post->id,
+                ]);
+            }
+        }
+
+        return $this->successResponse([
+            'status' => 'success',
+            'type'   => $type,
+            'action' => $action,
+            'post_id'=> $post ? $post->id : $id,
+        ], 'Reaction recorded successfully.');
+    }
+
+    /**
      * GET /api/v1/breaking-news
      */
     public function breakingNews()

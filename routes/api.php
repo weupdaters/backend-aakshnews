@@ -83,6 +83,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/news/{slug}', [NewsApiController::class, 'show']);
     Route::post('/news/{id}/view', [NewsApiController::class, 'incrementView']);
     Route::post('/news/{id}/share', [NewsApiController::class, 'incrementShare']);
+    Route::post('/news/{id}/react', [NewsApiController::class, 'react']);
 
     Route::get('/breaking-news', [NewsApiController::class, 'breakingNews']);
     Route::get('/trending', [NewsApiController::class, 'trending']);
