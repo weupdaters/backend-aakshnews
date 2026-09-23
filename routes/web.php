@@ -61,6 +61,8 @@ Route::delete('/api/photo-gallery/{id}', [PhotoGalleryController::class, 'destro
 Route::post('/api/translate', [TranslationController::class, 'translate']);
 Route::post('/api/generate-description', [AiToolController::class, 'generateDescription']);
 Route::post('/api/generate-ai-image', [AiToolController::class, 'generateAiImage']);
+Route::post('/api/search-real-images', [AiToolController::class, 'searchRealImages']);
+Route::post('/api/save-remote-image', [AiToolController::class, 'saveRemoteImage']);
 Route::post('/api/ai-suggest-title', [AiToolController::class, 'suggestTitle']);
 Route::post('/api/ai-assistant', [AiToolController::class, 'assistantAction']);
 

@@ -222,6 +222,108 @@
         border-radius: 10px;
         padding: 14px 16px;
     }
+
+    /* Real Image Finder Modal & Cards */
+    .real-image-card {
+        border-radius: 12px;
+        border: 1px solid #E2E8F0;
+        background: #FFFFFF;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+    .real-image-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.15);
+        border-color: #1769D2;
+    }
+    .real-image-thumb-wrap {
+        position: relative;
+        width: 100%;
+        height: 150px;
+        background: #0F172A;
+        overflow: hidden;
+    }
+    .real-image-thumb-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    .real-image-card:hover .real-image-thumb-wrap img {
+        transform: scale(1.05);
+    }
+    .real-image-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.72);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        color: #FFFFFF;
+        font-size: 12px;
+        font-weight: 700;
+        gap: 6px;
+        backdrop-filter: blur(2px);
+    }
+    .real-image-card:hover .real-image-overlay {
+        opacity: 1;
+    }
+    .real-image-card.is-saving .real-image-overlay {
+        opacity: 1 !important;
+        background: rgba(15, 23, 42, 0.88);
+    }
+    .real-image-meta {
+        padding: 10px 12px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .real-image-title {
+        font-size: 11.5px;
+        font-weight: 600;
+        color: #1E293B;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        height: 32px;
+        margin-bottom: 6px;
+    }
+    .real-image-badge-domain {
+        font-size: 10.5px;
+        font-weight: 600;
+        color: #1769D2;
+        background: #EBF3FC;
+        padding: 2px 7px;
+        border-radius: 4px;
+        display: inline-block;
+        max-width: 130px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .quick-search-pill {
+        transition: all 0.15s ease;
+        font-weight: 500;
+    }
+    .quick-search-pill:hover, .quick-search-pill.active {
+        background: #EBF3FC !important;
+        color: #1769D2 !important;
+        border-color: #BFDBFE !important;
+    }
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
 </style>
 
 <!-- Top Breadcrumbs & Page Heading -->
@@ -718,20 +820,33 @@
                         <i data-lucide="upload" style="width: 13px; height: 13px;"></i> Upload Image
                         <input type="file" id="post-image-file" accept="image/*" class="d-none">
                     </label>
-                    <button type="button" class="btn btn-sm btn-white border shadow-sm d-inline-flex align-items-center" id="btn-ai-image" style="border-radius: 6px; font-weight: 600; font-size: 11.5px; padding: 6px 12px; gap: 5px; color: #475569;">
-                        <i data-lucide="sparkles" style="width: 13px; height: 13px; color: #FFC400;"></i> AI Image
+                    <button type="button" class="btn btn-sm btn-white border shadow-sm d-inline-flex align-items-center" id="btn-find-real-image" style="border-radius: 6px; font-weight: 600; font-size: 11.5px; padding: 6px 12px; gap: 5px; color: #1E293B; background: #F8FAFC;">
+                        <i data-lucide="globe" style="width: 13px; height: 13px; color: #2563EB;"></i> Find Real News Image
                     </button>
                 </div>
             </div>
 
             <!-- Manual URL input & Preview -->
-            <div class="mb-3">
+            <div class="mb-2">
                 <input type="text" name="image_url" id="post-image-url" class="form-control form-control-modern font-xs" value="{{ $post->image_url }}" placeholder="Or paste image URL...">
                 <span id="upload-status" class="font-xs text-muted mt-1 d-none"><i data-lucide="loader-2" class="lucide-spin" style="width: 12px; height: 12px;"></i> Uploading image...</span>
             </div>
 
+            <!-- Live Featured Image Preview -->
+            <div id="featured-image-preview-container" class="mb-3 p-2 bg-light rounded border position-relative" style="{{ $post->image_url ? '' : 'display: none;' }}">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                    <span class="font-xxs text-muted fw-bold text-uppercase" style="letter-spacing: 0.5px; font-size: 10px;">Selected Featured Photo</span>
+                    <button type="button" class="btn btn-link btn-sm p-0 text-danger text-decoration-none" id="btn-remove-featured-image" style="font-size: 11px;">
+                        <i data-lucide="trash-2" style="width: 12px; height: 12px;"></i> Clear
+                    </button>
+                </div>
+                <div class="position-relative overflow-hidden rounded border bg-dark" style="max-height: 160px;">
+                    <img id="featured-image-preview-img" src="{{ $post->image_url }}" alt="Featured Preview" class="w-100 object-fit-cover" style="max-height: 160px; display: block;">
+                </div>
+            </div>
+
             <!-- Thumbnails selection row matching mockup -->
-            <div class="d-flex align-items-center gap-2 overflow-auto py-1">
+            <div class="d-flex align-items-center gap-2 overflow-auto py-1" id="preset-thumbnails-row">
                 @if($post->image_url)
                     <img src="{{ $post->image_url }}" alt="Current Featured" class="rounded object-fit-cover shadow-sm thumb-pick border border-primary" style="width: 64px; height: 44px; cursor: pointer;" onclick="selectThumbnail('{{ $post->image_url }}', this)">
                 @endif
@@ -851,15 +966,113 @@
 
     </div>
 </form>
+
+<!-- MODAL: REAL NEWS IMAGE FINDER -->
+<div class="modal fade" id="modal-real-image-finder" tabindex="-1" aria-labelledby="realImageFinderLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-2xl" style="border-radius: 16px; overflow: hidden;">
+            <div class="modal-header border-bottom py-3 px-4" style="background: #F8FAFC;">
+                <div class="d-flex align-items-center gap-2.5">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #EBF3FC; color: #1769D2;">
+                        <i data-lucide="globe" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title font-weight-bold text-dark mb-0" id="realImageFinderLabel" style="font-size: 16px;">
+                            Find Real News Image <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-xxs px-2 py-0.5 rounded-pill ms-1" style="font-size: 11px;">Real Press Photos</span>
+                        </h5>
+                        <div class="text-muted font-xxs" style="font-size: 12px;">Search authentic news photographs from media archives matching your story</div>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-4" style="background: #FFFFFF;">
+                <!-- Search Box -->
+                <div class="mb-3">
+                    <div class="input-group input-group-lg shadow-sm" style="border-radius: 10px; overflow: hidden; border: 1.5px solid #CBD5E1;">
+                        <span class="input-group-text bg-white border-0 text-muted ps-3">
+                            <i data-lucide="search" style="width: 18px; height: 18px; color: #64748B;"></i>
+                        </span>
+                        <input type="text" id="real-image-query" class="form-control border-0 font-sm py-2.5" placeholder="Enter headline, politician name, city or event (e.g. Bhagwant Mann, Harpal Cheema, Punjab Budget)...">
+                        <button class="btn btn-primary px-4 font-sm font-weight-bold d-inline-flex align-items-center gap-2" type="button" id="btn-search-real-images" style="background: #1769D2;">
+                            <span id="search-btn-spinner" class="d-none"><i data-lucide="loader-2" class="lucide-spin" style="width: 14px; height: 14px;"></i></span>
+                            <span id="search-btn-text">Search Photos</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Keywords / Entity Suggestion Pills -->
+                <div class="d-flex align-items-center gap-2 flex-wrap mb-3" id="quick-keywords-container">
+                    <span class="font-xxs text-muted fw-bold me-1" style="font-size: 11px;">Quick Topics:</span>
+                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="ਭਗਵੰਤ ਮਾਨ">CM Bhagwant Mann</button>
+                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="ਹਰਪਾਲ ਚੀਮਾ">Harpal Cheema</button>
+                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="ਪੰਜਾਬ ਕੈਬਨਿਟ">Punjab Cabinet</button>
+                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="ਪੰਜਾਬ ਪੁਲਿਸ">Punjab Police</button>
+                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="ਪੰਜਾਬ ਬਜਟ 2026">Punjab Budget</button>
+                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="Punjab News Breaking">Punjab Breaking</button>
+                </div>
+
+                <!-- Status Header -->
+                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom flex-wrap gap-2">
+                    <div class="font-xs text-muted" id="real-images-status-text">
+                        Showing news photographs for: <strong class="text-dark" id="current-search-term-display">-</strong>
+                    </div>
+                    <div class="font-xxs text-muted">
+                        Click any image to automatically download & set as featured
+                    </div>
+                </div>
+
+                <!-- Loading State Skeleton -->
+                <div id="real-images-skeleton" class="d-none">
+                    <div class="row g-3">
+                        @for ($i = 0; $i < 6; $i++)
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <div class="card border rounded-3 overflow-hidden shadow-sm h-100">
+                                <div class="bg-secondary-subtle" style="height: 150px; animation: pulse 1.5s infinite;"></div>
+                                <div class="p-2.5">
+                                    <div class="bg-secondary-subtle rounded mb-2" style="height: 12px; width: 85%;"></div>
+                                    <div class="bg-secondary-subtle rounded" style="height: 10px; width: 45%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        @endfor
+                    </div>
+                </div>
+
+                <!-- Results Grid -->
+                <div id="real-images-grid" class="row g-3">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="real-images-empty" class="text-center py-5 d-none">
+                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center p-3 mb-2" style="background: #F1F5F9; color: #94A3B8;">
+                        <i data-lucide="image-off" style="width: 32px; height: 32px;"></i>
+                    </div>
+                    <h6 class="font-weight-bold text-dark mb-1">No photographs found</h6>
+                    <p class="text-muted font-xs mb-3">Try searching with a shorter name, leader or department (e.g. "Bhagwant Mann" or "Punjab Police").</p>
+                </div>
+            </div>
+
+            <div class="modal-footer py-2.5 px-4 bg-light d-flex justify-content-between align-items-center">
+                <div class="font-xxs text-muted d-flex align-items-center gap-1.5" style="font-size: 11.5px;">
+                    <i data-lucide="shield-check" style="width: 14px; height: 14px; color: #16A34A;"></i>
+                    Photos are automatically downloaded & saved locally on your server for fast, permanent loading.
+                </div>
+                <button type="button" class="btn btn-sm btn-secondary font-xs px-3" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
 <script>
     // Global helper to select thumbnails
     function selectThumbnail(url, el) {
-        $('#post-image-url').val(url);
+        $('#post-image-url').val(url).trigger('input');
         $('.thumb-pick').removeClass('border border-primary');
-        $(el).addClass('border border-primary');
+        if (el) $(el).addClass('border border-primary');
     }
 
     // Tag remover
@@ -1139,35 +1352,158 @@
             });
         });
 
-        // 5. AI Image Generation
-        $('#btn-ai-image').on('click', function() {
-            var title = $('#post-title').val();
-            if (!title) {
-                alert('Please enter an article title first to generate AI image.');
-                return;
+        // 5. Featured Image Preview & Real Image Finder
+        function updateFeaturedImagePreview(url) {
+            if (url && url.trim() !== '') {
+                $('#featured-image-preview-img').attr('src', url.trim());
+                $('#featured-image-preview-container').slideDown(150);
+            } else {
+                $('#featured-image-preview-img').attr('src', '');
+                $('#featured-image-preview-container').slideUp(150);
             }
-            var $btn = $(this);
-            var originalHtml = $btn.html();
-            $btn.html('<i data-lucide="loader-2" class="lucide-spin" style="width:13px;height:13px;"></i> Generating...').prop('disabled', true);
-            if (window.lucide) lucide.createIcons();
-            
-            $.post('/api/generate-ai-image', { title: title })
+        }
+
+        $('#post-image-url').on('input change', function() {
+            updateFeaturedImagePreview($(this).val());
+        });
+
+        $('#btn-remove-featured-image').on('click', function() {
+            $('#post-image-url').val('').trigger('input');
+            $('.thumb-pick').removeClass('border border-primary');
+        });
+
+        if ($('#post-image-url').val()) {
+            updateFeaturedImagePreview($('#post-image-url').val());
+        }
+
+        // Open Real Image Finder Modal
+        $('#btn-find-real-image').on('click', function() {
+            var title = $('#post-title').val() ? $('#post-title').val().trim() : '';
+            var searchInit = title || 'Punjab News';
+            $('#real-image-query').val(searchInit);
+            $('#modal-real-image-finder').modal('show');
+            executeRealImageSearch(searchInit);
+        });
+
+        $('#btn-search-real-images').on('click', function() {
+            var q = $('#real-image-query').val().trim();
+            if (q) executeRealImageSearch(q);
+        });
+
+        $('#real-image-query').on('keypress', function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                var q = $(this).val().trim();
+                if (q) executeRealImageSearch(q);
+            }
+        });
+
+        $('.quick-search-pill').on('click', function() {
+            var keyword = $(this).data('keyword');
+            $('#real-image-query').val(keyword);
+            $('.quick-search-pill').removeClass('active');
+            $(this).addClass('active');
+            executeRealImageSearch(keyword);
+        });
+
+        function executeRealImageSearch(query) {
+            $('#current-search-term-display').text(query);
+            $('#real-images-skeleton').removeClass('d-none');
+            $('#real-images-grid').addClass('d-none').empty();
+            $('#real-images-empty').addClass('d-none');
+            $('#search-btn-spinner').removeClass('d-none');
+            $('#search-btn-text').text('Searching...');
+            $('#btn-search-real-images').prop('disabled', true);
+
+            $.post('/api/search-real-images', { query: query })
              .done(function(res) {
-                 if (res.success) {
-                     $('#post-image-url').val(res.url);
-                     alert('AI Image generated and set as featured image!');
+                 if (res.success && res.images && res.images.length > 0) {
+                     var html = '';
+                     res.images.forEach(function(item) {
+                         var safeTitle = $('<div>').text(item.title || 'News Photograph').html();
+                         var safeDomain = $('<div>').text(item.domain || 'Media').html();
+                         var imgUrl = item.thumb || item.url;
+
+                         html += `
+                         <div class="col-12 col-sm-6 col-md-4">
+                             <div class="real-image-card h-100" data-img-url="${item.url}" title="Click to select this photograph">
+                                 <div class="real-image-thumb-wrap">
+                                     <img src="${imgUrl}" alt="${safeTitle}" loading="lazy" onerror="this.src='/top_story_punjab_1784880621670.jpg'">
+                                     <div class="real-image-overlay">
+                                         <div class="overlay-spinner d-none mb-1"><i data-lucide="loader-2" class="lucide-spin" style="width:20px;height:20px;"></i></div>
+                                         <div class="overlay-text d-flex align-items-center gap-1.5"><i data-lucide="check-circle-2" style="width:16px;height:16px;color:#22C55E;"></i> Use This Photo</div>
+                                     </div>
+                                 </div>
+                                 <div class="real-image-meta">
+                                     <div class="real-image-title">${safeTitle}</div>
+                                     <div class="d-flex align-items-center justify-content-between mt-auto">
+                                         <span class="real-image-badge-domain">${safeDomain}</span>
+                                         <a href="${item.page_url || '#'}" target="_blank" onclick="event.stopPropagation();" class="text-muted font-xxs text-decoration-none" title="View Source Article" style="font-size:11px;">
+                                             <i data-lucide="external-link" style="width:12px;height:12px;"></i>
+                                         </a>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>`;
+                     });
+                     $('#real-images-grid').html(html).removeClass('d-none');
+                     if (window.lucide) lucide.createIcons();
+                     attachCardSelectionHandler();
                  } else {
-                     alert('Error generating image: ' + res.message);
+                     $('#real-images-empty').removeClass('d-none');
                  }
              })
              .fail(function() {
-                 alert('Unable to contact server.');
+                 $('#real-images-empty').removeClass('d-none');
              })
              .always(function() {
-                 $btn.html(originalHtml).prop('disabled', false);
-                 if (window.lucide) lucide.createIcons();
+                 $('#real-images-skeleton').addClass('d-none');
+                 $('#search-btn-spinner').addClass('d-none');
+                 $('#search-btn-text').text('Search Photos');
+                 $('#btn-search-real-images').prop('disabled', false);
              });
-        });
+        }
+
+        function attachCardSelectionHandler() {
+            $('.real-image-card').off('click').on('click', function() {
+                var $card = $(this);
+                var selectedUrl = $card.data('img-url');
+                if (!selectedUrl) return;
+
+                // Show downloading state
+                $card.addClass('is-saving');
+                $card.find('.overlay-spinner').removeClass('d-none');
+                $card.find('.overlay-text').html('Downloading to server...');
+                if (window.lucide) lucide.createIcons();
+
+                $.post('/api/save-remote-image', { image_url: selectedUrl })
+                 .done(function(res) {
+                     if (res.success && res.local_url) {
+                         var localUrl = res.local_url;
+                         $('#post-image-url').val(localUrl).trigger('input');
+
+                         // Prepend to presets row
+                         var newThumb = $(`<img src="${localUrl}" alt="Selected Real Photo" class="rounded object-fit-cover shadow-sm thumb-pick border border-primary" style="width: 64px; height: 44px; cursor: pointer;">`);
+                         newThumb.on('click', function() {
+                             selectThumbnail(localUrl, this);
+                         });
+                         $('.thumb-pick').removeClass('border border-primary');
+                         $('#preset-thumbnails-row').prepend(newThumb);
+
+                         $('#modal-real-image-finder').modal('hide');
+                     } else {
+                         // Fallback to direct URL if download fails
+                         $('#post-image-url').val(selectedUrl).trigger('input');
+                         $('#modal-real-image-finder').modal('hide');
+                     }
+                 })
+                 .fail(function() {
+                     // Fallback to direct URL if server download encounters an issue
+                     $('#post-image-url').val(selectedUrl).trigger('input');
+                     $('#modal-real-image-finder').modal('hide');
+                 });
+            });
+        }
 
         // 6. Image File Upload
         $('#post-image-file').on('change', function() {
