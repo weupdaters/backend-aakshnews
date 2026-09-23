@@ -704,53 +704,6 @@
         }
     }
 
-    /* Right Utility Sidebar */
-    .nr-side-panel {
-        background: #FFFFFF;
-        border: 1px solid var(--cms-border);
-        border-radius: 14px;
-        overflow: hidden;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-    }
-    .nr-side-header-gradient {
-        background: linear-gradient(135deg, #4338CA 0%, #6D28D9 100%);
-        color: #FFFFFF;
-        padding: 16px;
-    }
-    .utility-metric-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 8px 0;
-        border-bottom: 1px solid #F1F5F9;
-        font-size: 12.5px;
-    }
-    .utility-metric-row:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
-    }
-    .utility-shortcut-btn {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 9px 12px;
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 10px;
-        font-size: 12.5px;
-        font-weight: 600;
-        color: var(--cms-text-main);
-        text-decoration: none;
-        margin-bottom: 8px;
-        transition: all 0.15s ease;
-    }
-    .utility-shortcut-btn:hover {
-        background: #F1F5F9;
-        border-color: #CBD5E1;
-        color: var(--cms-primary);
-        transform: translateX(2px);
-    }
-
     /* Grid View Alternative */
     .nr-grid-card {
         background: #FFFFFF;
@@ -797,25 +750,45 @@
     <!-- ============================================================== -->
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3 pb-1">
         <div>
-            <div class="d-flex align-items-center mb-1">
+            <div class="d-flex align-items-center flex-wrap gap-2 mb-1">
                 <h3 class="mb-0" style="font-weight: 800; font-size: 26px; color: var(--cms-text-main); letter-spacing: -0.5px;">
                     News Articles
                 </h3>
                 <span class="nr-header-badge">{{ number_format($totalCount ?? 72) }}</span>
+                <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill" style="background: #ECFDF5; border: 1px solid #A7F3D0; font-size: 11.5px; font-weight: 700; color: #047857;">
+                    <span class="cat-dot-indicator" style="background-color: #10B981; width: 7px; height: 7px;"></span>
+                    <span>Today: {{ $todayPublished ?? 1 }} Published</span>
+                </span>
+                <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill" style="background: #EFF6FF; border: 1px solid #BFDBFE; font-size: 11.5px; font-weight: 700; color: #1D4ED8;">
+                    <i data-lucide="eye" style="width: 12px; height: 12px;"></i>
+                    <span>{{ number_format($todayViews ?? 142800) }} Live Views</span>
+                </span>
             </div>
             <p class="text-muted mb-0" style="font-size: 13px; font-weight: 500;">
                 Manage, edit and organize all published and draft news articles.
             </p>
         </div>
 
-        <div class="d-flex align-items-center gap-2">
-            <!-- Import Button -->
+        <div class="d-flex align-items-center flex-wrap gap-2">
+            <!-- 1. Breaking Alert / Ticker Button -->
+            <a href="/admin/breaking-news" class="btn d-inline-flex align-items-center gap-1.5 px-3 py-2" style="background: #FEF2F2; border: 1px solid #FECACA; border-radius: 9px; font-size: 13px; font-weight: 700; color: #DC2626;" title="Manage Breaking News Ticker">
+                <i data-lucide="zap" style="width: 15px; height: 15px; fill: #DC2626;"></i>
+                <span>Breaking Alert</span>
+            </a>
+
+            <!-- 2. Photo Gallery Button -->
+            <a href="/admin/photo-gallery" class="btn d-inline-flex align-items-center gap-1.5 px-3 py-2" style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 9px; font-size: 13px; font-weight: 700; color: #16A34A;" title="Photo Stories and Galleries">
+                <i data-lucide="camera" style="width: 15px; height: 15px;"></i>
+                <span>Photo Gallery</span>
+            </a>
+
+            <!-- 3. Import Button -->
             <button type="button" class="btn d-inline-flex align-items-center gap-1.5 px-3 py-2" style="background: #FFFFFF; border: 1px solid var(--cms-border); border-radius: 9px; font-size: 13px; font-weight: 600; color: #374151;" onclick="alert('Import feature: CSV / XML News Feed import wizard is active.')">
                 <i data-lucide="download" style="width: 15px; height: 15px;"></i>
                 <span>Import</span>
             </button>
 
-            <!-- + Publish New Button -->
+            <!-- 4. + Publish New Button -->
             <div class="btn-group">
                 <a href="/admin/post/create" class="btn text-white d-inline-flex align-items-center gap-1.5 px-3.5 py-2 shadow-sm" style="background-color: var(--cms-primary); border-radius: 9px 0 0 9px; font-size: 13px; font-weight: 700; border: none;">
                     <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
@@ -851,9 +824,8 @@
                 </div>
                 <div class="text-end">
                     <span class="badge" style="background: #ECFDF5; color: #10B981; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
-                        ↑ +12%
+                        ↑ Active
                     </span>
-                    <small class="text-muted d-block mt-0.5" style="font-size: 10px;">vs last month</small>
                 </div>
             </div>
         </div>
@@ -872,67 +844,67 @@
                 </div>
                 <div class="text-end">
                     <span class="badge" style="background: #ECFDF5; color: #10B981; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
-                        ↑ +8%
+                        Live
                     </span>
                 </div>
             </div>
         </div>
 
-        <!-- 03. Drafts -->
-        <div class="col-12 col-sm-6 col-xl">
-            <div class="nr-stat-card">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="nr-stat-icon-sq" style="background: #FEF3C7; color: #D97706;">
-                        <i data-lucide="file-edit" style="width: 22px; height: 22px;"></i>
-                    </div>
-                    <div>
-                        <div class="nr-stat-label">Drafts</div>
-                        <div class="nr-stat-value text-amber-600">{{ number_format($draftCount ?? 0) }}</div>
-                    </div>
-                </div>
-                <div class="text-end">
-                    <span class="badge" style="background: #FEF3C7; color: #D97706; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
-                        0%
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 04. Scheduled -->
+        <!-- 03. Live Views -->
         <div class="col-12 col-sm-6 col-xl">
             <div class="nr-stat-card">
                 <div class="d-flex align-items-center gap-3">
                     <div class="nr-stat-icon-sq" style="background: #EFF6FF; color: #2563EB;">
-                        <i data-lucide="clock" style="width: 22px; height: 22px;"></i>
+                        <i data-lucide="eye" style="width: 22px; height: 22px;"></i>
                     </div>
                     <div>
-                        <div class="nr-stat-label">Scheduled</div>
-                        <div class="nr-stat-value text-blue-600">{{ number_format($scheduledCount ?? 0) }}</div>
+                        <div class="nr-stat-label">Live Views</div>
+                        <div class="nr-stat-value text-blue-600">{{ number_format($todayViews ?? 142800) }}</div>
                     </div>
                 </div>
                 <div class="text-end">
                     <span class="badge" style="background: #EFF6FF; color: #2563EB; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
-                        0%
+                        Today
                     </span>
                 </div>
             </div>
         </div>
 
-        <!-- 05. Archived -->
+        <!-- 04. Breaking News -->
         <div class="col-12 col-sm-6 col-xl">
             <div class="nr-stat-card">
                 <div class="d-flex align-items-center gap-3">
                     <div class="nr-stat-icon-sq" style="background: #FEE2E2; color: #DC2626;">
-                        <i data-lucide="trash-2" style="width: 22px; height: 22px;"></i>
+                        <i data-lucide="zap" style="width: 22px; height: 22px; fill: #DC2626;"></i>
                     </div>
                     <div>
-                        <div class="nr-stat-label">Archived</div>
-                        <div class="nr-stat-value text-slate-600">{{ number_format($archivedCount ?? 2) }}</div>
+                        <div class="nr-stat-label">Breaking</div>
+                        <div class="nr-stat-value text-rose-600">{{ number_format($breakingCount ?? 1) }}</div>
                     </div>
                 </div>
                 <div class="text-end">
-                    <span class="badge" style="background: #ECFDF5; color: #10B981; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
-                        ↑ +100%
+                    <span class="badge" style="background: #FEE2E2; color: #DC2626; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
+                        Alerts
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 05. Drafts & Scheduled -->
+        <div class="col-12 col-sm-6 col-xl">
+            <div class="nr-stat-card">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="nr-stat-icon-sq" style="background: #FEF3C7; color: #D97706;">
+                        <i data-lucide="clock" style="width: 22px; height: 22px;"></i>
+                    </div>
+                    <div>
+                        <div class="nr-stat-label">Drafts & Scheduled</div>
+                        <div class="nr-stat-value text-amber-600">{{ number_format(($draftCount ?? 0) + ($scheduledCount ?? 0)) }}</div>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <span class="badge" style="background: #FEF3C7; color: #D97706; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
+                        Pending
                     </span>
                 </div>
             </div>
@@ -1098,8 +1070,8 @@
     <!-- ============================================================== -->
     <div class="row g-3 align-items-start">
         
-        <!-- LEFT: MAIN POST CARDS WORKSPACE (75%–78% on desktop) -->
-        <div class="col-12 col-xl-9" id="nr-articles-workspace">
+        <!-- MAIN POST CARDS WORKSPACE (Full Width) -->
+        <div class="col-12" id="nr-articles-workspace">
             
             @php
                 // Standard default mock dataset for flawless parity with the Figma / Mockup
@@ -1552,122 +1524,6 @@
                         <span>Next</span>
                         <i data-lucide="chevron-right"></i>
                     </button>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- RIGHT: EDITORIAL UTILITY DESK (22%–25% on desktop >= 1200px) -->
-        <div class="col-12 col-xl-3">
-            
-            <!-- Panel 1: Today's Desk -->
-            <div class="nr-side-panel mb-3">
-                <div class="nr-side-header-gradient">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h5 class="mb-0 text-white" style="font-size: 14px; font-weight: 800; letter-spacing: 0.5px;">
-                                Today's Desk
-                            </h5>
-                            <small style="font-size: 11px; opacity: 0.85;">Live Activity</small>
-                        </div>
-                        <i data-lucide="bar-chart-3" style="width: 24px; height: 24px; opacity: 0.9;"></i>
-                    </div>
-                </div>
-
-                <div class="p-3">
-                    <div class="utility-metric-row">
-                        <span class="d-flex align-items-center gap-2 text-dark font-medium">
-                            <span class="cat-dot-indicator" style="background-color: #10B981;"></span> Published
-                        </span>
-                        <span class="font-extrabold text-dark">{{ $todayPublished ?? 1 }}</span>
-                    </div>
-
-                    <div class="utility-metric-row">
-                        <span class="d-flex align-items-center gap-2 text-dark font-medium">
-                            <i data-lucide="eye" style="width: 14px; height: 14px; color: #2563EB;"></i> Live Views
-                        </span>
-                        <span class="font-extrabold text-dark">{{ number_format($todayViews ?? 142800) }}</span>
-                    </div>
-
-                    <div class="utility-metric-row">
-                        <span class="d-flex align-items-center gap-2 text-dark font-medium">
-                            <span class="cat-dot-indicator" style="background-color: #EF4444;"></span> Breaking
-                        </span>
-                        <span class="font-extrabold text-dark">{{ $breakingCount ?? 1 }}</span>
-                    </div>
-
-                    <div class="utility-metric-row">
-                        <span class="d-flex align-items-center gap-2 text-dark font-medium">
-                            <span class="cat-dot-indicator" style="background-color: #F59E0B;"></span> Scheduled
-                        </span>
-                        <span class="font-extrabold text-dark">{{ $scheduledCount ?? 0 }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Panel 2: Quick Actions -->
-            <div class="nr-side-panel p-3 mb-3">
-                <div class="font-bold text-dark text-uppercase tracking-wider mb-2.5" style="font-size: 12px; letter-spacing: 0.5px;">
-                    Quick Actions
-                </div>
-
-                <a href="/admin/post/create" class="utility-shortcut-btn">
-                    <div class="nr-stat-icon-sq" style="width: 28px; height: 28px; border-radius: 8px; background: #F3E8FF; color: #7C3AED;">
-                        <i data-lucide="file-plus" style="width: 14px; height: 14px;"></i>
-                    </div>
-                    <span>+ Quick Draft</span>
-                </a>
-
-                <a href="/admin/breaking-news" class="utility-shortcut-btn">
-                    <div class="nr-stat-icon-sq" style="width: 28px; height: 28px; border-radius: 8px; background: #FEE2E2; color: #EF4444;">
-                        <i data-lucide="zap" style="width: 14px; height: 14px;"></i>
-                    </div>
-                    <span>⚡ Breaking Ticker</span>
-                </a>
-
-                <a href="/admin/photo-gallery" class="utility-shortcut-btn">
-                    <div class="nr-stat-icon-sq" style="width: 28px; height: 28px; border-radius: 8px; background: #DCFCE7; color: #10B981;">
-                        <i data-lucide="camera" style="width: 14px; height: 14px;"></i>
-                    </div>
-                    <span>📸 Photo Gallery</span>
-                </a>
-
-                <a href="/admin/settings" class="utility-shortcut-btn mb-0">
-                    <div class="nr-stat-icon-sq" style="width: 28px; height: 28px; border-radius: 8px; background: #EFF6FF; color: #2563EB;">
-                        <i data-lucide="tv" style="width: 14px; height: 14px;"></i>
-                    </div>
-                    <span>📺 Live Stream Setup</span>
-                </a>
-            </div>
-
-            <!-- Panel 3: System Status -->
-            <div class="nr-side-panel p-3">
-                <div class="d-flex align-items-center justify-content-between mb-2 pb-1 border-bottom">
-                    <span class="font-bold text-dark text-uppercase tracking-wider" style="font-size: 12px; letter-spacing: 0.5px;">
-                        System Status
-                    </span>
-                    <span class="d-inline-flex align-items-center gap-1 text-emerald-600 font-bold" style="font-size: 11px;">
-                        <span class="cat-dot-indicator" style="background-color: #10B981;"></span>
-                        Operational
-                    </span>
-                </div>
-                <div class="text-muted" style="font-size: 12px; line-height: 1.8;">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="d-inline-flex align-items-center gap-1.5"><i data-lucide="bot" style="width: 13px; height: 13px; color: #94A3B8;"></i> Editorial AI:</span>
-                        <strong class="text-emerald-600">Ready</strong>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="d-inline-flex align-items-center gap-1.5"><i data-lucide="layers" style="width: 13px; height: 13px; color: #94A3B8;"></i> Fast Cache:</span>
-                        <strong class="text-emerald-600">Active</strong>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="d-inline-flex align-items-center gap-1.5"><i data-lucide="cloud" style="width: 13px; height: 13px; color: #94A3B8;"></i> CDN Media:</span>
-                        <strong class="text-dark">99.8%</strong>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="d-inline-flex align-items-center gap-1.5"><i data-lucide="database" style="width: 13px; height: 13px; color: #94A3B8;"></i> Database:</span>
-                        <strong class="text-emerald-600">Healthy</strong>
-                    </div>
                 </div>
             </div>
 
