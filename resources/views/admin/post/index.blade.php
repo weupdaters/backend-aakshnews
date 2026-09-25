@@ -913,146 +913,160 @@
     <!-- ============================================================== -->
     <!-- 3. SEARCH + FILTER BAR (ONE CLEAN HORIZONTAL CONTAINER)       -->
     <!-- ============================================================== -->
-    <div class="nr-filter-bar mb-3">
-        <!-- Search Input -->
-        <div class="d-flex align-items-center flex-grow-1" style="min-width: 220px;">
-            <i data-lucide="search" style="color: var(--cms-primary); width: 18px; height: 18px; margin-left: 6px; flex-shrink: 0;"></i>
-            <input type="text" id="nr-search-input" placeholder="Search articles, headlines, authors..." style="border: none; outline: none; width: 100%; height: 40px; font-size: 13.5px; padding: 0 12px; background: transparent; color: var(--cms-text-main);">
-        </div>
-
-        <!-- Vertical Divider -->
-        <div class="vr d-none d-md-block" style="height: 24px; opacity: 0.15;"></div>
-
-        <!-- All Categories -->
-        <select id="nr-category-filter" class="form-select nr-filter-control" style="width: auto; min-width: 145px; padding-right: 32px;">
-            <option value="">All Categories</option>
-            @if(isset($categories) && count($categories) > 0)
-                @foreach($categories as $cat)
-                    <option value="{{ $cat->name }}">{{ $cat->name }}</option>
-                @endforeach
-            @else
-                <option value="Punjab">Punjab</option>
-                <option value="Patiala">Patiala</option>
-                <option value="National">National</option>
-                <option value="Politics">Politics</option>
-                <option value="Crime">Crime</option>
-                <option value="Sports">Sports</option>
-                <option value="Business">Business</option>
-                <option value="Technology">Technology</option>
-                <option value="Entertainment">Entertainment</option>
-                <option value="World">World</option>
-                <option value="Haryana">Haryana</option>
-                <option value="Latest Update">Latest Update</option>
-                <option value="General">General</option>
-            @endif
-        </select>
-
-        <!-- All Status -->
-        <select id="nr-status-filter" class="form-select nr-filter-control" style="width: auto; min-width: 120px; padding-right: 32px;">
-            <option value="">All Status</option>
-            <option value="published">Published</option>
-            <option value="scheduled">Scheduled</option>
-            <option value="draft">Drafts</option>
-            <option value="archived">Archived</option>
-            <option value="breaking">Breaking</option>
-            <option value="featured">Featured</option>
-        </select>
-
-        <!-- All Authors -->
-        <select id="nr-author-filter" class="form-select nr-filter-control" style="width: auto; min-width: 130px; padding-right: 32px;">
-            <option value="">All Authors</option>
-            <option value="Aaksh News Admin">Aaksh News Admin</option>
-            <option value="Aaksh News Desk">Aaksh News Desk</option>
-            @if(isset($authors))
-                @foreach($authors as $author)
-                    @if($author !== 'Aaksh News Admin' && $author !== 'Aaksh News Desk')
-                        <option value="{{ $author }}">{{ $author }}</option>
-                    @endif
-                @endforeach
-            @endif
-        </select>
-
-        <!-- Date Picker -->
-        <input type="date" id="nr-date-filter" class="form-control nr-filter-control" style="width: auto; min-width: 135px;" title="Filter by date">
-
-        <!-- Sliders Button -->
-        <button type="button" class="btn text-white d-flex align-items-center justify-content-center" style="background: var(--cms-primary); width: 42px; height: 42px; border-radius: 10px; border: none; flex-shrink: 0;" title="Filter Options">
-            <i data-lucide="sliders-horizontal" style="width: 17px; height: 17px;"></i>
-        </button>
-
-        <!-- Reset Button -->
-        <button type="button" id="nr-reset-filter-btn" class="btn btn-light d-flex align-items-center justify-content-center" style="background: #FFFFFF; border: 1px solid var(--cms-border); width: 42px; height: 42px; border-radius: 10px; color: var(--cms-text-muted); flex-shrink: 0;" title="Reset Filters">
-            <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i>
-        </button>
-    </div>
-
     <!-- ============================================================== -->
-    <!-- 4. CATEGORY PILLS + SORT & VIEW CONTROLS                      -->
+    <!-- 3. SEARCH + FILTER BAR (ONE CLEAN HORIZONTAL CONTAINER)       -->
     <!-- ============================================================== -->
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-        <!-- Left: Category Pills -->
-        <div class="nr-cat-pills-wrap" id="nr-category-tabs">
-            <button type="button" class="nr-cat-pill-btn active" data-category="all">
-                <span class="cat-dot-indicator" style="background-color: var(--cms-primary);"></span>
-                <span>All Articles</span>
+    <form id="nr-filter-form" method="GET" action="/admin/post">
+        <div class="nr-filter-bar mb-3">
+            <!-- Search Input -->
+            <div class="d-flex align-items-center flex-grow-1" style="min-width: 220px;">
+                <i data-lucide="search" style="color: var(--cms-primary); width: 18px; height: 18px; margin-left: 6px; flex-shrink: 0;"></i>
+                <input type="text" name="search" id="nr-search-input" value="{{ request('search') }}" placeholder="Search articles, headlines, authors..." style="border: none; outline: none; width: 100%; height: 40px; font-size: 13.5px; padding: 0 12px; background: transparent; color: var(--cms-text-main);">
+            </div>
+
+            <!-- Vertical Divider -->
+            <div class="vr d-none d-md-block" style="height: 24px; opacity: 0.15;"></div>
+
+            <!-- All Categories -->
+            <select name="category" id="nr-category-filter" class="form-select nr-filter-control" style="width: auto; min-width: 145px; padding-right: 32px;" onchange="this.form.submit()">
+                <option value="all">All Categories</option>
+                @if(isset($categories) && count($categories) > 0)
+                    @foreach($categories as $cat)
+                        <option value="{{ $cat->name }}" {{ request('category') == $cat->name ? 'selected' : '' }}>{{ $cat->name }}</option>
+                    @endforeach
+                @else
+                    <option value="Punjab" {{ request('category') == 'Punjab' ? 'selected' : '' }}>Punjab</option>
+                    <option value="Patiala" {{ request('category') == 'Patiala' ? 'selected' : '' }}>Patiala</option>
+                    <option value="National" {{ request('category') == 'National' ? 'selected' : '' }}>National</option>
+                    <option value="Politics" {{ request('category') == 'Politics' ? 'selected' : '' }}>Politics</option>
+                    <option value="Crime" {{ request('category') == 'Crime' ? 'selected' : '' }}>Crime</option>
+                    <option value="Sports" {{ request('category') == 'Sports' ? 'selected' : '' }}>Sports</option>
+                    <option value="Business" {{ request('category') == 'Business' ? 'selected' : '' }}>Business</option>
+                    <option value="Technology" {{ request('category') == 'Technology' ? 'selected' : '' }}>Technology</option>
+                    <option value="Entertainment" {{ request('category') == 'Entertainment' ? 'selected' : '' }}>Entertainment</option>
+                    <option value="World" {{ request('category') == 'World' ? 'selected' : '' }}>World</option>
+                    <option value="Haryana" {{ request('category') == 'Haryana' ? 'selected' : '' }}>Haryana</option>
+                    <option value="Latest Update" {{ request('category') == 'Latest Update' ? 'selected' : '' }}>Latest Update</option>
+                    <option value="General" {{ request('category') == 'General' ? 'selected' : '' }}>General</option>
+                @endif
+            </select>
+
+            <!-- All Status -->
+            <select name="status" id="nr-status-filter" class="form-select nr-filter-control" style="width: auto; min-width: 120px; padding-right: 32px;" onchange="this.form.submit()">
+                <option value="all">All Status</option>
+                <option value="published" {{ request('status') == 'published' ? 'selected' : '' }}>Published</option>
+                <option value="scheduled" {{ request('status') == 'scheduled' ? 'selected' : '' }}>Scheduled</option>
+                <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Drafts</option>
+                <option value="archived" {{ request('status') == 'archived' ? 'selected' : '' }}>Archived</option>
+                <option value="breaking" {{ request('status') == 'breaking' ? 'selected' : '' }}>Breaking</option>
+            </select>
+
+            <!-- All Authors -->
+            <select name="author" id="nr-author-filter" class="form-select nr-filter-control" style="width: auto; min-width: 130px; padding-right: 32px;" onchange="this.form.submit()">
+                <option value="all">All Authors</option>
+                <option value="Aaksh News Admin" {{ request('author') == 'Aaksh News Admin' ? 'selected' : '' }}>Aaksh News Admin</option>
+                <option value="Aaksh News Desk" {{ request('author') == 'Aaksh News Desk' ? 'selected' : '' }}>Aaksh News Desk</option>
+                @if(isset($authors))
+                    @foreach($authors as $author)
+                        @if($author !== 'Aaksh News Admin' && $author !== 'Aaksh News Desk')
+                            <option value="{{ $author }}" {{ request('author') == $author ? 'selected' : '' }}>{{ $author }}</option>
+                        @endif
+                    @endforeach
+                @endif
+            </select>
+
+            <!-- Date Picker -->
+            <input type="date" name="date" value="{{ request('date') }}" id="nr-date-filter" class="form-control nr-filter-control" style="width: auto; min-width: 135px;" title="Filter by date" onchange="this.form.submit()">
+
+            <!-- Submit Filter Button -->
+            <button type="submit" class="btn text-white d-flex align-items-center justify-content-center" style="background: var(--cms-primary); width: 42px; height: 42px; border-radius: 10px; border: none; flex-shrink: 0;" title="Apply Filter">
+                <i data-lucide="search" style="width: 17px; height: 17px;"></i>
             </button>
-            @if(isset($categories) && count($categories) > 0)
-                @foreach($categories as $cat)
-                    @php
-                        $dotColor = $cat->color ?? '#6366F1';
-                    @endphp
-                    <button type="button" class="nr-cat-pill-btn" data-category="{{ $cat->name }}">
-                        <span class="cat-dot-indicator" style="background-color: {{ $dotColor }};"></span>
-                        <span>{{ $cat->name }}</span>
-                    </button>
-                @endforeach
-            @else
-                @php
-                    $defaultPills = [
-                        ['name' => 'Punjab', 'color' => '#F59E0B'],
-                        ['name' => 'Patiala', 'color' => '#E11D48'],
-                        ['name' => 'National', 'color' => '#EA580C'],
-                        ['name' => 'Politics', 'color' => '#2563EB'],
-                        ['name' => 'Crime', 'color' => '#DC2626'],
-                        ['name' => 'Sports', 'color' => '#10B981'],
-                        ['name' => 'Business', 'color' => '#06B6D4'],
-                        ['name' => 'Technology', 'color' => '#EC4899'],
-                        ['name' => 'Entertainment', 'color' => '#D946EF'],
-                        ['name' => 'World', 'color' => '#38BDF8'],
-                    ];
-                @endphp
-                @foreach($defaultPills as $dp)
-                    <button type="button" class="nr-cat-pill-btn" data-category="{{ $dp['name'] }}">
-                        <span class="cat-dot-indicator" style="background-color: {{ $dp['color'] }};"></span>
-                        <span>{{ $dp['name'] }}</span>
-                    </button>
-                @endforeach
-            @endif
+
+            <!-- Reset Button -->
+            <a href="/admin/post" id="nr-reset-filter-btn" class="btn btn-light d-flex align-items-center justify-content-center text-decoration-none" style="background: #FFFFFF; border: 1px solid var(--cms-border); width: 42px; height: 42px; border-radius: 10px; color: var(--cms-text-muted); flex-shrink: 0;" title="Reset Filters">
+                <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i>
+            </a>
         </div>
 
-        <!-- Right: Sort by, Show per page, View toggle -->
-        <div class="d-flex align-items-center gap-2 ms-auto">
-            <div class="d-flex align-items-center gap-1.5 text-muted" style="font-size: 12px; font-weight: 600;">
-                <span>Sort by:</span>
-                <select id="nr-sort-filter" class="form-select form-select-sm" style="height: 34px; border-radius: 8px; border: 1px solid var(--cms-border); font-size: 12px; font-weight: 600; width: 125px; padding-right: 28px;">
-                    <option value="latest">Latest First</option>
-                    <option value="oldest">Oldest First</option>
-                    <option value="views">Most Viewed</option>
-                    <option value="alpha">Title A-Z</option>
-                </select>
+        <!-- ============================================================== -->
+        <!-- 4. CATEGORY PILLS + SORT & VIEW CONTROLS                      -->
+        <!-- ============================================================== -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+            <!-- Left: Category Pills -->
+            <div class="nr-cat-pills-wrap" id="nr-category-tabs">
+                <a href="{{ request()->fullUrlWithQuery(['category' => 'all', 'page' => 1]) }}" class="nr-cat-pill-btn text-decoration-none {{ !request('category') || request('category') == 'all' ? 'active' : '' }}" data-category="all">
+                    <span class="cat-dot-indicator" style="background-color: var(--cms-primary);"></span>
+                    <span>All Articles</span>
+                </a>
+                @if(isset($categories) && count($categories) > 0)
+                    @foreach($categories as $cat)
+                        @php
+                            $dotColor = $cat->color ?? '#6366F1';
+                        @endphp
+                        <a href="{{ request()->fullUrlWithQuery(['category' => $cat->name, 'page' => 1]) }}" class="nr-cat-pill-btn text-decoration-none {{ request('category') == $cat->name ? 'active' : '' }}" data-category="{{ $cat->name }}">
+                            <span class="cat-dot-indicator" style="background-color: {{ $dotColor }};"></span>
+                            <span>{{ $cat->name }}</span>
+                        </a>
+                    @endforeach
+                @else
+                    @php
+                        $defaultPills = [
+                            ['name' => 'Punjab', 'color' => '#F59E0B'],
+                            ['name' => 'Patiala', 'color' => '#E11D48'],
+                            ['name' => 'National', 'color' => '#EA580C'],
+                            ['name' => 'Politics', 'color' => '#2563EB'],
+                            ['name' => 'Crime', 'color' => '#DC2626'],
+                            ['name' => 'Sports', 'color' => '#10B981'],
+                            ['name' => 'Business', 'color' => '#06B6D4'],
+                            ['name' => 'Technology', 'color' => '#EC4899'],
+                            ['name' => 'Entertainment', 'color' => '#D946EF'],
+                            ['name' => 'World', 'color' => '#38BDF8'],
+                        ];
+                    @endphp
+                    @foreach($defaultPills as $dp)
+                        <a href="{{ request()->fullUrlWithQuery(['category' => $dp['name'], 'page' => 1]) }}" class="nr-cat-pill-btn text-decoration-none {{ request('category') == $dp['name'] ? 'active' : '' }}" data-category="{{ $dp['name'] }}">
+                            <span class="cat-dot-indicator" style="background-color: {{ $dp['color'] }};"></span>
+                            <span>{{ $dp['name'] }}</span>
+                        </a>
+                    @endforeach
+                @endif
             </div>
 
-            <div class="d-flex align-items-center gap-1.5 text-muted" style="font-size: 12px; font-weight: 600;">
-                <span>Show:</span>
-                <select id="nr-per-page-select" class="form-select form-select-sm" style="height: 34px; border-radius: 8px; border: 1px solid var(--cms-border); font-size: 12px; font-weight: 600; width: 115px; padding-right: 28px;">
-                    <option value="20" selected>20 per page</option>
-                    <option value="40">40 per page</option>
-                    <option value="60">60 per page</option>
-                    <option value="9999">All</option>
-                </select>
-            </div>
+            <!-- Right: Sort by, Show per page, View toggle -->
+            <div class="d-flex align-items-center gap-2 ms-auto">
+                <div class="d-flex align-items-center gap-1.5 text-muted" style="font-size: 12px; font-weight: 600;">
+                    <span>Sort by:</span>
+                    <select name="sort" id="nr-sort-filter" class="form-select form-select-sm" style="height: 34px; border-radius: 8px; border: 1px solid var(--cms-border); font-size: 12px; font-weight: 600; width: 125px; padding-right: 28px;" onchange="this.form.submit()">
+                        <option value="latest" {{ request('sort', 'latest') == 'latest' ? 'selected' : '' }}>Latest First</option>
+                        <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest First</option>
+                        <option value="views" {{ request('sort') == 'views' ? 'selected' : '' }}>Most Viewed</option>
+                        <option value="alpha" {{ request('sort') == 'alpha' ? 'selected' : '' }}>Title A-Z</option>
+                    </select>
+                </div>
 
-            <!-- View toggle (List vs Grid) -->
+                <div class="d-flex align-items-center gap-1.5 text-muted" style="font-size: 12px; font-weight: 600;">
+                    <span>Show:</span>
+                    <select name="per_page" id="nr-per-page-select" class="form-select form-select-sm" style="height: 34px; border-radius: 8px; border: 1px solid var(--cms-border); font-size: 12px; font-weight: 600; width: 115px; padding-right: 28px;" onchange="this.form.submit()">
+                        <option value="20" {{ request('per_page', '20') == '20' ? 'selected' : '' }}>20 per page</option>
+                        <option value="40" {{ request('per_page') == '40' ? 'selected' : '' }}>40 per page</option>
+                        <option value="60" {{ request('per_page') == '60' ? 'selected' : '' }}>60 per page</option>
+                        <option value="100" {{ request('per_page') == '100' ? 'selected' : '' }}>100 per page</option>
+                    </select>
+                </div>
+
+                <!-- View toggle (List vs Grid) -->
+                <div class="d-flex align-items-center gap-1 bg-slate-100 p-0.5 rounded-2">
+                    <button type="button" id="view-mode-list-btn" class="btn text-white p-0 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; border-radius: 8px; background: var(--cms-primary); border: none;" title="Horizontal Post Cards View">
+                        <i data-lucide="list" style="width: 16px; height: 16px;"></i>
+                    </button>
+                    <button type="button" id="view-mode-grid-btn" class="btn btn-light p-0 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; border-radius: 8px; background: #FFFFFF; border: 1px solid var(--cms-border); color: var(--cms-text-muted);" title="Compact Grid View">
+                        <i data-lucide="grid-2x2" style="width: 16px; height: 16px;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
             <div class="d-flex align-items-center gap-1 bg-slate-100 p-0.5 rounded-2">
                 <button type="button" id="view-mode-list-btn" class="btn text-white p-0 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; border-radius: 8px; background: var(--cms-primary); border: none;" title="Horizontal Post Cards View">
                     <i data-lucide="list" style="width: 16px; height: 16px;"></i>
@@ -1205,18 +1219,8 @@
                         $pViewsFmt = $pViews >= 1000 ? round($pViews / 1000, 1) . 'K' : $pViews;
                         $pDate = $p->created_at ? (is_string($p->created_at) ? date('d M Y', strtotime($p->created_at)) : $p->created_at->format('d M Y')) : 'Recent';
                         $pIsoDate = $p->created_at ? (is_string($p->created_at) ? date('Y-m-d', strtotime($p->created_at)) : $p->created_at->format('Y-m-d')) : date('Y-m-d');
-                        $cleanDesc = !empty($p->content) ? trim(strip_tags($p->content)) : 'Punjab Government policy release and administrative developments reporting from ground zero.';
-                        $cleanDesc = trim(preg_replace('/\s+/', ' ', $cleanDesc));
-                        if (!empty($p->title)) {
-                            $tTitle = trim($p->title);
-                            if (str_starts_with($cleanDesc, $tTitle)) {
-                                $cleanDesc = trim(substr($cleanDesc, strlen($tTitle)));
-                                $cleanDesc = ltrim($cleanDesc, " :-–—|\t\n\r");
-                            }
-                        }
-                        if (empty($cleanDesc)) {
-                            $cleanDesc = 'ਸੰਪਾਦਕੀ ਰਿਪੋਰਟ ਅਤੇ ਪ੍ਰਸ਼ਾਸਨਿਕ ਜਾਣਕਾਰੀ ground report ਤੋਂ...';
-                        }
+                        $rawSummary = !empty($p->summary_content) ? $p->summary_content : (!empty($p->content) ? $p->content : '');
+                        $cleanDesc = !empty($rawSummary) ? trim(strip_tags($rawSummary)) : 'Aaksh News Ground Report...';
                         $pDesc = $cleanDesc;
                         
                         $pDot = '#7C3AED';
@@ -1251,9 +1255,9 @@
                     }
                 }
 
-                // If DB had fewer items, prepend the mock items so the layout exactly mirrors the user mockup
-                if (count($combinedArticles) < 6) {
-                    $combinedArticles = array_merge($mockArticles, $combinedArticles);
+                // If DB had no items, use mock items
+                if (count($combinedArticles) === 0) {
+                    $combinedArticles = $mockArticles;
                 }
             @endphp
 
@@ -1263,7 +1267,8 @@
             <div class="d-flex flex-column" id="nr-list-view-container" style="gap: 18px !important;">
                 @foreach($combinedArticles as $index => $item)
                     @php
-                        $rowNum = sprintf('%02d', $index + 1);
+                        $rowOffset = ($posts instanceof \Illuminate\Pagination\LengthAwarePaginator) ? ($posts->firstItem() ?: 1) : 1;
+                        $rowNum = sprintf('%02d', $rowOffset + $index);
                         $status = strtolower($item['status'] ?? 'published');
 
                         // Status pill styling
@@ -1503,28 +1508,71 @@
             <!-- ====================================================== -->
             <!-- 5.3 PAGINATION BAR                                     -->
             <!-- ====================================================== -->
+            @if($posts instanceof \Illuminate\Pagination\LengthAwarePaginator && $posts->total() > 0)
             <div class="nr-pagination-card" id="nr-pagination-bar">
                 <div class="nr-pagination-info-wrap" id="nr-pagination-info">
-                    <span class="nr-pg-badge" id="pg-current-page">Page 1 of {{ max(1, (int)ceil(count($combinedArticles) / 20)) }}</span>
+                    <span class="nr-pg-badge" id="pg-current-page">Page {{ $posts->currentPage() }} of {{ max(1, $posts->lastPage()) }}</span>
                     <span class="nr-pg-text">
-                        Showing <strong id="pg-start">1</strong>–<strong id="pg-end">20</strong> of <strong id="pg-total">{{ count($combinedArticles) }}</strong> articles
+                        Showing <strong id="pg-start">{{ $posts->firstItem() ?: 0 }}</strong>–<strong id="pg-end">{{ $posts->lastItem() ?: 0 }}</strong> of <strong id="pg-total">{{ number_format($posts->total()) }}</strong> articles
                     </span>
                 </div>
 
                 <div class="nr-pagination-controls" id="nr-pagination-buttons">
-                    <button type="button" class="nr-pg-nav-btn" id="btn-pg-prev">
-                        <i data-lucide="chevron-left"></i>
-                        <span>Previous</span>
-                    </button>
+                    @if($posts->onFirstPage())
+                        <button type="button" class="nr-pg-nav-btn" disabled>
+                            <i data-lucide="chevron-left"></i>
+                            <span>Previous</span>
+                        </button>
+                    @else
+                        <a href="{{ $posts->previousPageUrl() }}" class="nr-pg-nav-btn text-decoration-none">
+                            <i data-lucide="chevron-left"></i>
+                            <span>Previous</span>
+                        </a>
+                    @endif
+
                     <div id="pg-page-numbers" class="nr-pg-pages-cluster">
-                        <!-- Populated by JS -->
+                        @php
+                            $startPage = max(1, $posts->currentPage() - 2);
+                            $endPage = min($posts->lastPage(), $posts->currentPage() + 2);
+                        @endphp
+
+                        @if($startPage > 1)
+                            <a href="{{ $posts->url(1) }}" class="nr-pg-num-btn text-decoration-none">1</a>
+                            @if($startPage > 2)
+                                <span class="px-1 text-muted">...</span>
+                            @endif
+                        @endif
+
+                        @for ($page = $startPage; $page <= $endPage; $page++)
+                            @if ($page == $posts->currentPage())
+                                <span class="nr-pg-num-btn active">{{ $page }}</span>
+                            @else
+                                <a href="{{ $posts->url($page) }}" class="nr-pg-num-btn text-decoration-none">{{ $page }}</a>
+                            @endif
+                        @endfor
+
+                        @if($endPage < $posts->lastPage())
+                            @if($endPage < $posts->lastPage() - 1)
+                                <span class="px-1 text-muted">...</span>
+                            @endif
+                            <a href="{{ $posts->url($posts->lastPage()) }}" class="nr-pg-num-btn text-decoration-none">{{ $posts->lastPage() }}</a>
+                        @endif
                     </div>
-                    <button type="button" class="nr-pg-nav-btn" id="btn-pg-next">
-                        <span>Next</span>
-                        <i data-lucide="chevron-right"></i>
-                    </button>
+
+                    @if($posts->hasMorePages())
+                        <a href="{{ $posts->nextPageUrl() }}" class="nr-pg-nav-btn text-decoration-none">
+                            <span>Next</span>
+                            <i data-lucide="chevron-right"></i>
+                        </a>
+                    @else
+                        <button type="button" class="nr-pg-nav-btn" disabled>
+                            <span>Next</span>
+                            <i data-lucide="chevron-right"></i>
+                        </button>
+                    @endif
                 </div>
             </div>
+            @endif
 
         </div>
 
@@ -1605,156 +1653,27 @@ document.addEventListener('DOMContentLoaded', function () {
         window.lucide.createIcons();
     }
 
-    // State Variables
-    let currentCategory = 'all';
-    let currentSearch = '';
-    let currentStatus = '';
-    let currentAuthor = '';
-    let currentDate = '';
-    let currentSort = 'latest';
-    let currentPage = 1;
-    let itemsPerPage = 20;
-
-    // Elements
     const searchInput = document.getElementById('nr-search-input');
-    const categorySelect = document.getElementById('nr-category-filter');
-    const statusSelect = document.getElementById('nr-status-filter');
-    const authorSelect = document.getElementById('nr-author-filter');
-    const dateInput = document.getElementById('nr-date-filter');
-    const sortSelect = document.getElementById('nr-sort-filter');
-    const perPageSelect = document.getElementById('nr-per-page-select');
-    const resetBtn = document.getElementById('nr-reset-filter-btn');
-
+    const filterForm = document.getElementById('nr-filter-form');
     const listViewContainer = document.getElementById('nr-list-view-container');
     const gridViewContainer = document.getElementById('nr-grid-view-container');
-    const emptyState = document.getElementById('nr-empty-state');
-    const paginationBar = document.getElementById('nr-pagination-bar');
-
     const listBtn = document.getElementById('view-mode-list-btn');
     const gridBtn = document.getElementById('view-mode-grid-btn');
-
     const floatingBar = document.getElementById('nr-bulk-floating-bar');
     const floatingCount = document.getElementById('nr-floating-count');
 
-    // 1. Search filter with debounce
-    let searchTimeout = null;
-    if (searchInput) {
-        searchInput.addEventListener('input', function (e) {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                currentSearch = e.target.value.toLowerCase().trim();
-                currentPage = 1;
-                filterAndRender();
-            }, 180);
-        });
-    }
-
-    // 2. Dropdown Filters
-    if (categorySelect) {
-        categorySelect.addEventListener('change', function () {
-            currentCategory = this.value || 'all';
-            updateActiveCategoryPill(currentCategory);
-            currentPage = 1;
-            filterAndRender();
-        });
-    }
-
-    if (statusSelect) {
-        statusSelect.addEventListener('change', function () {
-            currentStatus = this.value.toLowerCase();
-            currentPage = 1;
-            filterAndRender();
-        });
-    }
-
-    if (authorSelect) {
-        authorSelect.addEventListener('change', function () {
-            currentAuthor = this.value.toLowerCase();
-            currentPage = 1;
-            filterAndRender();
-        });
-    }
-
-    if (dateInput) {
-        dateInput.addEventListener('change', function () {
-            currentDate = this.value;
-            currentPage = 1;
-            filterAndRender();
-        });
-    }
-
-    if (sortSelect) {
-        sortSelect.addEventListener('change', function () {
-            currentSort = this.value;
-            sortArticles();
-            filterAndRender();
-        });
-    }
-
-    if (perPageSelect) {
-        perPageSelect.addEventListener('change', function () {
-            itemsPerPage = parseInt(this.value, 10) || 20;
-            currentPage = 1;
-            filterAndRender();
-        });
-    }
-
-    // 3. Category Nav Pills Click
-    const catPills = document.querySelectorAll('.nr-cat-pill-btn');
-    catPills.forEach(pill => {
-        pill.addEventListener('click', function () {
-            catPills.forEach(p => p.classList.remove('active'));
-            this.classList.add('active');
-            currentCategory = this.getAttribute('data-category');
-            if (categorySelect) {
-                categorySelect.value = (currentCategory === 'all') ? '' : currentCategory;
-            }
-            currentPage = 1;
-            filterAndRender();
-        });
-    });
-
-    function updateActiveCategoryPill(catName) {
-        catPills.forEach(p => {
-            const dataCat = p.getAttribute('data-category');
-            if (catName === 'all' || catName === '') {
-                if (dataCat === 'all') p.classList.add('active');
-                else p.classList.remove('active');
-            } else {
-                if (dataCat.toLowerCase() === catName.toLowerCase()) p.classList.add('active');
-                else p.classList.remove('active');
+    // 1. Submit form on search enter
+    if (searchInput && filterForm) {
+        searchInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                filterForm.submit();
             }
         });
     }
 
-    // 4. Reset Filters
-    window.resetAllFilters = function () {
-        currentSearch = '';
-        currentCategory = 'all';
-        currentStatus = '';
-        currentAuthor = '';
-        currentDate = '';
-        currentSort = 'latest';
-        currentPage = 1;
-
-        if (searchInput) searchInput.value = '';
-        if (categorySelect) categorySelect.value = '';
-        if (statusSelect) statusSelect.value = '';
-        if (authorSelect) authorSelect.value = '';
-        if (dateInput) dateInput.value = '';
-        if (sortSelect) sortSelect.value = 'latest';
-        if (perPageSelect) perPageSelect.value = '20';
-
-        updateActiveCategoryPill('all');
-        filterAndRender();
-    };
-
-    if (resetBtn) {
-        resetBtn.addEventListener('click', resetAllFilters);
-    }
-
-    // 5. View Switcher (List vs Grid)
-    if (listBtn && gridBtn) {
+    // 2. View Switcher (List vs Grid)
+    if (listBtn && gridBtn && listViewContainer && gridViewContainer) {
         listBtn.addEventListener('click', function () {
             listBtn.style.background = 'var(--cms-primary)';
             listBtn.style.color = '#FFFFFF';
@@ -1774,7 +1693,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 6. Checkbox Selection & Floating Bar
+    // 3. Checkbox Selection & Floating Bar
     const checkboxes = document.querySelectorAll('.article-checkbox');
     checkboxes.forEach(cb => {
         cb.addEventListener('change', function () {
@@ -1805,177 +1724,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         updateFloatingBar();
     };
-
-    // 7. Filtering & Pagination Core
-    function filterAndRender() {
-        const listItems = Array.from(document.querySelectorAll('.article-item-row'));
-        const gridItems = Array.from(document.querySelectorAll('.article-grid-item'));
-
-        let visibleCount = 0;
-        let matchedIndices = [];
-
-        listItems.forEach((item, index) => {
-            const title = (item.getAttribute('data-title') || '').toLowerCase();
-            const category = (item.getAttribute('data-category') || '').toLowerCase();
-            const status = (item.getAttribute('data-status') || '').toLowerCase();
-            const author = (item.getAttribute('data-author') || '').toLowerCase();
-            const date = item.getAttribute('data-date') || '';
-
-            // Matching criteria
-            const matchSearch = !currentSearch || title.includes(currentSearch) || author.includes(currentSearch);
-            const matchCategory = (currentCategory === 'all') || (category === currentCategory.toLowerCase());
-            const matchStatus = !currentStatus || (status === currentStatus);
-            const matchAuthor = !currentAuthor || (author === currentAuthor);
-            const matchDate = !currentDate || (date === currentDate);
-
-            if (matchSearch && matchCategory && matchStatus && matchAuthor && matchDate) {
-                matchedIndices.push(index);
-            }
-        });
-
-        const totalMatched = matchedIndices.length;
-        const totalPages = Math.ceil(totalMatched / itemsPerPage) || 1;
-        if (currentPage > totalPages) currentPage = totalPages;
-
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-
-        // Apply pagination visibility
-        listItems.forEach((item, index) => {
-            const isMatched = matchedIndices.includes(index);
-            const inCurrentPage = matchedIndices.indexOf(index) >= startIndex && matchedIndices.indexOf(index) < endIndex;
-            if (isMatched && inCurrentPage) {
-                item.style.display = 'flex';
-                visibleCount++;
-            } else {
-                item.style.display = 'none';
-            }
-        });
-
-        // Mirror in Grid items if present
-        gridItems.forEach((gItem, index) => {
-            const isMatched = matchedIndices.includes(index);
-            const inCurrentPage = matchedIndices.indexOf(index) >= startIndex && matchedIndices.indexOf(index) < endIndex;
-            if (isMatched && inCurrentPage) {
-                gItem.style.display = 'block';
-            } else {
-                gItem.style.display = 'none';
-            }
-        });
-
-        // Empty state toggle
-        if (totalMatched === 0) {
-            emptyState.classList.remove('d-none');
-            paginationBar.classList.add('d-none');
-        } else {
-            emptyState.classList.add('d-none');
-            paginationBar.classList.remove('d-none');
-        }
-
-        // Update Pagination numbers & info
-        const pgStart = document.getElementById('pg-start');
-        const pgEnd = document.getElementById('pg-end');
-        const pgTotal = document.getElementById('pg-total');
-        if (pgStart && pgEnd && pgTotal) {
-            pgStart.textContent = totalMatched === 0 ? 0 : startIndex + 1;
-            pgEnd.textContent = Math.min(endIndex, totalMatched);
-            pgTotal.textContent = totalMatched;
-        }
-
-        renderPageButtons(totalPages);
-    }
-
-    function renderPageButtons(totalPages) {
-        const container = document.getElementById('pg-page-numbers');
-        const prevBtn = document.getElementById('btn-pg-prev');
-        const nextBtn = document.getElementById('btn-pg-next');
-        const pgCurrentPage = document.getElementById('pg-current-page');
-        if (!container) return;
-
-        if (pgCurrentPage) {
-            pgCurrentPage.textContent = `Page ${currentPage} of ${Math.max(1, totalPages)}`;
-        }
-
-        container.innerHTML = '';
-
-        // Sliding window of up to 5 buttons
-        let startPage = Math.max(1, currentPage - 2);
-        let endPage = Math.min(totalPages, startPage + 4);
-        if (endPage - startPage < 4) {
-            startPage = Math.max(1, endPage - 4);
-        }
-
-        for (let i = startPage; i <= endPage; i++) {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = `nr-pg-num-btn ${i === currentPage ? 'active' : ''}`;
-            btn.textContent = i;
-            btn.addEventListener('click', () => {
-                if (currentPage !== i) {
-                    currentPage = i;
-                    filterAndRender();
-                    const topTarget = document.getElementById('nr-list-view-container') || document.querySelector('.nr-filter-bar');
-                    if (topTarget) {
-                        topTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }
-            });
-            container.appendChild(btn);
-        }
-
-        if (prevBtn) {
-            prevBtn.disabled = (currentPage === 1);
-            prevBtn.onclick = () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    filterAndRender();
-                    const topTarget = document.getElementById('nr-list-view-container') || document.querySelector('.nr-filter-bar');
-                    if (topTarget) topTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            };
-        }
-
-        if (nextBtn) {
-            nextBtn.disabled = (currentPage >= totalPages);
-            nextBtn.onclick = () => {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    filterAndRender();
-                    const topTarget = document.getElementById('nr-list-view-container') || document.querySelector('.nr-filter-bar');
-                    if (topTarget) topTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            };
-        }
-
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
-    }
-
-    // 8. Sorting Function
-    function sortArticles() {
-        const container = listViewContainer;
-        const items = Array.from(container.children);
-
-        items.sort((a, b) => {
-            const viewsA = parseInt(a.getAttribute('data-views') || '0', 10);
-            const viewsB = parseInt(b.getAttribute('data-views') || '0', 10);
-            const dateA = new Date(a.getAttribute('data-date') || 0).getTime();
-            const dateB = new Date(b.getAttribute('data-date') || 0).getTime();
-            const titleA = a.getAttribute('data-title') || '';
-            const titleB = b.getAttribute('data-title') || '';
-
-            if (currentSort === 'views') return viewsB - viewsA;
-            if (currentSort === 'oldest') return dateA - dateB;
-            if (currentSort === 'alpha') return titleA.localeCompare(titleB);
-            return dateB - dateA; // latest first
-        });
-
-        items.forEach(item => container.appendChild(item));
-    }
-
-    // Initialize layout
-    filterAndRender();
 });
 
 // Quick Article Preview Modal
