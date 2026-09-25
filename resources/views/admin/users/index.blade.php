@@ -241,8 +241,8 @@
                                 data-phone="{{ $user->phone }}"
                                 data-role="{{ $user->role ?? 'user' }}"
                                 data-status="{{ $user->status ?? 'active' }}"
-                                data-district="{{ $user->district }}"
-                                data-bio="{{ $user->bio }}"
+                                data-district="{{ $user->district ?? '' }}"
+                                data-bio="{{ $user->bio ?? '' }}"
                                 title="Edit User">
                                 <i data-lucide="edit-3" style="width: 15px; height: 15px; color: #4B5563;"></i>
                             </button>

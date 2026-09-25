@@ -14,21 +14,36 @@ use Illuminate\Validation\Rule;
 class UserController extends Controller
 {
     /**
-     * Auto-ensure status column exists in users table.
+     * Auto-ensure required columns exist in users table.
      */
+    protected function ensureUserColumnsExist(): void
+    {
+        try {
+            Schema::table('users', function (Blueprint $table) {
+                if (!Schema::hasColumn('users', 'status')) {
+                    $table->string('status')->default('active')->after('email');
+                }
+                if (!Schema::hasColumn('users', 'bio')) {
+                    $table->text('bio')->nullable();
+                }
+                if (!Schema::hasColumn('users', 'avatar')) {
+                    $table->string('avatar')->nullable();
+                }
+                if (!Schema::hasColumn('users', 'phone')) {
+                    $table->string('phone')->nullable();
+                }
+                if (!Schema::hasColumn('users', 'district')) {
+                    $table->string('district')->nullable();
+                }
+            });
+        } catch (\Throwable $e) {
+            // Gracefully catch if DB user lacks ALTER permissions
+        }
+    }
+
     protected function ensureStatusColumnExists(): bool
     {
-        if (!Schema::hasColumn('users', 'status')) {
-            try {
-                Schema::table('users', function (Blueprint $table) {
-                    if (!Schema::hasColumn('users', 'status')) {
-                        $table->string('status')->default('active')->after('email');
-                    }
-                });
-            } catch (\Throwable $e) {
-                // If permission denied or locked, gracefully proceed
-            }
-        }
+        $this->ensureUserColumnsExist();
         return Schema::hasColumn('users', 'status');
     }
 
@@ -41,7 +56,8 @@ class UserController extends Controller
             return redirect('/admin/login')->with('error', 'Please log in first.');
         }
 
-        $hasStatus = $this->ensureStatusColumnExists();
+        $this->ensureUserColumnsExist();
+        $hasStatus = Schema::hasColumn('users', 'status');
 
         $query = User::query();
 
@@ -49,9 +65,13 @@ class UserController extends Controller
         if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%")
-                  ->orWhere('district', 'like', "%{$search}%");
+                  ->orWhere('email', 'like', "%{$search}%");
+                if (Schema::hasColumn('users', 'phone')) {
+                    $q->orWhere('phone', 'like', "%{$search}%");
+                }
+                if (Schema::hasColumn('users', 'district')) {
+                    $q->orWhere('district', 'like', "%{$search}%");
+                }
             });
         }
 
@@ -80,12 +100,12 @@ class UserController extends Controller
         $users = $query->latest()->paginate(15)->withQueryString();
 
         return view('admin.users.index', compact(
-            'users',
-            'totalUsers',
-            'adminCount',
-            'reporterCount',
-            'editorCount',
-            'readerCount',
+            'users', 
+            'totalUsers', 
+            'adminCount', 
+            'reporterCount', 
+            'editorCount', 
+            'readerCount', 
             'activeCount'
         ));
     }
@@ -99,8 +119,11 @@ class UserController extends Controller
             return redirect('/admin/login')->with('error', 'Please log in first.');
         }
 
-        $this->ensureStatusColumnExists();
+        $this->ensureUserColumnsExist();
         $hasStatus = Schema::hasColumn('users', 'status');
+        $hasBio = Schema::hasColumn('users', 'bio');
+        $hasPhone = Schema::hasColumn('users', 'phone');
+        $hasDistrict = Schema::hasColumn('users', 'district');
 
         $rules = [
             'name'     => 'required|string|max:255',
@@ -126,14 +149,22 @@ class UserController extends Controller
         if ($hasStatus) {
             $user->status = $request->input('status', 'active');
         }
-        $user->phone = $request->phone;
-        $user->district = $request->district;
-        $user->bio = $request->bio;
+        if ($hasPhone) {
+            $user->phone = $request->phone;
+        }
+        if ($hasDistrict) {
+            $user->district = $request->district;
+        }
+        if ($hasBio) {
+            $user->bio = $request->bio;
+        }
         
         if ($request->role === 'reporter') {
-            $user->badge = 'Field Reporter';
-            $user->is_verified_reporter = 1;
-            $user->reporter_id = 'REP-' . strtoupper(substr(uniqid(), -6));
+            if (Schema::hasColumn('users', 'badge')) $user->badge = 'Field Reporter';
+            if (Schema::hasColumn('users', 'is_verified_reporter')) $user->is_verified_reporter = 1;
+            if (Schema::hasColumn('users', 'reporter_id')) {
+                $user->reporter_id = 'REP-' . strtoupper(substr(uniqid(), -6));
+            }
         }
 
         $user->save();
@@ -152,8 +183,11 @@ class UserController extends Controller
 
         $user = User::findOrFail($id);
 
-        $this->ensureStatusColumnExists();
+        $this->ensureUserColumnsExist();
         $hasStatus = Schema::hasColumn('users', 'status');
+        $hasBio = Schema::hasColumn('users', 'bio');
+        $hasPhone = Schema::hasColumn('users', 'phone');
+        $hasDistrict = Schema::hasColumn('users', 'district');
 
         $rules = [
             'name'     => 'required|string|max:255',
@@ -177,18 +211,26 @@ class UserController extends Controller
         if ($hasStatus && $request->filled('status')) {
             $user->status = $request->status;
         }
-        $user->phone = $request->phone;
-        $user->district = $request->district;
-        $user->bio = $request->bio;
+        if ($hasPhone) {
+            $user->phone = $request->phone;
+        }
+        if ($hasDistrict) {
+            $user->district = $request->district;
+        }
+        if ($hasBio) {
+            $user->bio = $request->bio;
+        }
 
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }
 
-        if ($request->role === 'reporter' && empty($user->reporter_id)) {
-            $user->badge = 'Field Reporter';
-            $user->is_verified_reporter = 1;
-            $user->reporter_id = 'REP-' . strtoupper(substr(uniqid(), -6));
+        if ($request->role === 'reporter') {
+            if (Schema::hasColumn('users', 'badge')) $user->badge = 'Field Reporter';
+            if (Schema::hasColumn('users', 'is_verified_reporter')) $user->is_verified_reporter = 1;
+            if (Schema::hasColumn('users', 'reporter_id') && empty($user->reporter_id)) {
+                $user->reporter_id = 'REP-' . strtoupper(substr(uniqid(), -6));
+            }
         }
 
         $user->save();
