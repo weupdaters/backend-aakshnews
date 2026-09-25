@@ -9,13 +9,14 @@ use Illuminate\Support\Facades\Schema;
 
 class CleanAndTransferPostsCommand extends Command
 {
-    protected $signature = 'news:keep-latest-100 {--limit=100 : Number of latest news to keep per category} {--dry-run : Simulate without changing data}';
+    protected $signature = 'news:keep-latest-100 {--limit=100 : Number of latest news to keep per category} {--source= : Custom path to storage_path folder} {--dry-run : Simulate without changing data}';
     protected $description = 'Keep only the latest N news per category, copy active images to storage/app/public/posts, and remove old posts';
 
     public function handle()
     {
         $limit = (int) $this->option('limit');
         $isDryRun = $this->option('dry-run');
+        $customSource = $this->option('source');
 
         $this->info("===============================================================");
         $this->info("   AAKSH NEWS - CLEAN & TRANSFER LATEST {$limit} POSTS / CATEGORY");
@@ -26,9 +27,16 @@ class CleanAndTransferPostsCommand extends Command
         }
 
         // 1. Source and Target Image Paths
-        $sourceDir = base_path('../storage_path');
-        if (!is_dir($sourceDir)) {
+        if ($customSource && is_dir($customSource)) {
+            $sourceDir = rtrim($customSource, '/\\');
+        } elseif (is_dir(base_path('storage_path'))) {
+            $sourceDir = base_path('storage_path');
+        } elseif (is_dir(base_path('../storage_path'))) {
+            $sourceDir = base_path('../storage_path');
+        } elseif (is_dir(public_path('storage_path'))) {
             $sourceDir = public_path('storage_path');
+        } else {
+            $sourceDir = base_path('storage_path');
         }
         $targetDir = storage_path('app/public/posts');
 
