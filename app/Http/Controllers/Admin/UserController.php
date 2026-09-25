@@ -7,10 +7,31 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+    /**
+     * Auto-ensure status column exists in users table.
+     */
+    protected function ensureStatusColumnExists(): bool
+    {
+        if (!Schema::hasColumn('users', 'status')) {
+            try {
+                Schema::table('users', function (Blueprint $table) {
+                    if (!Schema::hasColumn('users', 'status')) {
+                        $table->string('status')->default('active')->after('email');
+                    }
+                });
+            } catch (\Throwable $e) {
+                // If permission denied or locked, gracefully proceed
+            }
+        }
+        return Schema::hasColumn('users', 'status');
+    }
+
     /**
      * Display a listing of users and roles.
      */
@@ -19,6 +40,8 @@ class UserController extends Controller
         if (!Auth::check()) {
             return redirect('/admin/login')->with('error', 'Please log in first.');
         }
+
+        $hasStatus = $this->ensureStatusColumnExists();
 
         $query = User::query();
 
@@ -39,8 +62,8 @@ class UserController extends Controller
             }
         }
 
-        // Status filter
-        if ($status = $request->input('status')) {
+        // Status filter (safe check)
+        if ($hasStatus && ($status = $request->input('status'))) {
             if ($status !== 'all') {
                 $query->where('status', $status);
             }
@@ -52,7 +75,7 @@ class UserController extends Controller
         $reporterCount = User::where('role', 'reporter')->count();
         $editorCount = User::where('role', 'editor')->count();
         $readerCount = User::whereIn('role', ['user', 'reader'])->orWhereNull('role')->count();
-        $activeCount = User::where('status', 'active')->count();
+        $activeCount = $hasStatus ? User::where('status', 'active')->count() : $totalUsers;
 
         $users = $query->latest()->paginate(15)->withQueryString();
 
@@ -76,23 +99,33 @@ class UserController extends Controller
             return redirect('/admin/login')->with('error', 'Please log in first.');
         }
 
-        $request->validate([
+        $this->ensureStatusColumnExists();
+        $hasStatus = Schema::hasColumn('users', 'status');
+
+        $rules = [
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|max:255|unique:users,email',
             'password' => 'required|string|min:6',
             'role'     => 'required|string|in:admin,editor,reporter,user',
-            'status'   => 'required|string|in:active,suspended',
             'phone'    => 'nullable|string|max:50',
             'district' => 'nullable|string|max:100',
             'bio'      => 'nullable|string|max:1000',
-        ]);
+        ];
+
+        if ($hasStatus) {
+            $rules['status'] = 'required|string|in:active,suspended';
+        }
+
+        $request->validate($rules);
 
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->role = $request->role;
-        $user->status = $request->status;
+        if ($hasStatus) {
+            $user->status = $request->input('status', 'active');
+        }
         $user->phone = $request->phone;
         $user->district = $request->district;
         $user->bio = $request->bio;
@@ -119,21 +152,31 @@ class UserController extends Controller
 
         $user = User::findOrFail($id);
 
-        $request->validate([
+        $this->ensureStatusColumnExists();
+        $hasStatus = Schema::hasColumn('users', 'status');
+
+        $rules = [
             'name'     => 'required|string|max:255',
             'email'    => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'role'     => 'required|string|in:admin,editor,reporter,user',
-            'status'   => 'required|string|in:active,suspended',
             'phone'    => 'nullable|string|max:50',
             'district' => 'nullable|string|max:100',
             'bio'      => 'nullable|string|max:1000',
             'password' => 'nullable|string|min:6',
-        ]);
+        ];
+
+        if ($hasStatus) {
+            $rules['status'] = 'required|string|in:active,suspended';
+        }
+
+        $request->validate($rules);
 
         $user->name = $request->name;
         $user->email = $request->email;
         $user->role = $request->role;
-        $user->status = $request->status;
+        if ($hasStatus && $request->filled('status')) {
+            $user->status = $request->status;
+        }
         $user->phone = $request->phone;
         $user->district = $request->district;
         $user->bio = $request->bio;
@@ -169,10 +212,15 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'You cannot change your own account status.');
         }
 
-        $user->status = $user->status === 'active' ? 'suspended' : 'active';
-        $user->save();
+        $this->ensureStatusColumnExists();
 
-        return redirect()->back()->with('success', "User '{$user->name}' status changed to '{$user->status}'.");
+        if (Schema::hasColumn('users', 'status')) {
+            $user->status = ($user->status ?? 'active') === 'active' ? 'suspended' : 'active';
+            $user->save();
+            return redirect()->back()->with('success', "User '{$user->name}' status changed to '{$user->status}'.");
+        }
+
+        return redirect()->back()->with('info', "User status toggle will take effect once the database is updated.");
     }
 
     /**

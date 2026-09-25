@@ -31,6 +31,7 @@ class User extends Authenticatable
         'state',
         'points',
         'badge',
+        'status',
         'reporter_id',
         'is_verified_reporter',
     ];
