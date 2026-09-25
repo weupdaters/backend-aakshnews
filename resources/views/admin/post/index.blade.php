@@ -1067,16 +1067,6 @@
             </div>
         </div>
     </form>
-            <div class="d-flex align-items-center gap-1 bg-slate-100 p-0.5 rounded-2">
-                <button type="button" id="view-mode-list-btn" class="btn text-white p-0 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; border-radius: 8px; background: var(--cms-primary); border: none;" title="Horizontal Post Cards View">
-                    <i data-lucide="list" style="width: 16px; height: 16px;"></i>
-                </button>
-                <button type="button" id="view-mode-grid-btn" class="btn btn-light p-0 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; border-radius: 8px; background: #FFFFFF; border: 1px solid var(--cms-border); color: var(--cms-text-muted);" title="Compact Grid View">
-                    <i data-lucide="grid-2x2" style="width: 16px; height: 16px;"></i>
-                </button>
-            </div>
-        </div>
-    </div>
 
     <!-- ============================================================== -->
     <!-- 5. MAIN CONTENT AREA: POST CARDS + RIGHT UTILITY DESK          -->
