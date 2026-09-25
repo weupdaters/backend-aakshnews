@@ -431,16 +431,10 @@
                 </div>
             </div>
 
-            <!-- Author & Source Row -->
-            <div class="row mb-4">
-                <div class="col-md-6 mb-3 mb-md-0">
-                    <label class="font-sm text-dark mb-2" style="font-weight: 600;">Author Name</label>
-                    <input type="text" name="author_name" id="post-author" class="form-control form-control-modern w-100" value="{{ old('author_name', $post->author_name ?? (Auth::check() ? Auth::user()->name : 'Aakash News Desk')) }}" placeholder="Enter author name">
-                </div>
-                <div class="col-md-6">
-                    <label class="font-sm text-dark mb-2" style="font-weight: 600;">Source <span class="text-muted" style="font-weight: normal;">(Optional)</span></label>
-                    <input type="text" name="source" id="post-source" class="form-control form-control-modern w-100" value="{{ old('source', $post->source ?? '') }}" placeholder="e.g. PTI, ANI, Bureau, etc.">
-                </div>
+            <!-- Author Name -->
+            <div class="mb-4">
+                <label class="font-sm text-dark mb-2" style="font-weight: 600;">Author Name</label>
+                <input type="text" name="author_name" id="post-author" class="form-control form-control-modern w-100" value="{{ old('author_name', $post->author_name ?? (Auth::check() ? Auth::user()->name : 'Aakash News Desk')) }}" placeholder="Enter author name">
             </div>
 
             <!-- Short Description -->
