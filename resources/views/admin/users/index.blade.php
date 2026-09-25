@@ -247,6 +247,16 @@
                                 <i data-lucide="edit-3" style="width: 15px; height: 15px; color: #4B5563;"></i>
                             </button>
 
+                            <!-- Direct Login as User Button -->
+                            @if(Auth::id() !== $user->id)
+                            <form action="{{ route('admin.users.impersonate', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Directly log in as {{ addslashes($user->name) }} ({{ ucfirst($user->role ?? 'user') }})?');">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-light border p-1.5" title="Direct Login as {{ $user->name }}" style="color: #1769D2;">
+                                    <i data-lucide="log-in" style="width: 15px; height: 15px; color: #1769D2;"></i>
+                                </button>
+                            </form>
+                            @endif
+
                             <!-- Toggle Status Button -->
                             @if(Auth::id() !== $user->id)
                             <form action="{{ route('admin.users.toggle-status', $user->id) }}" method="POST" class="d-inline">

@@ -46,6 +46,18 @@
 </head>
 <body class="bg-[#F0F4F9] text-slate-800 min-h-screen flex flex-col">
 
+    @if(session()->has('impersonator_admin_id'))
+    <div class="bg-amber-500 text-white px-4 py-2 text-sm font-semibold flex items-center justify-between shadow-md z-[60] sticky top-0">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-user-shield"></i>
+            <span>You are logged in as Reporter <strong>{{ Auth::user()->name }}</strong> (Admin Impersonation Mode)</span>
+        </div>
+        <a href="/admin/leave-impersonation" class="bg-slate-900 hover:bg-black text-white text-xs px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Return to Admin Account
+        </a>
+    </div>
+    @endif
+
     <!-- 1. TOP HEADER (Exact Match: Navy Blue Bar) -->
     <header class="bg-[#062B63] text-white sticky top-0 z-50 shadow-md no-print">
         <div class="max-w-[1600px] mx-auto px-4 py-2.5 flex items-center justify-between gap-4">

@@ -71,13 +71,16 @@ Route::get('/admin/instagram/{id}/edit', [InstagramVideoController::class, 'edit
 Route::put('/admin/instagram/{id}', [InstagramVideoController::class, 'update']);
 Route::delete('/admin/instagram/{id}', [InstagramVideoController::class, 'destroy']);
 
-// Admin Photo Gallery Management Routes
-Route::get('/admin/gallery', [PhotoGalleryController::class, 'index']);
-Route::get('/admin/gallery/create', [PhotoGalleryController::class, 'create']);
-Route::post('/admin/gallery', [PhotoGalleryController::class, 'store']);
-Route::get('/admin/gallery/{id}/edit', [PhotoGalleryController::class, 'edit']);
-Route::put('/admin/gallery/{id}', [PhotoGalleryController::class, 'update']);
-Route::delete('/admin/gallery/{id}', [PhotoGalleryController::class, 'destroy']);
+// Admin Media Library & Photo Gallery Routes
+Route::get('/admin/gallery', [PhotoGalleryController::class, 'index'])->name('admin.gallery.index');
+Route::post('/admin/gallery/upload', [PhotoGalleryController::class, 'upload'])->name('admin.gallery.upload');
+Route::post('/admin/gallery/delete-file', [PhotoGalleryController::class, 'destroyFile'])->name('admin.gallery.delete-file');
+Route::post('/admin/gallery/bulk-delete', [PhotoGalleryController::class, 'bulkDestroy'])->name('admin.gallery.bulk-delete');
+Route::get('/admin/gallery/create', [PhotoGalleryController::class, 'create'])->name('admin.gallery.create');
+Route::post('/admin/gallery', [PhotoGalleryController::class, 'store'])->name('admin.gallery.store');
+Route::get('/admin/gallery/{id}/edit', [PhotoGalleryController::class, 'edit'])->name('admin.gallery.edit');
+Route::put('/admin/gallery/{id}', [PhotoGalleryController::class, 'update'])->name('admin.gallery.update');
+Route::delete('/admin/gallery/{id}', [PhotoGalleryController::class, 'destroy'])->name('admin.gallery.destroy');
 
 // Admin Site & Social Media Settings Routes
 Route::get('/admin/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('admin.settings');
@@ -93,6 +96,9 @@ Route::post('/admin/users', [\App\Http\Controllers\Admin\UserController::class, 
 Route::put('/admin/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('admin.users.update');
 Route::delete('/admin/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('admin.users.destroy');
 Route::post('/admin/users/{id}/toggle-status', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('admin.users.toggle-status');
+Route::post('/admin/users/{id}/impersonate', [\App\Http\Controllers\Admin\UserController::class, 'impersonate'])->name('admin.users.impersonate');
+Route::match(['get', 'post'], '/admin/leave-impersonation', [\App\Http\Controllers\Admin\UserController::class, 'leaveImpersonate'])->name('admin.users.leave-impersonate');
+Route::match(['get', 'post'], '/leave-impersonation', [\App\Http\Controllers\Admin\UserController::class, 'leaveImpersonate'])->name('impersonate.leave');
 
 // Admin Newsletter Subscribers Route
 Route::get('/admin/subscribers', function () {

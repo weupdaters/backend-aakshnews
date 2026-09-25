@@ -244,4 +244,60 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index')->with('success', "User '{$name}' has been permanently deleted.");
     }
+
+    /**
+     * Direct login as user (impersonate).
+     */
+    public function impersonate($id)
+    {
+        if (!Auth::check()) {
+            return redirect('/admin/login')->with('error', 'Please log in first.');
+        }
+
+        $currentUser = Auth::user();
+        if ($currentUser->role !== 'admin' && !session()->has('impersonator_admin_id')) {
+            return redirect()->back()->with('error', 'Only administrators can log in as other users.');
+        }
+
+        $targetUser = User::findOrFail($id);
+
+        if ($targetUser->id === $currentUser->id) {
+            return redirect()->back()->with('info', 'You are already logged into this account.');
+        }
+
+        // Save original admin ID in session if not already stored
+        if (!session()->has('impersonator_admin_id')) {
+            session(['impersonator_admin_id' => $currentUser->id]);
+        }
+
+        // Login as target user
+        Auth::login($targetUser);
+
+        // Redirect based on target user role
+        if ($targetUser->role === 'reporter') {
+            return redirect('/reporter/dashboard')->with('success', "Directly logged in as {$targetUser->name} (Reporter).");
+        }
+
+        return redirect('/admin/dashboard')->with('success', "Directly logged in as {$targetUser->name}.");
+    }
+
+    /**
+     * Leave impersonation and return to original admin account.
+     */
+    public function leaveImpersonate()
+    {
+        if (!session()->has('impersonator_admin_id')) {
+            return redirect('/admin/dashboard');
+        }
+
+        $adminId = session()->pull('impersonator_admin_id');
+        $admin = User::find($adminId);
+
+        if ($admin) {
+            Auth::login($admin);
+            return redirect()->route('admin.users.index')->with('success', "Returned to Admin account ({$admin->name}).");
+        }
+
+        return redirect('/admin/login')->with('info', 'Session ended. Please log in again.');
+    }
 }

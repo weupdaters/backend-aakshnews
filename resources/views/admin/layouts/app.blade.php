@@ -1409,6 +1409,18 @@
         <div id="admin-top-loading-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #7C3AED 0%, #2563EB 50%, #06B6D4 100%); box-shadow: 0 0 12px rgba(124, 58, 237, 0.8), 0 0 6px rgba(37, 99, 235, 0.6); transition: width 0.2s cubic-bezier(0.12, 0.45, 0.25, 1);"></div>
     </div>
 
+    @if(session()->has('impersonator_admin_id'))
+    <div style="background: linear-gradient(90deg, #F59E0B 0%, #D97706 100%); color: #FFFFFF; padding: 8px 24px; font-size: 13.5px; font-weight: 600; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100000; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);">
+        <div class="d-flex align-items-center gap-2">
+            <i data-lucide="shield-alert" style="width: 18px; height: 18px;"></i>
+            <span>You are currently impersonating <strong>{{ Auth::user()->name ?? 'User' }}</strong> ({{ ucfirst(Auth::user()->role ?? 'user') }}).</span>
+        </div>
+        <a href="/admin/leave-impersonation" class="btn btn-sm btn-dark text-white fw-bold px-3 py-1 rounded-pill" style="font-size: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+            <i data-lucide="log-out" style="width: 13px; height: 13px;" class="me-1"></i> Return to Admin Account
+        </a>
+    </div>
+    @endif
+
     @include('admin.layouts.header')
     
     <div class="main">

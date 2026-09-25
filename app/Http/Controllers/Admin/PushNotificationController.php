@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PushNotificationController extends Controller
 {
@@ -40,6 +41,10 @@ class PushNotificationController extends Controller
 
     public function index()
     {
+        if (!Auth::check()) {
+            return redirect('/admin/login')->with('error', 'Please log in first.');
+        }
+
         $history = $this->getHistory();
         $totalSubscribers = 1482;
         $totalSent = count($history);
@@ -50,14 +55,24 @@ class PushNotificationController extends Controller
 
     public function send(Request $request)
     {
+        if (!Auth::check()) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
+            }
+            return redirect('/admin/login')->with('error', 'Please log in first.');
+        }
+
         $request->validate([
             'title' => 'required|string|max:150',
             'body' => 'required|string|max:300',
         ]);
 
-        $title = $request->input('title');
-        $body = $request->input('body');
-        $url = $request->input('url', '/');
+        $title = trim($request->input('title'));
+        $body = trim($request->input('body'));
+        $url = trim($request->input('url', '/'));
+        if (empty($url) || str_contains($url, 'localhost:3000')) {
+            $url = '/';
+        }
         $category = $request->input('category', 'Breaking News');
 
         $path = storage_path('app/push_history.json');
@@ -77,6 +92,17 @@ class PushNotificationController extends Controller
         array_unshift($history, $newNotification);
         @file_put_contents($path, json_encode($history, JSON_PRETTY_PRINT));
 
-        return redirect()->back()->with('success', 'Push notification broadcasted successfully to 1,482 active subscribers!');
+        $msg = 'Push notification broadcasted successfully to 1,482 active subscribers!';
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $msg,
+                'data' => $newNotification,
+                'total_sent' => count($history)
+            ]);
+        }
+
+        return redirect()->back()->with('success', $msg);
     }
 }

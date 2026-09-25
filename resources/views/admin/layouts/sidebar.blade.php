@@ -60,12 +60,6 @@
                 </a>
             </li>
             <li>
-                <a href="/admin/gallery" class="sidebar-btn">
-                    <i data-lucide="camera" class="sidebar-icon icon-animate icon-hover-bounce"></i> 
-                    <span class="name">{{ $t['gallery'] ?? 'Photo Gallery' }}</span>
-                </a>
-            </li>
-            <li>
                 <a href="/admin/advertisement" class="sidebar-btn {{ request()->is('admin/advertisement*') ? 'active' : '' }}">
                     <i data-lucide="tv" class="sidebar-icon icon-animate icon-spin-hover"></i> 
                     <span class="name">{{ $t['advertisements'] ?? 'Advertisements' }}</span>
