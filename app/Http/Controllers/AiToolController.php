@@ -247,12 +247,17 @@ class AiToolController extends Controller
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $imageUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (compatible; AakshNewsBot/1.0)");
-        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
+        curl_setopt($ch, CURLOPT_TIMEOUT, 12);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_REFERER, $imageUrl);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Accept: image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
+            'Accept-Language: en-US,en;q=0.9',
+        ]);
         $data = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
@@ -270,29 +275,56 @@ class AiToolController extends Controller
         ];
 
         $ext = null;
-        foreach ($allowedMimes as $mime => $extension) {
-            if (str_contains(strtolower($contentType), $mime)) {
-                $ext = $extension;
-                break;
+        if ($contentType) {
+            foreach ($allowedMimes as $mime => $extension) {
+                if (str_contains(strtolower($contentType), $mime)) {
+                    $ext = $extension;
+                    break;
+                }
             }
         }
 
+        // Magic byte fallback inspection
         if (!$ext) {
-            return response()->json(['success' => false, 'message' => 'Downloaded file is not a supported image.'], 422);
+            $header = substr($data, 0, 12);
+            if (str_starts_with($header, "\xFF\xD8\xFF")) {
+                $ext = 'jpg';
+            } elseif (str_starts_with($header, "\x89PNG\r\n\x1a\n")) {
+                $ext = 'png';
+            } elseif (str_starts_with($header, "GIF87a") || str_starts_with($header, "GIF89a")) {
+                $ext = 'gif';
+            } elseif (str_starts_with($header, "RIFF") && str_contains(substr($data, 8, 7), "WEBP")) {
+                $ext = 'webp';
+            } else {
+                $path = parse_url($imageUrl, PHP_URL_PATH);
+                if ($path && preg_match('/\.(jpe?g|png|webp|gif)/i', $path, $m)) {
+                    $ext = strtolower($m[1]) === 'jpeg' ? 'jpg' : strtolower($m[1]);
+                } else {
+                    $ext = 'jpg'; // Safe fallback
+                }
+            }
         }
 
         $filename = 'news_real_' . time() . '_' . substr(md5(uniqid()), 0, 8) . '.' . $ext;
-        $uploadsDir = public_path('uploads');
-        if (!file_exists($uploadsDir)) {
-            mkdir($uploadsDir, 0755, true);
+
+        // Preferred: storage/app/public/posts
+        $postsDir = storage_path('app/public/posts');
+        if (!file_exists($postsDir)) {
+            @mkdir($postsDir, 0755, true);
         }
 
-        $filepath = $uploadsDir . DIRECTORY_SEPARATOR . $filename;
-        if (file_put_contents($filepath, $data) === false) {
-            return response()->json(['success' => false, 'message' => 'Failed to save image on server.'], 500);
+        $filepath = $postsDir . DIRECTORY_SEPARATOR . $filename;
+        if (@file_put_contents($filepath, $data) !== false) {
+            $localUrl = '/storage/posts/' . $filename;
+        } else {
+            // Fallback: public/uploads
+            $uploadsDir = public_path('uploads');
+            if (!file_exists($uploadsDir)) {
+                @mkdir($uploadsDir, 0755, true);
+            }
+            @file_put_contents($uploadsDir . DIRECTORY_SEPARATOR . $filename, $data);
+            $localUrl = '/uploads/' . $filename;
         }
-
-        $localUrl = '/uploads/' . $filename;
 
         return response()->json([
             'success' => true,

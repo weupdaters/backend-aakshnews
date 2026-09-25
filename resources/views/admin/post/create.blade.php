@@ -1286,6 +1286,21 @@
             $('#lang-pane-' + lang).removeClass('d-none');
         });
 
+        // Reliable Accordion toggle for Advanced Options & Related Content
+        $('[data-bs-toggle="collapse"]').on('click', function() {
+            var target = $(this).attr('data-bs-target');
+            if (target && $(target).length) {
+                var $chevron = $(this).find('[data-lucide="chevron-down"]');
+                setTimeout(function() {
+                    var isShown = $(target).hasClass('show');
+                    $chevron.css({
+                        'transform': isShown ? 'rotate(180deg)' : 'rotate(0deg)',
+                        'transition': 'transform 0.25s ease'
+                    });
+                }, 150);
+            }
+        });
+
         // Tags Input Handler: Enter (13), Comma (188 or ','), Tab (9)
         $('#tag-input-field').on('keydown', function(e) {
             var key = e.which || e.keyCode;
@@ -1681,6 +1696,22 @@
              });
         }
 
+        function closeRealImageModal() {
+            var modalEl = document.getElementById('modal-real-image-finder');
+            if (modalEl) {
+                if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                    var inst = bootstrap.Modal.getInstance(modalEl) || bootstrap.Modal.getOrCreateInstance(modalEl);
+                    if (inst) inst.hide();
+                } else {
+                    $('#modal-real-image-finder').modal('hide');
+                }
+            }
+            setTimeout(function() {
+                $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open').css({ overflow: '', paddingRight: '' });
+            }, 300);
+        }
+
         function attachCardSelectionHandler() {
             $('.real-image-card').off('click').on('click', function() {
                 var $card = $(this);
@@ -1695,29 +1726,31 @@
 
                 $.post('/api/save-remote-image', { image_url: selectedUrl })
                  .done(function(res) {
-                     if (res.success && res.local_url) {
-                         var localUrl = res.local_url;
-                         $('#post-image-url').val(localUrl).trigger('input');
-
-                         // Prepend to presets row
-                         var newThumb = $(`<img src="${localUrl}" alt="Selected Real Photo" class="rounded object-fit-cover shadow-sm thumb-pick border border-primary" style="width: 64px; height: 44px; cursor: pointer;">`);
-                         newThumb.on('click', function() {
-                             selectThumbnail(localUrl, this);
-                         });
-                         $('.thumb-pick').removeClass('border border-primary');
-                         $('#preset-thumbnails-row').prepend(newThumb);
-
-                         $('#modal-real-image-finder').modal('hide');
-                     } else {
-                         // Fallback to direct URL if download fails
-                         $('#post-image-url').val(selectedUrl).trigger('input');
-                         $('#modal-real-image-finder').modal('hide');
+                     var finalUrl = (res.success && res.local_url) ? res.local_url : selectedUrl;
+                     $('#post-image-url').val(finalUrl).trigger('input');
+                     if (typeof updateFeaturedImagePreview === 'function') {
+                         updateFeaturedImagePreview(finalUrl);
                      }
+
+                     // Prepend to presets row
+                     var newThumb = $(`<img src="${finalUrl}" alt="Selected Real Photo" class="rounded object-fit-cover shadow-sm thumb-pick border border-primary" style="width: 64px; height: 44px; cursor: pointer;">`);
+                     newThumb.on('click', function() {
+                         selectThumbnail(finalUrl, this);
+                     });
+                     $('.thumb-pick').removeClass('border border-primary');
+                     $('#preset-thumbnails-row').prepend(newThumb);
+
+                     closeRealImageModal();
+                     if (window.showToast) window.showToast('Photo selected and set as featured!', 'success');
                  })
                  .fail(function() {
                      // Fallback to direct URL if server download encounters an issue
                      $('#post-image-url').val(selectedUrl).trigger('input');
-                     $('#modal-real-image-finder').modal('hide');
+                     if (typeof updateFeaturedImagePreview === 'function') {
+                         updateFeaturedImagePreview(selectedUrl);
+                     }
+                     closeRealImageModal();
+                     if (window.showToast) window.showToast('Photo selected and set as featured!', 'success');
                  });
             });
         }
