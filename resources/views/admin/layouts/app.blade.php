@@ -19,13 +19,35 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Noto+Sans+Gurmukhi:wght@400;500;600;700;800&display=swap');
 
         /* ══════════════════════════════════════════════════════
-           2026 NEXT-GEN SWEETALERT2 & TOASTR DESIGN SYSTEM
+           2026 SWEETALERT2 & TOASTR DESIGN SYSTEM (ZERO BLUR)
            ══════════════════════════════════════════════════════ */
         .swal2-container {
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            background: rgba(15, 23, 42, 0.5) !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
             z-index: 1000000 !important;
+        }
+        .swal2-container.swal2-backdrop-show:not(.swal2-top):not(.swal2-top-start):not(.swal2-top-end):not(.swal2-bottom):not(.swal2-bottom-end) {
+            background: rgba(15, 23, 42, 0.45) !important;
+        }
+        body.swal2-toast-shown .swal2-container,
+        .swal2-container.swal2-top-end,
+        .swal2-container.swal2-top,
+        .swal2-container.swal2-top-start,
+        .swal2-container.swal2-bottom,
+        .swal2-container.swal2-bottom-end,
+        .swal2-container.swal2-bottom-start,
+        .swal2-container.swal2-backdrop-hide,
+        .swal2-container:has(.swal2-toast) {
+            background: transparent !important;
+            background-color: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            pointer-events: none !important;
+            z-index: 1000000 !important;
+        }
+        body.swal2-toast-shown .swal2-popup.swal2-toast,
+        .swal2-container .swal2-popup.swal2-toast {
+            pointer-events: auto !important;
         }
         .swal2-popup.modern-swal-popup,
         .swal2-popup {
@@ -112,15 +134,15 @@
         .modern-toast-popup {
             border-radius: 16px !important;
             padding: 12px 18px !important;
-            background: rgba(255, 255, 255, 0.96) !important;
-            backdrop-filter: blur(14px) !important;
-            -webkit-backdrop-filter: blur(14px) !important;
+            background: #FFFFFF !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
             box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
             font-family: 'Plus Jakarta Sans', sans-serif !important;
             border: 1px solid rgba(226, 232, 240, 0.8) !important;
         }
         .dark-theme .swal2-popup.swal2-toast {
-            background: rgba(9, 33, 74, 0.95) !important;
+            background: #09214A !important;
             box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.12) !important;
             border: 1px solid rgba(30, 58, 110, 0.8) !important;
         }
@@ -150,8 +172,8 @@
             opacity: 0.98 !important;
             padding: 14px 18px 14px 50px !important;
             font-family: 'Plus Jakarta Sans', sans-serif !important;
-            backdrop-filter: blur(12px) !important;
-            -webkit-backdrop-filter: blur(12px) !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
         }
         #toast-container > .toast-success {
             background-color: #047857 !important;
@@ -172,6 +194,8 @@
         }
         .modal-backdrop {
             z-index: 1050 !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
         }
 
         :root {
@@ -1262,8 +1286,8 @@
             right: 0;
             bottom: 0;
             background: rgba(3, 20, 47, 0.65);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
             z-index: 1055;
             opacity: 0;
             visibility: hidden;
@@ -1429,13 +1453,14 @@
                 };
             }
 
-            // SweetAlert2 2026 Toast Mixin
+            // SweetAlert2 2026 Toast Mixin (backdrop explicitly false)
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
-                timer: 3500,
+                timer: 3000,
                 timerProgressBar: true,
+                backdrop: false,
                 didOpen: (toast) => {
                     toast.addEventListener('mouseenter', Swal.stopTimer);
                     toast.addEventListener('mouseleave', Swal.resumeTimer);

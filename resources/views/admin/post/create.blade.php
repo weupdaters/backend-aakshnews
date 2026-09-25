@@ -1697,7 +1697,7 @@
             if (modalEl) {
                 if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
                     try {
-                        var inst = bootstrap.Modal.getInstance(modalEl) || bootstrap.Modal.getOrCreateInstance(modalEl);
+                        var inst = bootstrap.Modal.getInstance(modalEl);
                         if (inst) inst.hide();
                     } catch(e) {}
                 }
@@ -1705,6 +1705,10 @@
             }
             $('.modal-backdrop').remove();
             $('body').removeClass('modal-open').css({ overflow: '', paddingRight: '' });
+            setTimeout(function() {
+                $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open').css({ overflow: '', paddingRight: '' });
+            }, 250);
         }
 
         function attachCardSelectionHandler() {
