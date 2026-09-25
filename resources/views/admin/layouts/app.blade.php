@@ -166,6 +166,14 @@
             background-color: #1D4ED8 !important;
         }
 
+        /* Modal Stacking & Backdrop Fix */
+        .modal {
+            z-index: 1060 !important;
+        }
+        .modal-backdrop {
+            z-index: 1050 !important;
+        }
+
         :root {
             /* AAKSH NEWS 24 LOGO BRAND COLOR SYSTEM */
             --primary-color: #1769D2;       /* Royal Blue */

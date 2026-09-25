@@ -1620,7 +1620,19 @@
             var title = $('#post-title').val() ? $('#post-title').val().trim() : '';
             var searchInit = title || 'Punjab News';
             $('#real-image-query').val(searchInit);
-            $('#modal-real-image-finder').modal('show');
+
+            // Move modal to body to avoid container stacking context traps
+            if ($('#modal-real-image-finder').parent()[0] !== document.body) {
+                $('body').append($('#modal-real-image-finder'));
+            }
+
+            var modalEl = document.getElementById('modal-real-image-finder');
+            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                var inst = bootstrap.Modal.getOrCreateInstance(modalEl);
+                inst.show();
+            } else {
+                $('#modal-real-image-finder').modal('show');
+            }
             executeRealImageSearch(searchInit);
         });
 
@@ -1707,16 +1719,15 @@
             var modalEl = document.getElementById('modal-real-image-finder');
             if (modalEl) {
                 if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
-                    var inst = bootstrap.Modal.getInstance(modalEl) || bootstrap.Modal.getOrCreateInstance(modalEl);
-                    if (inst) inst.hide();
-                } else {
-                    $('#modal-real-image-finder').modal('hide');
+                    try {
+                        var inst = bootstrap.Modal.getInstance(modalEl) || bootstrap.Modal.getOrCreateInstance(modalEl);
+                        if (inst) inst.hide();
+                    } catch(e) {}
                 }
+                $(modalEl).removeClass('show').css('display', 'none').attr('aria-hidden', 'true');
             }
-            setTimeout(function() {
-                $('.modal-backdrop').remove();
-                $('body').removeClass('modal-open').css({ overflow: '', paddingRight: '' });
-            }, 300);
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open').css({ overflow: '', paddingRight: '' });
         }
 
         function attachCardSelectionHandler() {
