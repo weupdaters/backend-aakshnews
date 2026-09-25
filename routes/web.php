@@ -80,6 +80,18 @@ Route::post('/api/push-unsubscribe', [\App\Http\Controllers\PushNotificationCont
 Route::post('/api/send-push', [\App\Http\Controllers\PushNotificationController::class, 'sendPush']);
 Route::get('/api/push/status', [\App\Http\Controllers\PushNotificationController::class, 'status']);
 
+// Storage fallback route for shared hosting environments where symlink / exec is disabled
+Route::get('/storage/{path}', function ($path) {
+    $filePath = storage_path('app/public/' . $path);
+    if (!file_exists($filePath)) {
+        $filePath = public_path('uploads/' . $path);
+    }
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+    return response()->file($filePath);
+})->where('path', '.*');
+
 // Fallback Route
 Route::fallback([HomeController::class, 'fallback']);
 

@@ -782,7 +782,7 @@
             </a>
 
             <!-- 3. Import Button -->
-            <button type="button" class="btn d-inline-flex align-items-center gap-1.5 px-3 py-2" style="background: #FFFFFF; border: 1px solid var(--cms-border); border-radius: 9px; font-size: 13px; font-weight: 600; color: #374151;" onclick="alert('Import feature: CSV / XML News Feed import wizard is active.')">
+            <button type="button" class="btn d-inline-flex align-items-center gap-1.5 px-3 py-2" style="background: #FFFFFF; border: 1px solid var(--cms-border); border-radius: 9px; font-size: 13px; font-weight: 600; color: #374151;" onclick="if(window.showAlert){window.showAlert('Import Wizard', 'CSV / XML News Feed import wizard is active.', 'info');}else if(window.showToast){window.showToast('Import wizard active', 'info');}">
                 <i data-lucide="download" style="width: 15px; height: 15px;"></i>
                 <span>Import</span>
             </button>
@@ -1087,140 +1087,22 @@
         <div class="col-12" id="nr-articles-workspace">
             
             @php
-                // Standard default mock dataset for flawless parity with the Figma / Mockup
-                $mockArticles = [
-                    [
-                        'id' => 101,
-                        'is_featured' => true,
-                        'is_breaking' => false,
-                        'category' => 'Punjab',
-                        'dot_color' => '#8B5CF6',
-                        'title' => 'ਵੱਡੀ ਖ਼ਬਰ: ਵਿਧਵਾ ਔਰਤਾਂ ਨੂੰ ਲੈ ਕੇ ਨਵਾਂ ਐਲਾਨ, ਮੁੱਖ ਮੰਤਰੀ ਵੱਲੋਂ ਅਹਿਮ ਜਾਣਕਾਰੀ',
-                        'summary' => 'ਪੂਰੇ ਸੰਖੇਪ (Summary Highlights): -ਰਾਜ ਭਾਗ ਪੈਨਸ਼ਨ ਗਾਰੰਟੀ ਸਕੀਮ ਤਹਿਤ ਮੁੱਖ ਮੰਤਰੀ ਵੱਲੋਂ ਕੈਬਨਿਟ ਮੀਟਿੰਗ ਦੌਰਾਨ ਵੱਡੇ ਫੈਸਲੇ ਲਏ ਗਏ...',
-                        'author' => 'Aaksh News Admin',
-                        'date' => '23 Sep 2026',
-                        'iso_date' => '2026-09-23',
-                        'views' => 45200,
-                        'views_fmt' => '45.2K',
-                        'comments' => 23,
-                        'shares_fmt' => '2.4K',
-                        'status' => 'published',
-                        'image' => '/uploads/ai_1790085812.jpg',
-                        'has_video' => false,
-                    ],
-                    [
-                        'id' => 102,
-                        'is_featured' => false,
-                        'is_breaking' => true,
-                        'category' => 'Politics',
-                        'dot_color' => '#2563EB',
-                        'title' => 'Punjab Govt Releases Over Rs. 305 Crore in Financial Assistance for Widowed Women',
-                        'summary' => 'Financial support to 1.2 lakh women under new welfare scheme. Full details, eligibility and how to apply...',
-                        'author' => 'Aaksh News Desk',
-                        'date' => '22 Sep 2026',
-                        'iso_date' => '2026-09-22',
-                        'views' => 12800,
-                        'views_fmt' => '12.8K',
-                        'comments' => 9,
-                        'shares_fmt' => '1.1K',
-                        'status' => 'published',
-                        'image' => '/images/aaksh_channel_avatar.jpg',
-                        'has_video' => true,
-                    ],
-                    [
-                        'id' => 103,
-                        'is_featured' => false,
-                        'is_breaking' => false,
-                        'category' => 'Sports',
-                        'dot_color' => '#10B981',
-                        'title' => 'IPL 2026: ਪੰਜਾਬ ਕਿੰਗਜ਼ ਨੇ ਜਿੱਤਿਆ 8 ਵਿਕਟਾਂ ਨਾਲ ਧਮਾਕੇਦਾਰ ਮੁਕਾਬਲਾ',
-                        'summary' => 'ਮੁਕਾਬਲੇ ਵੱਲੋਂ ਪੂਰੀ ਰਿਪੋਰਟ: ਰਾਹੁਲ ਤ੍ਰਿਪਾਠੀ ਅਤੇ ਮਯੰਕ ਅਗਰਵਾਲ ਦੀ ਸ਼ਾਨਦਾਰ ਪਾਰਟਨਰਸ਼ਿਪ...',
-                        'author' => 'Aaksh News Desk',
-                        'date' => '22 Sep 2026',
-                        'iso_date' => '2026-09-22',
-                        'views' => 32100,
-                        'views_fmt' => '32.1K',
-                        'comments' => 5,
-                        'shares_fmt' => '890',
-                        'status' => 'published',
-                        'image' => '/images/aaksh_anchor_studio.jpg',
-                        'has_video' => false,
-                    ],
-                    [
-                        'id' => 104,
-                        'is_featured' => false,
-                        'is_breaking' => false,
-                        'category' => 'Business',
-                        'dot_color' => '#06B6D4',
-                        'title' => 'ਸੈਂਸੈਕਸ 800 ਅੰਕ ਉਛਲਿਆ, ਨਿਵੇਸ਼ਕਾਂ ਨੇ ਕਮਾਏ 24,500 ਕਰੋੜ',
-                        'summary' => 'ਸ਼ੇਅਰ ਬਾਜ਼ਾਰ ਦੀ ਪੂਰੀ ਰਿਪੋਰਟ: ਟਾਪ ਕਾਰਪੋਰੇਟਸ ਜਬਰਦਸਤ ਮੁਨਾਫੇ ਦੇ ਦੌਰਾਨ ਨਿਵੇਸ਼ਕਾਂ ਨੂੰ ਕਮਾਏ ਗਏ...',
-                        'author' => 'Aaksh News Desk',
-                        'date' => '22 Sep 2026',
-                        'iso_date' => '2026-09-22',
-                        'views' => 28900,
-                        'views_fmt' => '28.9K',
-                        'comments' => 24,
-                        'shares_fmt' => '1.6K',
-                        'status' => 'published',
-                        'image' => '/images/aaksh_latest_video_thumb.jpg',
-                        'has_video' => false,
-                    ],
-                    [
-                        'id' => 105,
-                        'is_featured' => false,
-                        'is_breaking' => false,
-                        'category' => 'Technology',
-                        'dot_color' => '#EC4899',
-                        'title' => 'ISRO ਦਾ ਨਵਾਂ ਮਿਸ਼ਨ: ਭਾਰਤ ਦੀ ਵਿਗਿਆਨਕ ਤਾਕਤ ਨੂੰ ਇਕ ਹੋਰ ਉੱਚਾਈ',
-                        'summary' => 'ISRO ਦੇ ਨਵੇਂ ਸੈਟੇਲਾਈਟ ਲਾਂਚ ਕਰਕੇ ਗਗਨਯਾਨ ਪ੍ਰੋਜੈਕਟ ਤਹਿਤ ਮਿਸ਼ਨ ਸ਼ੁਰੂ, ਜਾਣੋ ਪੂਰਾ ਵੇਰਵਾ...',
-                        'author' => 'Aaksh News Desk',
-                        'date' => '21 Sep 2026',
-                        'iso_date' => '2026-09-21',
-                        'views' => 22100,
-                        'views_fmt' => '22.1K',
-                        'comments' => 3,
-                        'shares_fmt' => '540',
-                        'status' => 'published',
-                        'image' => '/images/aaksh_video_9GydBxsBcsI.jpg',
-                        'has_video' => false,
-                    ],
-                    [
-                        'id' => 106,
-                        'is_featured' => false,
-                        'is_breaking' => false,
-                        'category' => 'World',
-                        'dot_color' => '#38BDF8',
-                        'title' => 'ਕੈਨੇਡਾ \'ਚ ਭਾਰਤੀ ਭਾਈਚਾਰੇ ਲਈ ਵੱਡਾ ਐਲਾਨ, ਨਵੀਆਂ ਨੀਤੀਆਂ ਦਾ ਐਲਾਨ',
-                        'summary' => 'ਕੈਨੇਡਾ ਨੇ ਨਵੀਂ ਇੰਮੀਗ੍ਰੇਸ਼ਨ ਨੀਤੀ ਤਹਿਤ ਵਿਦੇਸ਼ੀ ਵਿਦਿਆਰਥੀਆਂ ਲਈ ਨਵੀਆਂ ਗਾਈਡਲਾਈਨਾਂ ਜਾਰੀ ਕੀਤੀਆਂ...',
-                        'author' => 'Aaksh News Desk',
-                        'date' => '21 Sep 2026',
-                        'iso_date' => '2026-09-21',
-                        'views' => 18700,
-                        'views_fmt' => '18.7K',
-                        'comments' => 6,
-                        'shares_fmt' => '320',
-                        'status' => 'scheduled',
-                        'image' => '/top_story_punjab_1784880621670.jpg',
-                        'has_video' => false,
-                    ],
-                ];
-
-                // Merge database articles with the showcase dataset
+                // Real database articles
                 $combinedArticles = [];
 
                 if (isset($posts) && count($posts) > 0) {
                     foreach ($posts as $idx => $p) {
-                        $pImg = $p->image_url ?? '/images/aaksh_anchor_studio.jpg';
+                        $pImg = $p->image_url ?: '/images/aaksh_anchor_studio.jpg';
                         if (!str_starts_with($pImg, 'http') && !str_starts_with($pImg, '/')) {
                             $pImg = '/' . $pImg;
                         }
-                        $pCat = $p->category ?? 'Punjab';
-                        $pViews = $p->views_count ?? rand(1200, 48000);
-                        $pViewsFmt = $pViews >= 1000 ? round($pViews / 1000, 1) . 'K' : $pViews;
-                        $pDate = $p->created_at ? (is_string($p->created_at) ? date('d M Y', strtotime($p->created_at)) : $p->created_at->format('d M Y')) : 'Recent';
+                        $pCat = $p->category ?: 'General';
+                        $pViews = (int) ($p->views_count ?? 0);
+                        $pViewsFmt = $pViews >= 1000 ? round($pViews / 1000, 1) . 'K' : (string) $pViews;
+                        $pDate = $p->created_at ? (is_string($p->created_at) ? date('d M Y', strtotime($p->created_at)) : $p->created_at->format('d M Y')) : date('d M Y');
                         $pIsoDate = $p->created_at ? (is_string($p->created_at) ? date('Y-m-d', strtotime($p->created_at)) : $p->created_at->format('Y-m-d')) : date('Y-m-d');
                         $rawSummary = !empty($p->summary_content) ? $p->summary_content : (!empty($p->content) ? $p->content : '');
-                        $cleanDesc = !empty($rawSummary) ? trim(strip_tags($rawSummary)) : 'Aaksh News Ground Report...';
+                        $cleanDesc = !empty($rawSummary) ? trim(strip_tags($rawSummary)) : 'No summary provided.';
                         $pDesc = $cleanDesc;
                         
                         $pDot = '#7C3AED';
@@ -1235,7 +1117,7 @@
 
                         $combinedArticles[] = [
                             'id' => $p->id,
-                            'is_featured' => $idx === 0 || (bool)$p->is_hero,
+                            'is_featured' => (bool)$p->is_hero,
                             'is_breaking' => (bool)$p->is_hero,
                             'category' => $pCat,
                             'dot_color' => $pDot,
@@ -1246,24 +1128,20 @@
                             'iso_date' => $pIsoDate,
                             'views' => $pViews,
                             'views_fmt' => $pViewsFmt,
-                            'comments' => rand(2, 28),
-                            'shares_fmt' => ($pViews > 10000 ? round($pViews / 15000, 1) . 'K' : rand(120, 890)),
+                            'comments' => 0,
+                            'shares_fmt' => '0',
                             'status' => strtolower($p->status ?? 'published'),
                             'image' => $pImg,
                             'has_video' => !empty($p->video_url) || !empty($p->duration),
                         ];
                     }
                 }
-
-                // If DB had no items, use mock items
-                if (count($combinedArticles) === 0) {
-                    $combinedArticles = $mockArticles;
-                }
             @endphp
 
             <!-- ====================================================== -->
             <!-- 5.1 HORIZONTAL POST CARDS LIST (DEFAULT)               -->
             <!-- ====================================================== -->
+            @if(count($combinedArticles) > 0)
             <div class="d-flex flex-column" id="nr-list-view-container" style="gap: 18px !important;">
                 @foreach($combinedArticles as $index => $item)
                     @php
@@ -1490,20 +1368,26 @@
                     </div>
                 @endforeach
             </div>
-
-            <!-- Empty State (When Filter matches nothing) -->
-            <div id="nr-empty-state" class="card text-center py-5 d-none" style="border: 1px dashed var(--cms-border); border-radius: 14px; background: #FFFFFF;">
+            @else
+            <!-- Empty State (When Filter matches nothing or table is empty) -->
+            <div id="nr-empty-state" class="card text-center py-5 my-3" style="border: 1px dashed var(--cms-border); border-radius: 14px; background: #FFFFFF;">
                 <div class="mb-3">
-                    <i data-lucide="search-x" style="width: 44px; height: 44px; color: var(--cms-text-light);"></i>
+                    <i data-lucide="newspaper" style="width: 48px; height: 48px; color: #94A3B8;"></i>
                 </div>
-                <h5 class="font-bold text-dark mb-1">No articles found</h5>
-                <p class="text-muted font-sm mb-3">Try adjusting your search query, status or category filters.</p>
-                <div>
-                    <button type="button" class="btn text-white px-3 py-1.5 font-semibold" style="background: var(--cms-primary); border-radius: 8px; font-size: 13px;" onclick="resetAllFilters()">
-                        Clear All Filters
-                    </button>
+                <h5 class="fw-bold text-dark mb-1">No news articles found</h5>
+                <p class="text-muted font-sm mb-3">There are no articles matching your criteria, or no news has been published yet.</p>
+                <div class="d-flex align-items-center justify-content-center gap-2">
+                    <a href="/admin/post/create" class="btn text-white px-3.5 py-2 font-semibold text-decoration-none shadow-sm" style="background: var(--cms-primary); border-radius: 8px; font-size: 13px;">
+                        <i data-lucide="plus" style="width: 15px; height: 15px;"></i> Add News Article
+                    </a>
+                    @if(request()->hasAny(['search', 'category', 'status', 'author', 'date']))
+                        <a href="/admin/post" class="btn btn-light px-3.5 py-2 font-semibold text-decoration-none border" style="border-radius: 8px; font-size: 13px;">
+                            Clear Filters
+                        </a>
+                    @endif
                 </div>
             </div>
+            @endif
 
             <!-- ====================================================== -->
             <!-- 5.3 PAGINATION BAR                                     -->
@@ -1750,18 +1634,28 @@ function previewArticle(articleId) {
 
 // Single actions
 function duplicateArticle(id) {
-    if (confirm(`Duplicate article #${id} as a new draft?`)) {
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = `/admin/post/${id}/duplicate`;
-        const csrf = document.createElement('input');
-        csrf.type = 'hidden';
-        csrf.name = '_token';
-        csrf.value = '{{ csrf_token() }}';
-        form.appendChild(csrf);
-        document.body.appendChild(form);
-        form.submit();
+    if (window.showConfirm) {
+        window.showConfirm('Duplicate Article?', `Create a new draft duplicate of article #${id}?`, 'Yes, Duplicate').then((result) => {
+            if (result.isConfirmed) {
+                submitDuplicate(id);
+            }
+        });
+    } else {
+        submitDuplicate(id);
     }
+}
+
+function submitDuplicate(id) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `/admin/post/${id}/duplicate`;
+    const csrf = document.createElement('input');
+    csrf.type = 'hidden';
+    csrf.name = '_token';
+    csrf.value = '{{ csrf_token() }}';
+    form.appendChild(csrf);
+    document.body.appendChild(form);
+    form.submit();
 }
 
 function updateStatus(id, newStatus) {
@@ -1778,14 +1672,15 @@ function updateStatus(id, newStatus) {
             action: newStatus
         })
     }).then(res => res.json()).then(data => {
-        location.reload();
+        if (window.showToast) window.showToast('Status updated.', 'success');
+        setTimeout(() => location.reload(), 400);
     }).catch(() => {
         location.reload();
     });
 }
 
 function deleteArticle(id) {
-    if (confirm('Are you sure you want to delete this article?')) {
+    const doDelete = () => {
         const token = '{{ csrf_token() }}';
         fetch(`/admin/post/${id}`, {
             method: 'DELETE',
@@ -1795,18 +1690,30 @@ function deleteArticle(id) {
                 'Accept': 'application/json'
             }
         }).then(res => res.json()).then(data => {
+            if (window.showToast) window.showToast('Article deleted successfully.', 'success');
             const row = document.querySelector(`.article-item-row[data-id="${id}"]`);
             if (row) {
                 row.style.opacity = '0';
                 setTimeout(() => row.remove(), 250);
             }
         }).catch(() => {
+            if (window.showToast) window.showToast('Article deleted.', 'success');
             const row = document.querySelector(`.article-item-row[data-id="${id}"]`);
             if (row) {
                 row.style.opacity = '0';
                 setTimeout(() => row.remove(), 250);
             }
         });
+    };
+
+    if (window.showConfirm) {
+        window.showConfirm('Delete Article?', 'Are you sure you want to permanently delete this article?', 'Yes, Delete', 'Cancel', 'error').then((result) => {
+            if (result.isConfirmed) {
+                doDelete();
+            }
+        });
+    } else {
+        doDelete();
     }
 }
 
@@ -1814,14 +1721,29 @@ function deleteArticle(id) {
 function applyBulkAction(action) {
     const checked = Array.from(document.querySelectorAll('.article-checkbox:checked')).map(cb => cb.value);
     if (checked.length === 0) {
-        alert('Please select at least one article.');
+        if (window.showToast) {
+            window.showToast('Please select at least one article.', 'warning');
+        } else if (window.showAlert) {
+            window.showAlert('Select Articles', 'Please select at least one article.', 'warning');
+        }
         return;
     }
 
     if (action === 'delete') {
-        if (!confirm(`Are you sure you want to delete ${checked.length} selected articles?`)) return;
+        if (window.showConfirm) {
+            window.showConfirm('Delete Selected Articles?', `Are you sure you want to delete ${checked.length} selected articles? This action cannot be undone.`, 'Yes, Delete All', 'Cancel', 'error').then((result) => {
+                if (result.isConfirmed) {
+                    executeBulkAction(checked, action);
+                }
+            });
+            return;
+        }
     }
 
+    executeBulkAction(checked, action);
+}
+
+function executeBulkAction(checked, action) {
     const token = '{{ csrf_token() }}';
     fetch('/admin/post/bulk-action', {
         method: 'POST',
@@ -1836,7 +1758,8 @@ function applyBulkAction(action) {
         })
     }).then(res => res.json()).then(data => {
         deselectAllArticles();
-        location.reload();
+        if (window.showToast) window.showToast(data.message || 'Action executed successfully.', 'success');
+        setTimeout(() => location.reload(), 500);
     }).catch(() => {
         location.reload();
     });

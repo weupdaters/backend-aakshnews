@@ -307,24 +307,22 @@ class AiToolController extends Controller
 
         $filename = 'news_real_' . time() . '_' . substr(md5(uniqid()), 0, 8) . '.' . $ext;
 
-        // Preferred: storage/app/public/posts
-        $postsDir = storage_path('app/public/posts');
-        if (!file_exists($postsDir)) {
-            @mkdir($postsDir, 0755, true);
+        // Save directly to public/uploads/posts so it works on any server without symlinks
+        $publicDir = public_path('uploads/posts');
+        if (!file_exists($publicDir)) {
+            @mkdir($publicDir, 0755, true);
         }
+        $publicFile = $publicDir . DIRECTORY_SEPARATOR . $filename;
+        @file_put_contents($publicFile, $data);
 
-        $filepath = $postsDir . DIRECTORY_SEPARATOR . $filename;
-        if (@file_put_contents($filepath, $data) !== false) {
-            $localUrl = '/storage/posts/' . $filename;
-        } else {
-            // Fallback: public/uploads
-            $uploadsDir = public_path('uploads');
-            if (!file_exists($uploadsDir)) {
-                @mkdir($uploadsDir, 0755, true);
-            }
-            @file_put_contents($uploadsDir . DIRECTORY_SEPARATOR . $filename, $data);
-            $localUrl = '/uploads/' . $filename;
+        // Also save to storage/app/public/posts if directory exists
+        $storageDir = storage_path('app/public/posts');
+        if (!file_exists($storageDir)) {
+            @mkdir($storageDir, 0755, true);
         }
+        @file_put_contents($storageDir . DIRECTORY_SEPARATOR . $filename, $data);
+
+        $localUrl = '/uploads/posts/' . $filename;
 
         return response()->json([
             'success' => true,

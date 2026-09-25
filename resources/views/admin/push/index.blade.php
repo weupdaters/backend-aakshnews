@@ -196,7 +196,7 @@
                             </p>
                         </div>
                         <div class="rounded-3 bg-secondary shrink-0 overflow-hidden" style="width: 48px; height: 48px;">
-                            <img src="/top_story_punjab_1784880621670.jpg" alt="Icon" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="/images/aaksh_channel_avatar.jpg" alt="Icon" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/images/aaksh_anchor_studio.jpg'">
                         </div>
                     </div>
                     <div class="d-flex gap-2 mt-2 pt-2 border-top border-secondary">

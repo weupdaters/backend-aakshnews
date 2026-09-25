@@ -890,13 +890,11 @@
                 </div>
             </div>
 
-            <!-- Thumbnails selection row matching mockup -->
-            <div class="d-flex align-items-center gap-2 overflow-auto py-1" id="preset-thumbnails-row">
+            <!-- Thumbnails selection row (Dynamic: shows current/selected photos) -->
+            <div class="d-flex align-items-center gap-2 overflow-auto py-1" id="preset-thumbnails-row" style="{{ $post->image_url ? '' : 'display: none !important;' }}">
                 @if($post->image_url)
                     <img src="{{ $post->image_url }}" alt="Current Featured" class="rounded object-fit-cover shadow-sm thumb-pick border border-primary" style="width: 64px; height: 44px; cursor: pointer;" onclick="selectThumbnail('{{ $post->image_url }}', this)">
                 @endif
-                <img src="/top_story_punjab_1784880621670.jpg" alt="Preset 1" class="rounded object-fit-cover shadow-sm thumb-pick" style="width: 64px; height: 44px; cursor: pointer;" onclick="selectThumbnail('/top_story_punjab_1784880621670.jpg', this)">
-                <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=600&auto=format&fit=crop&q=80" alt="Preset 2" class="rounded object-fit-cover shadow-sm thumb-pick" style="width: 64px; height: 44px; cursor: pointer;" onclick="selectThumbnail('https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=600&auto=format&fit=crop&q=80', this)">
             </div>
         </div>
 
@@ -919,25 +917,12 @@
                 <div class="text-muted font-xs mb-2" style="font-size: 11.5px;">Drag & drop images or videos here or</div>
                 <div class="d-flex justify-content-center gap-2">
                     <button type="button" class="btn btn-sm text-white" style="background: #1769D2; border-radius: 6px; font-size: 11px; padding: 4px 10px;" onclick="$('#post-image-file').click();">Upload Media</button>
-                    <button type="button" class="btn btn-sm btn-white border shadow-sm" style="border-radius: 6px; font-size: 11px; padding: 4px 10px; color: #475569;" onclick="alert('Media library loaded.');">Browse Library</button>
+                    <button type="button" class="btn btn-sm btn-white border shadow-sm" style="border-radius: 6px; font-size: 11px; padding: 4px 10px; color: #475569;" onclick="$('#post-image-file').click();">Browse Device</button>
                 </div>
             </div>
 
-            <!-- Gallery Thumbnails with remove ✕ and video duration tag -->
+            <!-- Gallery Thumbnails (Populated dynamically on upload) -->
             <div class="d-flex align-items-center gap-2 mb-2" id="gallery-preview-strip">
-                <div class="position-relative">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80" class="rounded object-fit-cover" style="width: 60px; height: 50px;">
-                    <span class="position-absolute top-0 end-0 bg-dark text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 16px; height: 16px; font-size: 9px; cursor: pointer; transform: translate(30%, -30%);" onclick="$(this).parent().remove();">&times;</span>
-                </div>
-                <div class="position-relative">
-                    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=120&auto=format&fit=crop&q=80" class="rounded object-fit-cover" style="width: 60px; height: 50px;">
-                    <span class="position-absolute top-0 end-0 bg-dark text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 16px; height: 16px; font-size: 9px; cursor: pointer; transform: translate(30%, -30%);" onclick="$(this).parent().remove();">&times;</span>
-                </div>
-                <div class="position-relative">
-                    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=120&auto=format&fit=crop&q=80" class="rounded object-fit-cover" style="width: 60px; height: 50px;">
-                    <span class="position-absolute bottom-0 end-0 bg-dark text-white font-xxs px-1 rounded" style="font-size: 9px; margin: 2px;">01:24</span>
-                    <span class="position-absolute top-0 end-0 bg-dark text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 16px; height: 16px; font-size: 9px; cursor: pointer; transform: translate(30%, -30%);" onclick="$(this).parent().remove();">&times;</span>
-                </div>
             </div>
             <a href="#" class="font-xs text-decoration-none d-inline-flex align-items-center" style="color: #1769D2; font-weight: 600; font-size: 12px; gap: 4px;" onclick="$('#post-image-file').click(); return false;">
                 <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Add more media
@@ -1049,12 +1034,12 @@
                 <!-- Quick Keywords / Entity Suggestion Pills -->
                 <div class="d-flex align-items-center gap-2 flex-wrap mb-3" id="quick-keywords-container">
                     <span class="font-xxs text-muted fw-bold me-1" style="font-size: 11px;">Quick Topics:</span>
-                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="ਭਗਵੰਤ ਮਾਨ">CM Bhagwant Mann</button>
-                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="ਹਰਪਾਲ ਚੀਮਾ">Harpal Cheema</button>
-                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="ਪੰਜਾਬ ਕੈਬਨਿਟ">Punjab Cabinet</button>
-                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="ਪੰਜਾਬ ਪੁਲਿਸ">Punjab Police</button>
-                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="ਪੰਜਾਬ ਬਜਟ 2026">Punjab Budget</button>
-                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="Punjab News Breaking">Punjab Breaking</button>
+                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="Breaking News">Breaking News</button>
+                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="National Politics">National Politics</button>
+                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="Crime and Law">Crime & Law</button>
+                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="Indian Sports Cricket">Sports & Cricket</button>
+                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="Economy Finance Market">Economy & Market</button>
+                    <button type="button" class="btn btn-xs btn-light border py-1 px-2.5 rounded-pill quick-search-pill font-xxs" data-keyword="Technology Science">Technology</button>
                 </div>
 
                 <!-- Status Header -->
@@ -1375,11 +1360,11 @@
                      $btn.data('suggest-idx', currentIdx + 1);
                      updateCounters();
                  } else {
-                     alert('No title suggestions returned.');
+                     if (window.showToast) window.showToast('No title suggestions returned.', 'info');
                  }
              })
              .fail(function() {
-                 alert('Unable to contact AI suggestion service.');
+                 if (window.showToast) window.showToast('Unable to contact AI suggestion service.', 'error');
              })
              .always(function() {
                  $btn.html(originalHtml).prop('disabled', false);
@@ -1391,7 +1376,7 @@
         $('#btn-ai-desc').on('click', function() {
             var title = $('#post-title').val();
             if (!title) {
-                alert('Please enter a title first to generate AI description.');
+                if (window.showToast) window.showToast('Please enter a title first to generate AI description.', 'warning');
                 return;
             }
             var $btn = $(this);
@@ -1405,11 +1390,11 @@
                      $('#post-short-desc').val(res.description);
                      updateCounters();
                  } else {
-                     alert('Error generating content: ' + res.message);
+                     if (window.showToast) window.showToast('Error generating content: ' + res.message, 'error');
                  }
              })
              .fail(function() {
-                 alert('Unable to contact server.');
+                 if (window.showToast) window.showToast('Unable to contact server.', 'error');
              })
              .always(function() {
                  $btn.html(originalHtml).prop('disabled', false);
@@ -1421,7 +1406,7 @@
         function runAiAssistantAction(action, btnSelector) {
             var content = $('#post-content').val();
             if (!content || !content.trim()) {
-                alert('Please write or generate some content first.');
+                if (window.showToast) window.showToast('Please write or generate some content first.', 'warning');
                 return;
             }
             var $btn = $(btnSelector);
@@ -1434,12 +1419,13 @@
                  if (res.success && res.result) {
                      $('#post-content').val(res.result).focus();
                      updateCounters();
+                     if (window.showToast) window.showToast('Content updated with AI!', 'success');
                  } else {
-                     alert(res.message || 'Error processing content.');
+                     if (window.showToast) window.showToast(res.message || 'Error processing content.', 'error');
                  }
              })
              .fail(function() {
-                 alert('Failed to run AI assistant action.');
+                 if (window.showToast) window.showToast('Failed to run AI assistant action.', 'error');
              })
              .always(function() {
                  $btn.html(originalHtml).prop('disabled', false);
@@ -1487,7 +1473,7 @@
             var title = $('#post-title').val();
             var content = $('#post-content').val() || $('#post-short-desc').val();
             if (!title && !content) {
-                alert('Please enter a Title or Content first.');
+                if (window.showToast) window.showToast('Please enter a Title or Content first.', 'warning');
                 return;
             }
 
@@ -1520,7 +1506,7 @@
             var content = $('#post-content').val() || $('#post-short-desc').val();
 
             if (!title && !content) {
-                alert('Please fill in Title or Content to translate.');
+                if (window.showToast) window.showToast('Please fill in Title or Content to translate.', 'warning');
                 return;
             }
 
@@ -1679,7 +1665,7 @@
                          <div class="col-12 col-sm-6 col-md-4">
                              <div class="real-image-card h-100" data-img-url="${item.url}" title="Click to select this photograph">
                                  <div class="real-image-thumb-wrap">
-                                     <img src="${imgUrl}" alt="${safeTitle}" loading="lazy" onerror="this.src='/top_story_punjab_1784880621670.jpg'">
+                                     <img src="${imgUrl}" alt="${safeTitle}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'200\' viewBox=\'0 0 300 200\' fill=\'%23f1f5f9\'%3E%3Crect width=\'300\' height=\'200\' fill=\'%23f1f5f9\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'13\' fill=\'%2394a3b8\'%3EPhoto Unavailable%3C/text%3E%3C/svg%3E';">
                                      <div class="real-image-overlay">
                                          <div class="overlay-spinner d-none mb-1"><i data-lucide="loader-2" class="lucide-spin" style="width:20px;height:20px;"></i></div>
                                          <div class="overlay-text d-flex align-items-center gap-1.5"><i data-lucide="check-circle-2" style="width:16px;height:16px;color:#22C55E;"></i> Use This Photo</div>
@@ -1750,13 +1736,13 @@
                          updateFeaturedImagePreview(finalUrl);
                      }
 
-                     // Prepend to presets row
+                     // Prepend to presets row and display it
                      var newThumb = $(`<img src="${finalUrl}" alt="Selected Real Photo" class="rounded object-fit-cover shadow-sm thumb-pick border border-primary" style="width: 64px; height: 44px; cursor: pointer;">`);
                      newThumb.on('click', function() {
                          selectThumbnail(finalUrl, this);
                      });
                      $('.thumb-pick').removeClass('border border-primary');
-                     $('#preset-thumbnails-row').prepend(newThumb);
+                     $('#preset-thumbnails-row').css('display', 'flex').prepend(newThumb);
 
                      closeRealImageModal();
                      if (window.showToast) window.showToast('Photo selected and set as featured!', 'success');
@@ -1799,11 +1785,11 @@
                             '</div>';
                         $('#gallery-preview-strip').prepend(newThumbHtml);
                     } else {
-                        alert('Upload error: ' + res.message);
+                        if (window.showToast) window.showToast('Upload error: ' + res.message, 'error');
                     }
                 },
                 error: function() {
-                    alert('Failed to upload file.');
+                    if (window.showToast) window.showToast('Failed to upload file.', 'error');
                 },
                 complete: function() {
                     $status.addClass('d-none');
@@ -1834,7 +1820,7 @@
                 title: $('#post-title').val(),
                 category: $('#post-category').val(),
                 author_name: $('#post-author').val(),
-                source: $('#post-source').val(),
+                source: '',
                 short_description: $('#post-short-desc').val(),
                 content: $('#post-content').val() || $('#post-short-desc').val(),
                 video_url: $('#post-video-url').val(),
@@ -1870,17 +1856,43 @@
             $.post('/api/posts/' + id + '/update', payload)
              .done(function(res) {
                  if (res.success) {
-                     alert('Article updated successfully!');
-                     window.location.href = '/admin/post';
+                     if (window.Swal) {
+                         Swal.fire({
+                             icon: 'success',
+                             title: 'Article Updated!',
+                             text: 'Changes saved and synchronized successfully.',
+                             timer: 1500,
+                             timerProgressBar: true,
+                             showConfirmButton: false,
+                             customClass: {
+                                 popup: 'modern-swal-popup'
+                             }
+                         }).then(function() {
+                             window.location.href = '/admin/post';
+                         });
+                     } else {
+                         window.showToast('Article updated successfully!', 'success');
+                         setTimeout(function() {
+                             window.location.href = '/admin/post';
+                         }, 1000);
+                     }
                  } else {
-                     alert('Notice: ' + res.message);
+                     if (window.showAlert) {
+                         window.showAlert('Update Notice', res.message || 'Please review your changes.', 'warning');
+                     } else if (window.showToast) {
+                         window.showToast('Notice: ' + res.message, 'warning');
+                     }
+                     $submitBtn.html(origSubmitHtml).prop('disabled', false);
+                     if (window.lucide) lucide.createIcons();
                  }
              })
              .fail(function(xhr) {
                  var msg = xhr.responseJSON ? xhr.responseJSON.message : 'Failed to update article.';
-                 alert(msg);
-             })
-             .always(function() {
+                 if (window.showAlert) {
+                     window.showAlert('Update Error', msg, 'error');
+                 } else if (window.showToast) {
+                     window.showToast(msg, 'error');
+                 }
                  $submitBtn.html(origSubmitHtml).prop('disabled', false);
                  if (window.lucide) lucide.createIcons();
              });

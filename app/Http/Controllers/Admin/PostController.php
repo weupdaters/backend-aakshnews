@@ -28,9 +28,9 @@ class PostController extends Controller
         $authors = UserPost::distinct()->whereNotNull('author_name')->limit(30)->pluck('author_name');
 
         // Right side stats
-        $todayPublished = UserPost::where('status', 'published')->where('created_at', '>=', now()->startOfDay())->count() ?: min(18, $publishedCount);
-        $todayViews = UserPost::where('created_at', '>=', now()->startOfDay())->sum('views_count') ?: 142800;
-        $breakingCount = UserPost::where('is_hero', true)->count() ?: 4;
+        $todayPublished = UserPost::where('status', 'published')->where('created_at', '>=', now()->startOfDay())->count();
+        $todayViews = (int) UserPost::where('created_at', '>=', now()->startOfDay())->sum('views_count');
+        $breakingCount = UserPost::where('is_hero', true)->count();
 
         // 2. High-performance Query: ONLY SELECT NEEDED COLUMNS (No huge content blobs)
         $query = UserPost::select([

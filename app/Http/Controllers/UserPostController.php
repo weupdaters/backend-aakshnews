@@ -17,7 +17,7 @@ class UserPostController extends Controller
         if (!Auth::check()) {
             $query->where('status', 'published');
         } else {
-            if ($request->has('status')) {
+            if ($request->has('status') && $request->input('status') !== 'all') {
                 $query->where('status', $request->input('status'));
             }
             if ($request->has('is_admin_post')) {
@@ -25,7 +25,30 @@ class UserPostController extends Controller
             }
         }
 
-        $posts = $query->latest()->get();
+        if ($search = $request->query('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'LIKE', "%{$search}%")
+                  ->orWhere('author_name', 'LIKE', "%{$search}%");
+            });
+        }
+
+        if ($cat = $request->query('category')) {
+            if ($cat !== 'all') {
+                $query->where('category', $cat);
+            }
+        }
+
+        $perPage = (int) $request->input('per_page', 20);
+        if ($perPage < 1 || $perPage > 100) {
+            $perPage = 20;
+        }
+
+        if ($request->has('page') || $request->has('per_page') || $request->boolean('paginate')) {
+            $posts = $query->latest()->paginate($perPage);
+        } else {
+            $posts = $query->latest()->take(100)->get();
+        }
+
         return response()->json($posts);
     }
 
@@ -53,7 +76,7 @@ class UserPostController extends Controller
 
         $title = $request->input('title');
         $content = $request->input('content');
-        $category = $request->input('category', 'Breaking News');
+        $category = $request->input('category', 'General');
         $authorName = $request->input('author_name');
         $videoUrl = $request->input('video_url');
         $imageUrl = $request->input('image_url');
@@ -66,10 +89,6 @@ class UserPostController extends Controller
         $isAdminPost = $request->boolean('is_admin_post', false);
         if (Auth::check() && $request->has('status')) {
             $isAdminPost = true;
-        }
-
-        if ($isHero) {
-            UserPost::query()->update(['is_hero' => false]);
         }
 
         if (!$authorName) {
@@ -124,44 +143,9 @@ class UserPostController extends Controller
             ], JSON_UNESCAPED_UNICODE);
         }
 
-        $titleEn = $request->input('title_en');
-        $titleHi = $request->input('title_hi');
-        $titlePb = $request->input('title_pb');
-
-        $contentEn = $request->input('content_en');
-        $contentHi = $request->input('content_hi');
-        $contentPb = $request->input('content_pb');
-
-        // Detect input script: Gurmukhi (Punjabi), Devanagari (Hindi), or Latin (English)
-        $detectedTitleLang = TranslationService::detectLanguage($title);
-        if ($detectedTitleLang === 'pb') {
-            $titlePb = $titlePb ?: $title;
-            $titleHi = $titleHi ?: TranslationService::translateText($title, 'hi');
-            $titleEn = $titleEn ?: TranslationService::translateText($title, 'en');
-        } elseif ($detectedTitleLang === 'hi') {
-            $titleHi = $titleHi ?: $title;
-            $titlePb = $titlePb ?: TranslationService::translateText($title, 'pa');
-            $titleEn = $titleEn ?: TranslationService::translateText($title, 'en');
-        } else {
-            $titleEn = $titleEn ?: $title;
-            $titleHi = $titleHi ?: TranslationService::translateText($title, 'hi');
-            $titlePb = $titlePb ?: TranslationService::translateText($title, 'pa');
-        }
-
-        $detectedContentLang = TranslationService::detectLanguage($content);
-        if ($detectedContentLang === 'pb') {
-            $contentPb = $contentPb ?: $content;
-            $contentHi = $contentHi ?: TranslationService::translateText($content, 'hi');
-            $contentEn = $contentEn ?: TranslationService::translateText($content, 'en');
-        } elseif ($detectedContentLang === 'hi') {
-            $contentHi = $contentHi ?: $content;
-            $contentPb = $contentPb ?: TranslationService::translateText($content, 'pa');
-            $contentEn = $contentEn ?: TranslationService::translateText($content, 'en');
-        } else {
-            $contentEn = $contentEn ?: $content;
-            $contentHi = $contentHi ?: TranslationService::translateText($content, 'hi');
-            $contentPb = $contentPb ?: TranslationService::translateText($content, 'pa');
-        }
+        $titleEn = $request->input('title_en') ?: $title;
+        $titleHi = $request->input('title_hi') ?: $title;
+        $titlePb = $request->input('title_pb') ?: $title;
 
         $post = UserPost::create([
             'user_id' => Auth::id(),
@@ -191,6 +175,18 @@ class UserPostController extends Controller
             'meta_desc' => $request->input('meta_desc'),
             'meta_keywords' => $request->input('meta_keywords'),
         ]);
+
+        if ($request->boolean('is_breaking') && $aiStatus === 'approved') {
+            try {
+                \App\Models\BreakingNews::create([
+                    'title' => $title,
+                    'title_en' => $titleEn ?: $title,
+                    'title_hi' => $titleHi ?: $title,
+                    'title_pb' => $titlePb ?: $title,
+                    'is_active' => true,
+                ]);
+            } catch (\Throwable $e) {}
+        }
 
         if ($request->boolean('send_push_notification') && $aiStatus === 'approved') {
             $this->triggerPushNotification($post);
@@ -240,51 +236,12 @@ class UserPostController extends Controller
         $isHero = $request->boolean('is_hero', false);
         $isMiddleStack = $request->boolean('is_middle_stack', false);
 
-        if ($isHero) {
-            UserPost::where('id', '!=', $id)->update(['is_hero' => false]);
-        }
-
         $title = $request->input('title');
         $content = $request->input('content');
 
-        $titleEn = $request->input('title_en');
-        $titleHi = $request->input('title_hi');
-        $titlePb = $request->input('title_pb');
-
-        $contentEn = $request->input('content_en');
-        $contentHi = $request->input('content_hi');
-        $contentPb = $request->input('content_pb');
-
-        // Detect input script
-        $detectedTitleLang = TranslationService::detectLanguage($title);
-        if ($detectedTitleLang === 'pb') {
-            $titlePb = $titlePb ?: $title;
-            $titleHi = $titleHi ?: TranslationService::translateText($title, 'hi');
-            $titleEn = $titleEn ?: TranslationService::translateText($title, 'en');
-        } elseif ($detectedTitleLang === 'hi') {
-            $titleHi = $titleHi ?: $title;
-            $titlePb = $titlePb ?: TranslationService::translateText($title, 'pa');
-            $titleEn = $titleEn ?: TranslationService::translateText($title, 'en');
-        } else {
-            $titleEn = $titleEn ?: $title;
-            $titleHi = $titleHi ?: TranslationService::translateText($title, 'hi');
-            $titlePb = $titlePb ?: TranslationService::translateText($title, 'pa');
-        }
-
-        $detectedContentLang = TranslationService::detectLanguage($content);
-        if ($detectedContentLang === 'pb') {
-            $contentPb = $contentPb ?: $content;
-            $contentHi = $contentHi ?: TranslationService::translateText($content, 'hi');
-            $contentEn = $contentEn ?: TranslationService::translateText($content, 'en');
-        } elseif ($detectedContentLang === 'hi') {
-            $contentHi = $contentHi ?: $content;
-            $contentPb = $contentPb ?: TranslationService::translateText($content, 'pa');
-            $contentEn = $contentEn ?: TranslationService::translateText($content, 'en');
-        } else {
-            $contentEn = $contentEn ?: $content;
-            $contentHi = $contentHi ?: TranslationService::translateText($content, 'hi');
-            $contentPb = $contentPb ?: TranslationService::translateText($content, 'pa');
-        }
+        $titleEn = $request->input('title_en') ?: ($post->title_en ?: $title);
+        $titleHi = $request->input('title_hi') ?: ($post->title_hi ?: $title);
+        $titlePb = $request->input('title_pb') ?: ($post->title_pb ?: $title);
 
         $post->update([
             'author_name' => $request->input('author_name', $post->author_name),
@@ -311,6 +268,20 @@ class UserPostController extends Controller
             'meta_desc' => $request->input('meta_desc', $post->meta_desc),
             'meta_keywords' => $request->input('meta_keywords', $post->meta_keywords),
         ]);
+
+        if ($request->boolean('is_breaking')) {
+            try {
+                \App\Models\BreakingNews::firstOrCreate(
+                    ['title' => $title],
+                    [
+                        'title_en' => $titleEn ?: $title,
+                        'title_hi' => $titleHi ?: $title,
+                        'title_pb' => $titlePb ?: $title,
+                        'is_active' => true,
+                    ]
+                );
+            } catch (\Throwable $e) {}
+        }
 
         if ($request->boolean('send_push_notification')) {
             $this->triggerPushNotification($post);
