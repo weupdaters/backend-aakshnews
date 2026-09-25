@@ -3,38 +3,55 @@
 @section('content')
 <!-- Custom Styles to match reference mockup media_1790110704755.png -->
 <style>
-    /* Design Tokens */
+    /* Design Tokens - Modern 2026 Editorial UI */
     :root {
-        --color-purple-primary: #1769D2;
-        --color-purple-hover: #0D56B5;
-        --color-purple-light: #EBF3FC;
-        --color-purple-border: #BFDBFE;
+        --color-primary: #2563EB;
+        --color-primary-hover: #1D4ED8;
+        --color-primary-light: #EFF6FF;
+        --color-primary-border: #BFDBFE;
         --border-card: #E2E8F0;
-        --text-slate-800: #111827;
+        --text-slate-900: #0F172A;
+        --text-slate-800: #1E293B;
+        --text-slate-700: #334155;
         --text-slate-500: #64748B;
         --text-slate-400: #94A3B8;
+    }
+
+    .page-main-title {
+        font-size: 24px;
+        font-weight: 800;
+        color: #0F172A;
+        letter-spacing: -0.025em;
+        margin-bottom: 2px;
+    }
+    .page-main-desc {
+        font-size: 13.5px;
+        font-weight: 400;
+        color: #64748B;
+        margin-bottom: 0;
     }
 
     .news-page-card {
         background: #ffffff;
         border: 1px solid #E2E8F0;
         border-radius: 14px;
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
-        padding: 24px;
-        margin-bottom: 24px;
+        box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+        padding: 22px;
+        margin-bottom: 22px;
+        transition: all 0.2s ease;
     }
 
     .icon-squircle {
-        width: 38px;
-        height: 38px;
+        width: 36px;
+        height: 36px;
         border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
     }
-    .icon-squircle-purple { background: #EBF3FC; color: #1769D2; }
-    .icon-squircle-blue { background: #EFF6FF; color: #1769D2; }
+    .icon-squircle-purple { background: #EEF2FF; color: #4F46E5; }
+    .icon-squircle-blue { background: #EFF6FF; color: #2563EB; }
     .icon-squircle-orange { background: #FFF7ED; color: #EA580C; }
     .icon-squircle-green { background: #ECFDF5; color: #16A34A; }
 
@@ -42,7 +59,9 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 20px;
+        margin-bottom: 18px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #F1F5F9;
     }
     .card-header-left {
         display: flex;
@@ -50,20 +69,38 @@
         gap: 12px;
     }
     .card-title-main {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 700;
         color: #0F172A;
+        letter-spacing: -0.01em;
         margin-bottom: 2px;
     }
     .card-subtitle-sub {
         font-size: 12px;
+        font-weight: 400;
         color: #64748B;
         margin-bottom: 0;
     }
 
+    /* Unified Form Label Standard */
+    .form-label-custom {
+        font-size: 13px;
+        font-weight: 600;
+        color: #1E293B;
+        margin-bottom: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        letter-spacing: -0.01em;
+    }
+    .form-label-custom .text-danger {
+        color: #EF4444 !important;
+        font-weight: 700;
+    }
+
     .btn-ai-pill {
-        background: #EBF3FC;
-        color: #1769D2;
+        background: #EFF6FF;
+        color: #2563EB;
         border: 1px solid #BFDBFE;
         border-radius: 8px;
         font-weight: 600;
@@ -75,23 +112,34 @@
         transition: all 0.2s ease;
     }
     .btn-ai-pill:hover {
-        background: #DCEAF9;
-        color: #0D56B5;
+        background: #DBEAFE;
+        color: #1D4ED8;
     }
 
     .form-control-modern {
-        border: 1px solid #E2E8F0;
-        border-radius: 8px;
-        padding: 10px 14px;
+        border: 1px solid #CBD5E1;
+        border-radius: 9px;
+        padding: 9px 13px;
         font-size: 13.5px;
-        color: #111827;
-        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        font-weight: 500;
+        color: #0F172A;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
         background-color: #ffffff;
     }
+    .form-control-modern::placeholder {
+        color: #94A3B8;
+        font-size: 13px;
+        font-weight: 400;
+    }
     .form-control-modern:focus {
-        border-color: #1769D2;
-        box-shadow: 0 0 0 3px rgba(23, 105, 210, 0.15);
+        border-color: #2563EB;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         outline: none;
+    }
+    .form-control-modern.is-invalid {
+        border-color: #EF4444 !important;
+        background-color: #FEF2F2 !important;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
     }
 
     /* iOS Switch Style */
@@ -324,23 +372,61 @@
         0%, 100% { opacity: 1; }
         50% { opacity: 0.5; }
     }
+
+    /* 2026 Mobile Responsive Adaptations */
+    @media (max-width: 991px) {
+        .page-header-wrap {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 12px !important;
+        }
+        .page-header-actions {
+            width: 100% !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+        }
+    }
+    @media (max-width: 768px) {
+        .news-page-card {
+            padding: 16px 14px !important;
+            margin-bottom: 16px !important;
+            border-radius: 12px !important;
+        }
+        .page-main-title {
+            font-size: 20px !important;
+        }
+        .card-header-flex {
+            flex-wrap: wrap !important;
+            gap: 10px !important;
+            margin-bottom: 14px !important;
+            padding-bottom: 10px !important;
+        }
+        .lang-tab-btn {
+            padding: 6px 10px !important;
+            font-size: 12px !important;
+        }
+        .real-image-thumb-wrap {
+            height: 120px !important;
+        }
+    }
 </style>
 
 <!-- Top Breadcrumbs & Page Heading -->
-<div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+<div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4 page-header-wrap">
     <div>
-        <h3 class="mb-1" style="font-size: 24px; font-weight: 800; color: #111827; letter-spacing: -0.02em;">Publish News Article</h3>
-        <p class="text-muted mb-0" style="font-size: 13.5px;">Create and publish a powerful news article with AI tools, multilingual support and SEO optimization.</p>
+        <h3 class="page-main-title">Publish News Article</h3>
+        <p class="page-main-desc">Create and publish breaking stories, multimedia and multilingual news for Aaksh News 24.</p>
     </div>
-    <div class="text-end">
+    <div class="text-end page-header-actions">
         <div class="d-flex align-items-center gap-1 font-xs text-muted mb-2 justify-content-end" style="font-size: 12px;">
             <a href="/admin/dashboard" class="text-muted text-decoration-none">Dashboard</a>
             <span>&gt;</span>
             <a href="/admin/post" class="text-muted text-decoration-none">News Articles</a>
             <span>&gt;</span>
-            <span style="color: #1769D2; font-weight: 600;">Publish News</span>
+            <span style="color: #2563EB; font-weight: 600;">Publish News</span>
         </div>
-        <a href="/admin/post" class="btn btn-sm btn-white border d-inline-flex align-items-center bg-white shadow-sm" style="border-radius: 8px; font-weight: 600; font-size: 12.5px; padding: 6px 14px; gap: 6px; color: #334155;">
+        <a href="/admin/post" class="btn btn-sm btn-white border d-inline-flex align-items-center bg-white shadow-sm" style="border-radius: 9px; font-weight: 600; font-size: 13px; padding: 7px 14px; gap: 6px; color: #334155;">
             <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i> Back to Articles
         </a>
     </div>
@@ -370,10 +456,10 @@
             <div class="p-3 mb-3 rounded-3" style="background: linear-gradient(135deg, #EFF6FF 0%, #F5F3FF 100%); border: 1px solid #BFDBFE;">
                 <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
                     <div class="d-flex align-items-center gap-2">
-                        <span class="font-xs font-bold text-dark text-uppercase" style="letter-spacing: 0.5px;">✍️ Writing Language:</span>
-                        <span class="badge" id="detected-script-badge" style="background: #1769D2; color: #FFF; font-size: 11px; padding: 4px 10px; border-radius: 6px;">Auto-Detect (Any Language)</span>
+                        <span class="font-xs font-bold text-dark text-uppercase" style="letter-spacing: 0.5px; font-size: 11.5px;">✍️ Writing Language:</span>
+                        <span class="badge" id="detected-script-badge" style="background: #2563EB; color: #FFF; font-size: 11px; font-weight: 600; padding: 5px 10px; border-radius: 6px;">Auto-Detect (Any Language)</span>
                     </div>
-                    <button type="button" class="btn btn-sm text-white fw-bold shadow-sm d-inline-flex align-items-center gap-2" id="btn-quick-translate-all" style="background: #1769D2; border-radius: 8px; font-size: 12px; padding: 6px 14px;">
+                    <button type="button" class="btn btn-sm text-white fw-bold shadow-sm d-inline-flex align-items-center gap-2" id="btn-quick-translate-all" style="background: #2563EB; border-radius: 8px; font-size: 12px; padding: 6px 14px;">
                         <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
                         <span>Auto-Translate to English, Hindi & Punjabi</span>
                     </button>
@@ -383,7 +469,7 @@
             <!-- Title -->
             <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <label class="font-sm text-dark mb-0" style="font-weight: 600;">Title (Any Language: Punjabi / Hindi / English) <span class="text-danger">*</span></label>
+                    <label class="form-label-custom mb-0">Title (Any Language: Punjabi / Hindi / English) <span class="text-danger">*</span></label>
                     <button type="button" class="btn-ai-pill" id="btn-ai-suggest-title">
                         <i data-lucide="sparkles" style="width: 13px; height: 13px;"></i> AI Suggest Title
                     </button>
@@ -397,7 +483,7 @@
             <!-- Category & Sub Category Row -->
             <div class="row mb-4">
                 <div class="col-md-6 mb-3 mb-md-0">
-                    <label class="font-sm text-dark mb-2" style="font-weight: 600;">Category <span class="text-danger">*</span></label>
+                    <label class="form-label-custom">Category <span class="text-danger">*</span></label>
                     <select name="category" id="post-category" class="form-control form-control-modern w-100" required>
                         @foreach($categories as $index => $cat)
                             <option value="{{ $cat->name }}" {{ $index === 0 ? 'selected' : '' }}>{{ $cat->name }}</option>
@@ -415,7 +501,7 @@
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label class="font-sm text-dark mb-2" style="font-weight: 600;">Sub Category</label>
+                    <label class="form-label-custom">Sub Category</label>
                     <select name="sub_category" id="post-sub-category" class="form-control form-control-modern w-100">
                         <option value="">Select Sub Category</option>
                         <option value="State Politics">State Politics</option>
@@ -430,14 +516,14 @@
 
             <!-- Author Name -->
             <div class="mb-4">
-                <label class="font-sm text-dark mb-2" style="font-weight: 600;">Author Name</label>
+                <label class="form-label-custom">Author Name</label>
                 <input type="text" name="author_name" id="post-author" class="form-control form-control-modern w-100" value="{{ old('author_name', Auth::check() ? Auth::user()->name : 'Aakash News Desk') }}" placeholder="Enter author name">
             </div>
 
             <!-- Short Description -->
             <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <label class="font-sm text-dark mb-0" style="font-weight: 600;">Short Description <span class="text-danger">*</span></label>
+                    <label class="form-label-custom mb-0">Short Description <span class="text-danger">*</span></label>
                     <button type="button" class="btn-ai-pill" id="btn-ai-desc">
                         <i data-lucide="sparkles" style="width: 13px; height: 13px;"></i> Generate with AI
                     </button>
@@ -450,7 +536,7 @@
 
             <!-- Content with Rich Toolbar -->
             <div class="mb-4">
-                <label class="font-sm text-dark mb-2" style="font-weight: 600;">Content <span class="text-danger">*</span></label>
+                <label class="form-label-custom">Content <span class="text-danger">*</span></label>
                 
                 <!-- Formatting Toolbar -->
                 <div class="d-flex flex-wrap align-items-center gap-1 p-2 rounded-top border border-bottom-0" style="background: #F8FAFC; border-color: #E2E8F0 !important;">
@@ -669,11 +755,11 @@
             
             <div class="collapse pt-3 mt-3 border-top" id="collapseRelatedContent">
                 <div class="mb-3">
-                    <label class="font-xs text-muted mb-1" style="font-weight: 600;">Search & Link Articles</label>
+                    <label class="form-label-custom">Search & Link Articles</label>
                     <input type="text" class="form-control form-control-modern" placeholder="Type keywords to search existing articles...">
                 </div>
                 <div class="mb-2">
-                    <label class="font-xs text-muted mb-1" style="font-weight: 600;">External Reference URL</label>
+                    <label class="form-label-custom">External Reference URL</label>
                     <input type="url" name="external_url" class="form-control form-control-modern" placeholder="https://external-source.com/report">
                 </div>
             </div>
@@ -697,36 +783,36 @@
             <div class="collapse pt-3 mt-3 border-top" id="collapseAdvancedOptions">
                 <div class="row mb-3">
                     <div class="col-md-6 mb-2">
-                        <label class="font-xs text-muted mb-1" style="font-weight: 600;">Location / District</label>
+                        <label class="form-label-custom">Location / District</label>
                         <input type="text" name="location" class="form-control form-control-modern" placeholder="e.g. Chandigarh, Amritsar, Ludhiana">
                     </div>
                     <div class="col-md-6 mb-2">
-                        <label class="font-xs text-muted mb-1" style="font-weight: 600;">Video / Reel URL</label>
+                        <label class="form-label-custom">Video / Reel URL</label>
                         <input type="url" name="video_url" id="post-video-url" class="form-control form-control-modern" placeholder="https://youtube.com/watch?v=...">
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6 mb-2">
-                        <label class="font-xs text-muted mb-1" style="font-weight: 600;">Video Duration</label>
+                        <label class="form-label-custom">Video Duration</label>
                         <input type="text" name="duration" id="post-duration" class="form-control form-control-modern" placeholder="e.g. 02:30">
                     </div>
                     <div class="col-md-6 mb-2">
-                        <label class="font-xs text-muted mb-1" style="font-weight: 600;">Initial Views Count</label>
+                        <label class="form-label-custom">Initial Views Count</label>
                         <input type="number" name="views_count" id="post-views" class="form-control form-control-modern" value="0">
                     </div>
                 </div>
                 <div class="d-flex flex-wrap gap-4 pt-2">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="is_reel" id="post-is-reel">
-                        <label class="form-check-label font-sm" for="post-is-reel">Open as Reel (Short Format)</label>
+                        <label class="form-check-label font-sm" for="post-is-reel" style="font-size: 13px; font-weight: 500; color: #334155;">Open as Reel (Short Format)</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="is_middle_stack" id="post-is-middle-stack">
-                        <label class="form-check-label font-sm" for="post-is-middle-stack">Show in Middle Stack</label>
+                        <label class="form-check-label font-sm" for="post-is-middle-stack" style="font-size: 13px; font-weight: 500; color: #334155;">Show in Middle Stack</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="send_push_notification" id="post-send-push" value="1" checked>
-                        <label class="form-check-label font-sm text-primary font-weight-bold" for="post-send-push">
+                        <label class="form-check-label font-sm font-weight-bold" for="post-send-push" style="font-size: 13px; font-weight: 600; color: #2563EB;">
                             <i data-lucide="bell" style="width: 13px; height: 13px;" class="text-danger me-1"></i> Send Instant Push Notification
                         </label>
                     </div>
@@ -756,7 +842,7 @@
 
             <!-- Status -->
             <div class="mb-3">
-                <label class="font-sm text-dark mb-1" style="font-weight: 600;">Status</label>
+                <label class="form-label-custom">Status</label>
                 <select name="status" id="post-status" class="form-control form-control-modern w-100">
                     <option value="published" selected>Published</option>
                     <option value="draft">Draft</option>
@@ -767,17 +853,17 @@
 
             <!-- Publish Date & Time -->
             <div class="mb-4">
-                <label class="font-sm text-dark mb-1" style="font-weight: 600;">Publish Date & Time</label>
+                <label class="form-label-custom">Publish Date & Time</label>
                 <div class="row g-2">
                     <div class="col-7">
                         <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0" style="border-color: #E2E8F0;"><i data-lucide="calendar" style="width: 14px; height: 14px; color: #64748B;"></i></span>
+                            <span class="input-group-text bg-white border-end-0" style="border-color: #CBD5E1;"><i data-lucide="calendar" style="width: 14px; height: 14px; color: #64748B;"></i></span>
                             <input type="date" name="publish_date" id="post-publish-date" class="form-control form-control-modern border-start-0 ps-0" value="{{ date('Y-m-d') }}">
                         </div>
                     </div>
                     <div class="col-5">
                         <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0" style="border-color: #E2E8F0;"><i data-lucide="clock" style="width: 14px; height: 14px; color: #64748B;"></i></span>
+                            <span class="input-group-text bg-white border-end-0" style="border-color: #CBD5E1;"><i data-lucide="clock" style="width: 14px; height: 14px; color: #64748B;"></i></span>
                             <input type="time" name="publish_time" id="post-publish-time" class="form-control form-control-modern border-start-0 ps-0" value="{{ date('H:i') }}">
                         </div>
                     </div>
@@ -789,7 +875,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center gap-2">
                         <i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: #64748B;"></i>
-                        <span class="font-sm" style="font-weight: 600; color: #334155;">Set as Breaking News</span>
+                        <span class="font-sm" style="font-weight: 600; font-size: 13px; color: #334155;">Set as Breaking News</span>
                     </div>
                     <label class="custom-switch-label">
                         <input type="checkbox" name="is_breaking" id="post-is-breaking">
@@ -800,7 +886,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center gap-2">
                         <i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: #16A34A;"></i>
-                        <span class="font-sm" style="font-weight: 600; color: #334155;">Feature on Homepage</span>
+                        <span class="font-sm" style="font-weight: 600; font-size: 13px; color: #334155;">Feature on Homepage</span>
                     </div>
                     <label class="custom-switch-label">
                         <input type="checkbox" name="is_hero" id="post-is-hero" checked>
@@ -811,7 +897,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center gap-2">
                         <i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: #16A34A;"></i>
-                        <span class="font-sm" style="font-weight: 600; color: #334155;">Allow Comments</span>
+                        <span class="font-sm" style="font-weight: 600; font-size: 13px; color: #334155;">Allow Comments</span>
                     </div>
                     <label class="custom-switch-label">
                         <input type="checkbox" name="allow_comments" id="post-allow-comments" checked>
@@ -822,7 +908,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center gap-2">
                         <i data-lucide="lock" style="width: 16px; height: 16px; color: #64748B;"></i>
-                        <span class="font-sm" style="font-weight: 600; color: #334155;">Lock this article</span>
+                        <span class="font-sm" style="font-weight: 600; font-size: 13px; color: #334155;">Lock this article</span>
                     </div>
                     <label class="custom-switch-label">
                         <input type="checkbox" name="is_locked" id="post-is-locked">
@@ -852,15 +938,15 @@
                         <i data-lucide="image-plus" style="width: 28px; height: 28px;"></i>
                     </div>
                 </div>
-                <div class="font-sm font-weight-bold text-dark mb-1">Upload Featured Image</div>
+                <div class="font-sm font-weight-bold text-dark mb-1" style="font-size: 13.5px; font-weight: 600;">Upload Featured Image</div>
                 <div class="text-muted font-xxs mb-3" style="font-size: 11px;">Recommended size: 1200 × 630 px<br>JPG, PNG or WebP (Max 5MB)</div>
 
                 <div class="d-flex justify-content-center gap-2 flex-wrap" onclick="event.stopPropagation();">
-                    <label class="btn btn-sm text-white mb-0 d-inline-flex align-items-center" style="background: #1769D2; border-radius: 6px; font-weight: 600; font-size: 11.5px; padding: 6px 12px; gap: 5px; cursor: pointer;">
+                    <label class="btn btn-sm text-white mb-0 d-inline-flex align-items-center" style="background: #2563EB; border-radius: 8px; font-weight: 600; font-size: 12px; padding: 6px 14px; gap: 5px; cursor: pointer;">
                         <i data-lucide="upload" style="width: 13px; height: 13px;"></i> Upload Image
                         <input type="file" id="post-image-file" accept="image/*" class="d-none">
                     </label>
-                    <button type="button" class="btn btn-sm btn-white border shadow-sm d-inline-flex align-items-center" id="btn-find-real-image" style="border-radius: 6px; font-weight: 600; font-size: 11.5px; padding: 6px 12px; gap: 5px; color: #1E293B; background: #F8FAFC;">
+                    <button type="button" class="btn btn-sm btn-white border shadow-sm d-inline-flex align-items-center" id="btn-find-real-image" style="border-radius: 8px; font-weight: 600; font-size: 12px; padding: 6px 14px; gap: 5px; color: #1E293B; background: #F8FAFC;">
                         <i data-lucide="globe" style="width: 13px; height: 13px; color: #2563EB;"></i> Find Real News Image
                     </button>
                 </div>
@@ -908,15 +994,15 @@
                 <i data-lucide="cloud-upload" style="width: 24px; height: 24px; color: #64748B;" class="mb-1"></i>
                 <div class="text-muted font-xs mb-2" style="font-size: 11.5px;">Drag & drop images or videos here or</div>
                 <div class="d-flex justify-content-center gap-2">
-                    <button type="button" class="btn btn-sm text-white" style="background: #1769D2; border-radius: 6px; font-size: 11px; padding: 4px 10px;" onclick="$('#post-image-file').click();">Upload Media</button>
-                    <button type="button" class="btn btn-sm btn-white border shadow-sm" style="border-radius: 6px; font-size: 11px; padding: 4px 10px; color: #475569;" onclick="$('#post-image-file').click();">Browse Device</button>
+                    <button type="button" class="btn btn-sm text-white" style="background: #2563EB; border-radius: 7px; font-size: 11.5px; font-weight: 600; padding: 5px 12px;" onclick="$('#post-image-file').click();">Upload Media</button>
+                    <button type="button" class="btn btn-sm btn-white border shadow-sm" style="border-radius: 7px; font-size: 11.5px; font-weight: 600; padding: 5px 12px; color: #475569;" onclick="$('#post-image-file').click();">Browse Device</button>
                 </div>
             </div>
 
             <!-- Gallery Thumbnails (Populated dynamically on upload) -->
             <div class="d-flex align-items-center gap-2 mb-2" id="gallery-preview-strip">
             </div>
-            <a href="#" class="font-xs text-decoration-none d-inline-flex align-items-center" style="color: #1769D2; font-weight: 600; font-size: 12px; gap: 4px;" onclick="$('#post-image-file').click(); return false;">
+            <a href="#" class="font-xs text-decoration-none d-inline-flex align-items-center" style="color: #2563EB; font-weight: 600; font-size: 12px; gap: 4px;" onclick="$('#post-image-file').click(); return false;">
                 <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Add more media
             </a>
         </div>
@@ -949,7 +1035,7 @@
 
             <!-- Meta Title -->
             <div class="mb-3">
-                <label class="font-xs text-dark mb-1" style="font-weight: 600;">Meta Title</label>
+                <label class="form-label-custom">Meta Title</label>
                 <input type="text" name="meta_title" id="post-meta-title" class="form-control form-control-modern w-100 font-xs" placeholder="Enter SEO title..." maxlength="60">
                 <div class="d-flex justify-content-end mt-1">
                     <span class="text-muted" style="font-size: 10.5px;" id="meta-title-count">0/60</span>
@@ -958,7 +1044,7 @@
 
             <!-- Meta Description -->
             <div class="mb-2">
-                <label class="font-xs text-dark mb-1" style="font-weight: 600;">Meta Description</label>
+                <label class="form-label-custom">Meta Description</label>
                 <textarea name="meta_desc" id="post-meta-desc" class="form-control form-control-modern w-100 font-xs" rows="3" placeholder="Enter SEO description..." maxlength="160"></textarea>
                 <div class="d-flex justify-content-end mt-1">
                     <span class="text-muted" style="font-size: 10.5px;" id="meta-desc-count">0/160</span>
@@ -981,8 +1067,8 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn w-100 d-inline-flex align-items-center justify-content-center shadow-sm btn-publish-yellow" style="background-color: #FFC400; color: #062B63; border: 1.5px solid #F5A900; border-radius: 12px; font-weight: 800; font-size: 15px; padding: 13px; gap: 8px;">
-                <i data-lucide="send" style="width: 17px; height: 17px; color: #062B63;"></i> Publish Article
+            <button type="submit" class="btn w-100 d-inline-flex align-items-center justify-content-center shadow-sm" id="btn-submit-publish" style="background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%); color: #FFFFFF; border: none; border-radius: 12px; font-weight: 700; font-size: 14.5px; padding: 13px; gap: 8px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28); transition: all 0.2s ease;">
+                <i data-lucide="send" style="width: 17px; height: 17px;"></i> <span>Publish Article</span>
             </button>
         </div>
 
@@ -1806,17 +1892,72 @@
             previewWin.document.write('<html><head><title>' + title + '</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"></head><body class="p-5"><div class="container" style="max-width:800px;"><h1>' + title + '</h1><hr><div class="lead">' + content + '</div></div></body></html>');
         });
 
+        // Clear invalid feedback on typing/changing
+        $(document).on('input change', 'input, textarea, select', function() {
+            if ($(this).hasClass('is-invalid')) {
+                $(this).removeClass('is-invalid');
+            }
+        });
+
         // 9. Main Form Submit
         $('#post-create-form').on('submit', function(e) {
             e.preventDefault();
             
+            var title = ($('#post-title').val() || '').trim();
+            var category = $('#post-category').val();
+            var shortDesc = ($('#post-short-desc').val() || '').trim();
+            var content = ($('#post-content').val() || '').trim();
+
+            // Client Validation Check
+            if (!title) {
+                $('#post-title').addClass('is-invalid');
+                $('html, body').animate({
+                    scrollTop: $('#post-title').offset().top - 120
+                }, 250, function() {
+                    $('#post-title').focus();
+                });
+                if (window.Swal) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Headline Required',
+                        text: 'Please enter the news headline before publishing.',
+                        confirmButtonText: 'Got It',
+                        customClass: { popup: 'modern-swal-popup', confirmButton: 'modern-swal-btn-primary' }
+                    });
+                } else if (window.showToast) {
+                    window.showToast('Please enter the article headline', 'warning');
+                }
+                return false;
+            }
+
+            if (!category) {
+                $('#post-category').addClass('is-invalid').focus();
+                if (window.showToast) {
+                    window.showToast('Please choose a category', 'warning');
+                }
+                return false;
+            }
+
+            if (!shortDesc && !content) {
+                $('#post-short-desc').addClass('is-invalid');
+                $('html, body').animate({
+                    scrollTop: $('#post-short-desc').offset().top - 120
+                }, 250, function() {
+                    $('#post-short-desc').focus();
+                });
+                if (window.showToast) {
+                    window.showToast('Please provide a short description or story content', 'warning');
+                }
+                return false;
+            }
+
             var payload = {
-                title: $('#post-title').val(),
-                category: $('#post-category').val(),
+                title: title,
+                category: category,
                 author_name: $('#post-author').val(),
                 source: '',
-                short_description: $('#post-short-desc').val(),
-                content: $('#post-content').val() || $('#post-short-desc').val(),
+                short_description: shortDesc,
+                content: content || shortDesc,
                 video_url: $('#post-video-url').val(),
                 image_url: $('#post-image-url').val() || '',
                 duration: $('#post-duration').val(),
@@ -1837,8 +1978,8 @@
                 content_en: $('#post-content-en').val(),
                 content_hi: $('#post-content-hi').val(),
                 content_pb: $('#post-content-pb').val(),
-                meta_title: $('#post-meta-title').val() || $('#post-title').val(),
-                meta_desc: $('#post-meta-desc').val() || $('#post-short-desc').val(),
+                meta_title: $('#post-meta-title').val() || title,
+                meta_desc: $('#post-meta-desc').val() || shortDesc,
                 meta_keywords: $('#post-meta-keywords').val()
             };
 

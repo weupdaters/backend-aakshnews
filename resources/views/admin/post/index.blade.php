@@ -6,20 +6,20 @@
     /* 2026 AAKSH NEWS 24 EDITORIAL CMS POST LIST WORKSPACE           */
     /* ============================================================== */
     :root {
-        --cms-primary: #7C3AED;
-        --cms-primary-hover: #6D28D9;
-        --cms-primary-subtle: #F3E8FF;
-        --cms-secondary-purple: #8B5CF6;
-        --cms-text-main: #111827;
+        --cms-primary: #1769D2;
+        --cms-primary-hover: #0D56B5;
+        --cms-primary-subtle: #EBF3FC;
+        --cms-secondary-purple: #1557A6;
+        --cms-text-main: #0F172A;
         --cms-text-muted: #64748B;
         --cms-text-light: #94A3B8;
-        --cms-border: #E5E7EB;
+        --cms-border: #E2E8F0;
         --cms-bg-canvas: #F8FAFC;
         --cms-card-bg: #FFFFFF;
         --cms-success: #10B981;
         --cms-warning: #F59E0B;
         --cms-breaking: #EF4444;
-        --cms-scheduled: #8B5CF6;
+        --cms-scheduled: #1769D2;
     }
 
     .newsroom-wrap {
@@ -813,7 +813,7 @@
         <div class="col-12 col-sm-6 col-xl">
             <div class="nr-stat-card">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="nr-stat-icon-sq" style="background: #F3E8FF; color: #7C3AED;">
+                    <div class="nr-stat-icon-sq" style="background: #EBF3FC; color: #1769D2;">
                         <i data-lucide="newspaper" style="width: 22px; height: 22px;"></i>
                     </div>
                     <div>
