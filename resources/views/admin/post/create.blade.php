@@ -405,7 +405,7 @@
                         @endforeach
                         @if($categories->isEmpty())
                             <option value="National">National</option>
-                            <option value="Punjab" selected>Punjab</option>
+                            <option value="Punjab">Punjab</option>
                             <option value="Politics">Politics</option>
                             <option value="Sports">Sports</option>
                             <option value="Business">Business</option>
@@ -433,7 +433,7 @@
             <div class="row mb-4">
                 <div class="col-md-6 mb-3 mb-md-0">
                     <label class="font-sm text-dark mb-2" style="font-weight: 600;">Author Name</label>
-                    <input type="text" name="author_name" id="post-author" class="form-control form-control-modern w-100" value="{{ Auth::check() ? Auth::user()->name : 'Aaksh News Admin' }}" placeholder="Enter author name">
+                    <input type="text" name="author_name" id="post-author" class="form-control form-control-modern w-100" value="{{ old('author_name', Auth::check() ? Auth::user()->name : 'Aakash News Desk') }}" placeholder="Enter author name">
                 </div>
                 <div class="col-md-6">
                     <label class="font-sm text-dark mb-2" style="font-weight: 600;">Source <span class="text-muted" style="font-weight: normal;">(Optional)</span></label>
@@ -638,16 +638,24 @@
             </div>
 
             <div class="mb-3">
-                <input type="text" id="tag-input-field" class="form-control form-control-modern w-100" placeholder="Type a tag and press Enter...">
-                <input type="hidden" name="meta_keywords" id="post-meta-keywords" value="Punjab News, Government, Women Welfare, Dr Baljit Kaur">
+                <input type="text" id="tag-input-field" class="form-control form-control-modern w-100" placeholder="Type a tag and press Enter, Comma (,) or Tab...">
+                <input type="hidden" name="meta_keywords" id="post-meta-keywords" value="{{ old('meta_keywords', '') }}">
             </div>
 
-            <!-- Tags List matching mockup -->
+            <!-- Tags List -->
             <div class="d-flex flex-wrap align-items-center gap-2" id="tags-badges-container">
-                <span class="tag-badge-pill">#Punjab News <span class="tag-badge-remove" onclick="removeTag(this, 'Punjab News')">&times;</span></span>
-                <span class="tag-badge-pill">#Government <span class="tag-badge-remove" onclick="removeTag(this, 'Government')">&times;</span></span>
-                <span class="tag-badge-pill">#Women Welfare <span class="tag-badge-remove" onclick="removeTag(this, 'Women Welfare')">&times;</span></span>
-                <span class="tag-badge-pill">#Dr Baljit Kaur <span class="tag-badge-remove" onclick="removeTag(this, 'Dr Baljit Kaur')">&times;</span></span>
+                @if(old('meta_keywords'))
+                    @foreach(array_filter(array_map('trim', explode(',', old('meta_keywords')))) as $kw)
+                        @php $cleanKw = ltrim(trim($kw), '#'); @endphp
+                        @if($cleanKw !== '')
+                            <span class="tag-badge-pill">#{{ $cleanKw }} <span class="tag-badge-remove" onclick="removeTag(this, '{{ addslashes($cleanKw) }}')">&times;</span></span>
+                        @endif
+                    @endforeach
+                @endif
+            </div>
+            <div class="form-text mt-2 d-flex align-items-center gap-1.5" style="font-size: 11.5px; color: #94A3B8;">
+                <i data-lucide="info" style="width: 13px; height: 13px;"></i>
+                <span>Type keyword and press <kbd style="background:#F1F5F9;color:#334155;padding:1px 5px;border-radius:4px;font-size:10px;border:1px solid #CBD5E1;">Enter</kbd>, <kbd style="background:#F1F5F9;color:#334155;padding:1px 5px;border-radius:4px;font-size:10px;border:1px solid #CBD5E1;">,</kbd> (Comma) or <kbd style="background:#F1F5F9;color:#334155;padding:1px 5px;border-radius:4px;font-size:10px;border:1px solid #CBD5E1;">Tab</kbd> to add tag.</span>
             </div>
         </div>
 
@@ -1114,7 +1122,7 @@
 
     // Tag remover
     function removeTag(el, tagName) {
-        $(el).parent().remove();
+        $(el).closest('.tag-badge-pill').remove();
         syncTagsToKeywords();
     }
 
@@ -1123,9 +1131,44 @@
         $('#tags-badges-container .tag-badge-pill').each(function() {
             var text = $(this).text().replace('×', '').trim();
             if (text.startsWith('#')) text = text.substring(1);
-            tags.push(text);
+            if (text) tags.push(text);
         });
         $('#post-meta-keywords').val(tags.join(', '));
+    }
+
+    function addSingleTag(rawTag) {
+        if (!rawTag) return;
+        var tag = rawTag.trim().replace(/^#+/, '');
+        if (!tag) return;
+
+        // Check duplicates (case-insensitive)
+        var exists = false;
+        $('#tags-badges-container .tag-badge-pill').each(function() {
+            var currentText = $(this).text().replace('×', '').trim().replace(/^#+/, '');
+            if (currentText.toLowerCase() === tag.toLowerCase()) {
+                exists = true;
+                return false;
+            }
+        });
+
+        if (exists) {
+            if (window.showToast) window.showToast('Tag #' + tag + ' is already added.', 'info');
+            return;
+        }
+
+        var safeTag = $('<div>').text(tag).html();
+        var safeJsTag = tag.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        var badgeHtml = '<span class="tag-badge-pill">#' + safeTag + ' <span class="tag-badge-remove" onclick="removeTag(this, \'' + safeJsTag + '\')">&times;</span></span> ';
+        $('#tags-badges-container').append(badgeHtml);
+        syncTagsToKeywords();
+    }
+
+    function processTagsInput(val) {
+        if (!val) return;
+        var parts = val.split(',');
+        for (var i = 0; i < parts.length; i++) {
+            addSingleTag(parts[i]);
+        }
     }
 
     // Text formatting helpers for rich toolbar
@@ -1142,16 +1185,62 @@
     }
 
     function insertLink() {
-        var url = prompt('Enter the link URL:', 'https://');
-        if (url) wrapText('[', '](' + url + ')');
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Insert Link',
+                input: 'url',
+                inputPlaceholder: 'https://example.com',
+                inputValue: 'https://',
+                showCancelButton: true,
+                confirmButtonText: 'Insert',
+                cancelButtonText: 'Cancel',
+                customClass: {
+                    popup: 'modern-swal-popup',
+                    confirmButton: 'modern-swal-btn-primary',
+                    cancelButton: 'modern-swal-btn-cancel'
+                },
+                buttonsStyling: false
+            }).then(function(result) {
+                if (result.isConfirmed && result.value) {
+                    wrapText('[', '](' + result.value + ')');
+                }
+            });
+        } else {
+            var url = prompt('Enter the link URL:', 'https://');
+            if (url) wrapText('[', '](' + url + ')');
+        }
     }
 
     function insertVideoPrompt() {
-        var url = prompt('Enter YouTube or Video URL:');
-        if (url) {
-            $('#post-video-url').val(url);
-            $('#collapseAdvancedOptions').collapse('show');
-            alert('Video URL linked to article.');
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Attach Video URL',
+                text: 'Enter YouTube or MP4 Video Stream URL:',
+                input: 'url',
+                inputPlaceholder: 'https://www.youtube.com/watch?v=...',
+                showCancelButton: true,
+                confirmButtonText: 'Attach Video',
+                cancelButtonText: 'Cancel',
+                customClass: {
+                    popup: 'modern-swal-popup',
+                    confirmButton: 'modern-swal-btn-primary',
+                    cancelButton: 'modern-swal-btn-cancel'
+                },
+                buttonsStyling: false
+            }).then(function(result) {
+                if (result.isConfirmed && result.value) {
+                    $('#post-video-url').val(result.value);
+                    $('#collapseAdvancedOptions').collapse('show');
+                    if (window.showToast) window.showToast('Video URL attached to article.', 'success');
+                }
+            });
+        } else {
+            var url = prompt('Enter YouTube or Video URL:');
+            if (url) {
+                $('#post-video-url').val(url);
+                $('#collapseAdvancedOptions').collapse('show');
+                if (window.showToast) window.showToast('Video URL linked to article.', 'success');
+            }
         }
     }
 
@@ -1203,18 +1292,50 @@
             $('#lang-pane-' + lang).removeClass('d-none');
         });
 
-        // Tags Input Handler (Enter key)
-        $('#tag-input-field').on('keypress', function(e) {
-            if (e.which === 13) {
+        // Tags Input Handler: Enter (13), Comma (188 or ','), Tab (9)
+        $('#tag-input-field').on('keydown', function(e) {
+            var key = e.which || e.keyCode;
+            var val = $(this).val();
+
+            // 1. Enter Key
+            if (key === 13) {
                 e.preventDefault();
-                var tag = $(this).val().trim();
-                if (tag) {
-                    if (!tag.startsWith('#')) tag = '#' + tag;
-                    var badgeHtml = '<span class="tag-badge-pill">' + tag + ' <span class="tag-badge-remove" onclick="removeTag(this, \'' + tag.replace('#', '') + '\')">&times;</span></span> ';
-                    $('#tags-badges-container').append(badgeHtml);
+                if (val.trim()) {
+                    processTagsInput(val);
                     $(this).val('');
-                    syncTagsToKeywords();
                 }
+                return false;
+            }
+
+            // 2. Tab Key
+            if (key === 9) {
+                if (val.trim()) {
+                    e.preventDefault();
+                    processTagsInput(val);
+                    $(this).val('');
+                    return false;
+                }
+                // Allow natural Tab navigation if field is blank
+            }
+
+            // 3. Comma Key
+            if (key === 188 || e.key === ',') {
+                e.preventDefault();
+                if (val.trim()) {
+                    processTagsInput(val);
+                    $(this).val('');
+                }
+                return false;
+            }
+        });
+
+        // Also handle Paste event for comma-separated tags
+        $('#tag-input-field').on('paste', function(e) {
+            var pastedText = (e.originalEvent || e).clipboardData ? (e.originalEvent || e).clipboardData.getData('text/plain') : '';
+            if (pastedText && pastedText.indexOf(',') !== -1) {
+                e.preventDefault();
+                processTagsInput(pastedText);
+                $(this).val('');
             }
         });
 

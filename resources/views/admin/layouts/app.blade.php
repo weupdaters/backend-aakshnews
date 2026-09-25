@@ -10,8 +10,161 @@
     <!-- FontAwesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
+    <!-- SweetAlert2 Modern 2026 UI -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <!-- Toastr Modern 2026 UI -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Noto+Sans+Gurmukhi:wght@400;500;600;700;800&display=swap');
+
+        /* ══════════════════════════════════════════════════════
+           2026 NEXT-GEN SWEETALERT2 & TOASTR DESIGN SYSTEM
+           ══════════════════════════════════════════════════════ */
+        .swal2-container {
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            background: rgba(15, 23, 42, 0.5) !important;
+            z-index: 1000000 !important;
+        }
+        .swal2-popup.modern-swal-popup,
+        .swal2-popup {
+            border-radius: 22px !important;
+            padding: 28px 30px !important;
+            background: #FFFFFF !important;
+            box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            border: 1px solid rgba(226, 232, 240, 0.8) !important;
+        }
+        .dark-theme .swal2-popup {
+            background: #09214A !important;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+            color: #F8FAFC !important;
+            border: 1px solid rgba(30, 58, 110, 0.8) !important;
+        }
+        .swal2-title {
+            font-size: 20px !important;
+            font-weight: 700 !important;
+            color: #0F172A !important;
+            letter-spacing: -0.02em !important;
+            margin-bottom: 8px !important;
+        }
+        .dark-theme .swal2-title {
+            color: #F8FAFC !important;
+        }
+        .swal2-html-container {
+            font-size: 14.5px !important;
+            color: #64748B !important;
+            line-height: 1.6 !important;
+            margin: 8px 0 22px 0 !important;
+        }
+        .dark-theme .swal2-html-container {
+            color: #94A3B8 !important;
+        }
+        .swal2-icon {
+            width: 62px !important;
+            height: 62px !important;
+            margin: 8px auto 16px !important;
+            border-width: 2.5px !important;
+        }
+        .swal2-actions {
+            gap: 12px !important;
+            margin-top: 16px !important;
+        }
+        .modern-swal-btn-primary,
+        .swal2-confirm {
+            background: linear-gradient(135deg, #1769D2 0%, #1557A6 100%) !important;
+            color: #FFFFFF !important;
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 10px 24px !important;
+            font-size: 13.5px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 14px rgba(23, 105, 210, 0.35) !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+        }
+        .modern-swal-btn-primary:hover,
+        .swal2-confirm:hover {
+            transform: translateY(-1.5px) !important;
+            box-shadow: 0 6px 20px rgba(23, 105, 210, 0.45) !important;
+        }
+        .modern-swal-btn-cancel,
+        .swal2-cancel {
+            background: #F1F5F9 !important;
+            color: #475569 !important;
+            border: 1px solid #CBD5E1 !important;
+            border-radius: 12px !important;
+            padding: 10px 22px !important;
+            font-size: 13.5px !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+        }
+        .modern-swal-btn-cancel:hover,
+        .swal2-cancel:hover {
+            background: #E2E8F0 !important;
+            color: #0F172A !important;
+        }
+
+        /* 2026 Floating Toast Design */
+        .swal2-popup.swal2-toast,
+        .modern-toast-popup {
+            border-radius: 16px !important;
+            padding: 12px 18px !important;
+            background: rgba(255, 255, 255, 0.96) !important;
+            backdrop-filter: blur(14px) !important;
+            -webkit-backdrop-filter: blur(14px) !important;
+            box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            border: 1px solid rgba(226, 232, 240, 0.8) !important;
+        }
+        .dark-theme .swal2-popup.swal2-toast {
+            background: rgba(9, 33, 74, 0.95) !important;
+            box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.12) !important;
+            border: 1px solid rgba(30, 58, 110, 0.8) !important;
+        }
+        .swal2-toast .swal2-title {
+            font-size: 13.5px !important;
+            font-weight: 600 !important;
+            color: #0F172A !important;
+            margin: 0 !important;
+        }
+        .dark-theme .swal2-toast .swal2-title {
+            color: #F8FAFC !important;
+        }
+        .swal2-toast .swal2-icon {
+            width: 24px !important;
+            height: 24px !important;
+            margin: 0 10px 0 0 !important;
+        }
+        .swal2-timer-progress-bar {
+            background: linear-gradient(90deg, #1769D2 0%, #38BDF8 100%) !important;
+            height: 3px !important;
+        }
+
+        /* 2026 Toastr Overrides */
+        #toast-container > div {
+            border-radius: 16px !important;
+            box-shadow: 0 18px 40px -10px rgba(15, 23, 42, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.2) !important;
+            opacity: 0.98 !important;
+            padding: 14px 18px 14px 50px !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+        }
+        #toast-container > .toast-success {
+            background-color: #047857 !important;
+        }
+        #toast-container > .toast-error {
+            background-color: #B91C1C !important;
+        }
+        #toast-container > .toast-warning {
+            background-color: #C2410C !important;
+        }
+        #toast-container > .toast-info {
+            background-color: #1D4ED8 !important;
+        }
 
         :root {
             /* AAKSH NEWS 24 LOGO BRAND COLOR SYSTEM */
@@ -1238,10 +1391,141 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- SweetAlert2 (2026 UI) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Toastr (2026 UI) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <!-- Unified Lucide Icons Library (Matches Next.js Frontend) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
+        // ══════════════════════════════════════════════════════
+        // 2026 NEXT-GEN NOTIFICATION SYSTEM (SWEETALERT2 & TOASTR)
+        // ══════════════════════════════════════════════════════
+        (function() {
+            // Configure Toastr 2026 Settings
+            if (typeof toastr !== 'undefined') {
+                toastr.options = {
+                    closeButton: true,
+                    progressBar: true,
+                    positionClass: "toast-top-right",
+                    preventDuplicates: true,
+                    showDuration: "250",
+                    hideDuration: "800",
+                    timeOut: "3500",
+                    extendedTimeOut: "1000",
+                    showEasing: "swing",
+                    hideEasing: "linear",
+                    showMethod: "fadeIn",
+                    hideMethod: "fadeOut"
+                };
+            }
+
+            // SweetAlert2 2026 Toast Mixin
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3500,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                },
+                customClass: {
+                    popup: 'modern-toast-popup'
+                }
+            });
+            window.Toast = Toast;
+
+            // Global 2026 Toast Helper: window.showToast('Message', 'success'|'error'|'warning'|'info')
+            window.showToast = function(message, icon = 'success') {
+                Toast.fire({
+                    icon: icon,
+                    title: message
+                });
+            };
+
+            // Global 2026 Alert Modal: window.showAlert('Title', 'Message', 'info')
+            window.showAlert = function(title, message, icon = 'info') {
+                return Swal.fire({
+                    title: title || 'Notice',
+                    html: message,
+                    icon: icon,
+                    confirmButtonText: 'Got It',
+                    customClass: {
+                        popup: 'modern-swal-popup',
+                        confirmButton: 'modern-swal-btn-primary'
+                    },
+                    buttonsStyling: false
+                });
+            };
+
+            // Global 2026 Confirmation Modal: window.showConfirm('Are you sure?', 'Description').then(result => ...)
+            window.showConfirm = function(title, message, confirmText = 'Yes, Proceed', cancelText = 'Cancel', icon = 'warning') {
+                return Swal.fire({
+                    title: title,
+                    text: message,
+                    icon: icon,
+                    showCancelButton: true,
+                    confirmButtonText: confirmText,
+                    cancelButtonText: cancelText,
+                    reverseButtons: true,
+                    customClass: {
+                        popup: 'modern-swal-popup',
+                        confirmButton: 'modern-swal-btn-primary',
+                        cancelButton: 'modern-swal-btn-cancel'
+                    },
+                    buttonsStyling: false
+                });
+            };
+
+            // Intelligent 2026 Polyfill for window.alert (Replaces ugly browser OS dialogs everywhere!)
+            const _originalAlert = window.alert;
+            window.alert = function(msg) {
+                if (typeof msg === 'string' && msg.length <= 110) {
+                    let icon = 'info';
+                    let lower = msg.toLowerCase();
+                    if (lower.includes('success') || lower.includes('published') || lower.includes('saved') || lower.includes('updated') || lower.includes('created') || lower.includes('copied')) {
+                        icon = 'success';
+                    } else if (lower.includes('error') || lower.includes('failed') || lower.includes('denied') || lower.includes('invalid') || lower.includes('unable')) {
+                        icon = 'error';
+                    } else if (lower.includes('please') || lower.includes('required') || lower.includes('fill') || lower.includes('select') || lower.includes('warning') || lower.includes('empty')) {
+                        icon = 'warning';
+                    }
+                    showToast(msg, icon);
+                } else {
+                    showAlert('Notice', msg, 'info');
+                }
+            };
+        })();
+
+        // Auto-trigger Flash messages from Laravel Controller redirects
+        @if(session('success'))
+            document.addEventListener('DOMContentLoaded', function() {
+                window.showToast("{{ session('success') }}", 'success');
+            });
+        @endif
+        @if(session('error'))
+            document.addEventListener('DOMContentLoaded', function() {
+                window.showToast("{{ session('error') }}", 'error');
+            });
+        @endif
+        @if(session('warning'))
+            document.addEventListener('DOMContentLoaded', function() {
+                window.showToast("{{ session('warning') }}", 'warning');
+            });
+        @endif
+        @if(session('info'))
+            document.addEventListener('DOMContentLoaded', function() {
+                window.showToast("{{ session('info') }}", 'info');
+            });
+        @endif
+        @if($errors->any())
+            document.addEventListener('DOMContentLoaded', function() {
+                window.showAlert('Validation Notice', "{!! implode('<br>', $errors->all()) !!}", 'warning');
+            });
+        @endif
         // Admin Top Loading Line Logic
         (function() {
             const line = document.getElementById('admin-top-loading-line');
