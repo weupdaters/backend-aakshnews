@@ -1,4 +1,15 @@
 <div class="nav-sidebar">
+    <!-- Mobile Drawer Header (Visible on Mobile/Tablet) -->
+    <div class="d-flex d-lg-none align-items-center justify-content-between pb-3 mb-2 border-bottom" style="border-color: rgba(255, 255, 255, 0.12) !important;">
+        <div class="d-flex align-items-center gap-2">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" style="width: 28px; height: 28px; border-radius: 50%;">
+            <span class="text-white fw-bold font-sm" style="letter-spacing: -0.3px;">AAKSH NEWS 24</span>
+        </div>
+        <button type="button" id="sidebar-close-btn" class="btn btn-sm text-white" aria-label="Close Navigation" style="background: rgba(255,255,255,0.15); border: none; border-radius: 6px; padding: 4px 8px; cursor: pointer;">
+            <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+        </button>
+    </div>
+
     <nav class="nav-main-menu">
         <ul class="main-menu">
             <li>
@@ -16,6 +27,12 @@
                 <a href="/admin/post" class="sidebar-btn {{ request()->is('admin/post*') ? 'active' : '' }}">
                     <i data-lucide="file-text" class="sidebar-icon icon-animate icon-hover-bounce"></i> 
                     <span class="name">{{ $t['news_articles'] ?? 'News Articles' }}</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/reader-corner" class="sidebar-btn {{ request()->is('admin/reader-corner*') ? 'active' : '' }}">
+                    <i data-lucide="newspaper" class="sidebar-icon icon-animate icon-hover-bounce"></i> 
+                    <span class="name">Reader's Corner</span>
                 </a>
             </li>
             <li>
@@ -129,19 +146,19 @@
                 SETTINGS
             </li>
             <li>
-                <a href="/admin/settings" class="sidebar-btn {{ request()->is('admin/settings*') ? 'active' : '' }}">
+                <a href="/admin/settings" class="sidebar-btn {{ request()->is('admin/settings') ? 'active' : '' }}">
                     <i data-lucide="settings" class="sidebar-icon icon-animate icon-spin-hover"></i> 
-                    <span class="name">{{ $t['settings'] ?? 'General Settings' }}</span>
+                    <span class="name">{{ $t['settings'] ?? 'Settings' }}</span>
                 </a>
             </li>
             <li>
-                <a href="/admin/reader-corner" class="sidebar-btn">
+                <a href="/admin/users" class="sidebar-btn {{ request()->is('admin/users*') ? 'active' : '' }}">
                     <i data-lucide="users" class="sidebar-icon icon-animate icon-hover-bounce"></i> 
                     <span class="name">Users & Roles</span>
                 </a>
             </li>
             <li>
-                <a href="/admin/settings" class="sidebar-btn">
+                <a href="/admin/website-settings" class="sidebar-btn {{ request()->is('admin/website-settings*') ? 'active' : '' }}">
                     <i data-lucide="sliders" class="sidebar-icon icon-animate"></i> 
                     <span class="name">Website Settings</span>
                 </a>
@@ -165,19 +182,6 @@
         </ul>
     </nav>
 
-    <!-- Upgrade to Pro Card matching media_1790110704755.png -->
-    <div class="card p-3 my-3 border-0 shadow-xs" style="background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%); border: 1px solid #FDE68A !important; border-radius: 16px;">
-        <div class="d-flex align-items-center gap-2 mb-1">
-            <span style="font-size: 18px;">👑</span>
-            <span style="font-weight: 800; color: #92400E; font-size: 13px;">Upgrade to Pro</span>
-        </div>
-        <p class="font-xxs text-muted mb-2" style="font-size: 11px; color: #B45309 !important;">
-            Get advanced AI tools, media storage and detailed analytics.
-        </p>
-        <button class="btn btn-sm w-100 font-xs btn-cta-yellow" style="background-color: #FFC400; color: #062B63; border-radius: 10px; font-weight: 800; padding: 7px 12px; border: none; box-shadow: 0 2px 8px rgba(245, 169, 0, 0.3);">
-            Upgrade Now
-        </button>
-    </div>
 
     <!-- Live Now Widget matching media_1790110704755.png -->
     <div class="card p-3 border-0 text-white" style="background-color: #041D44; border: 1px solid rgba(255, 255, 255, 0.08) !important; border-radius: 16px;">

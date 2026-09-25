@@ -37,13 +37,13 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="section-box">
-            <div class="container">
-                <div class="panel-white mb-30">
+            <div class="container-fluid px-0">
+                <div class="panel-white mb-30" style="border: 1px solid var(--border-color); border-radius: 16px; background: var(--card-bg); padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
                     <div class="box-padding">
-                        <div class="panel-head d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom">
-                            <h5>All Categories</h5>
-                            <div class="box-search" style="width: 240px; margin: 0;">
-                                <input type="text" id="category-search-input" placeholder="Search categories..." class="form-control py-1 px-3 border rounded-3 font-sm" style="height: 34px;">
+                        <div class="panel-head d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 mb-4 border-bottom">
+                            <h5 class="mb-0">All Categories</h5>
+                            <div class="box-search" style="min-width: 200px; max-width: 100%; margin: 0;">
+                                <input type="text" id="category-search-input" placeholder="Search categories..." class="form-control py-1 px-3 border rounded-3 font-sm" style="height: 36px;">
                             </div>
                         </div>
                         <div class="row display-list" id="categories-list">

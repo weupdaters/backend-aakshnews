@@ -80,8 +80,19 @@ Route::put('/admin/gallery/{id}', [PhotoGalleryController::class, 'update']);
 Route::delete('/admin/gallery/{id}', [PhotoGalleryController::class, 'destroy']);
 
 // Admin Site & Social Media Settings Routes
-Route::get('/admin/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index']);
-Route::post('/admin/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update']);
+Route::get('/admin/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('admin.settings');
+Route::post('/admin/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('admin.settings.update');
+
+// Admin Website Settings Route
+Route::get('/admin/website-settings', [\App\Http\Controllers\Admin\SettingController::class, 'websiteSettings'])->name('admin.website-settings');
+Route::post('/admin/website-settings', [\App\Http\Controllers\Admin\SettingController::class, 'updateWebsiteSettings'])->name('admin.website-settings.update');
+
+// Admin Users & Roles Management Routes
+Route::get('/admin/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users.index');
+Route::post('/admin/users', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('admin.users.store');
+Route::put('/admin/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('admin.users.update');
+Route::delete('/admin/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('admin.users.destroy');
+Route::post('/admin/users/{id}/toggle-status', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('admin.users.toggle-status');
 
 // Admin Newsletter Subscribers Route
 Route::get('/admin/subscribers', function () {

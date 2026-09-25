@@ -101,27 +101,22 @@ class NewsApiController extends Controller
         if (is_numeric($slug)) {
             $post = UserPost::find($slug);
         } else {
-            // 1. Try end of slug if numeric: title-slug-123
-            $parts = explode('-', $slug);
-            $possibleId = end($parts);
-            if (is_numeric($possibleId)) {
-                $post = UserPost::find($possibleId);
-            }
-
-            // 2. Try trailing digits with regex
-            if (!$post && preg_match('/(\d+)$/', $slug, $matches)) {
+            // 1. If slug ends with hyphen and ID (e.g. news-title-slug-123), extract trailing ID
+            if (preg_match('/-(\d+)$/', $slug, $matches)) {
                 $post = UserPost::find($matches[1]);
             }
 
-            // 3. Try any embedded digits
-            if (!$post && preg_match('/(\d+)/', $slug, $matches)) {
-                $post = UserPost::find($matches[1]);
-            }
-
-            // 4. Try matching title directly
+            // 2. Try matching title across all languages directly
             if (!$post) {
                 $cleanTitle = trim(str_replace('-', ' ', $slug));
-                $post = UserPost::where('title', 'LIKE', "%{$cleanTitle}%")->first();
+                $post = UserPost::where('status', 'published')
+                    ->where(function ($q) use ($cleanTitle) {
+                        $q->where('title', 'LIKE', "%{$cleanTitle}%")
+                          ->orWhere('title_en', 'LIKE', "%{$cleanTitle}%")
+                          ->orWhere('title_pb', 'LIKE', "%{$cleanTitle}%")
+                          ->orWhere('title_hi', 'LIKE', "%{$cleanTitle}%");
+                    })
+                    ->first();
             }
         }
 
@@ -277,9 +272,9 @@ class NewsApiController extends Controller
 
         $items = BreakingNews::where('is_active', true)->latest()->get()->map(function ($item) use ($lang) {
             $title = match ($lang) {
-                'en' => $item->title_en ?: $item->title,
-                'hi' => $item->title_hi ?: ($item->title_en ?: $item->title),
-                'pb' => $item->title_pb ?: $item->title,
+                'en' => $item->title_en ?: \App\Services\TranslationService::translateText($item->title, 'en'),
+                'hi' => $item->title_hi ?: \App\Services\TranslationService::translateText($item->title, 'hi'),
+                'pb' => $item->title_pb ?: \App\Services\TranslationService::translateText($item->title, 'pa'),
                 default => $item->title,
             };
             return $title;

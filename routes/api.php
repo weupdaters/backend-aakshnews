@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\v1\EngagementApiController;
 use App\Http\Controllers\Api\v1\AuthApiController;
 use App\Http\Controllers\Api\v1\UserApiController;
 use App\Http\Controllers\Api\v1\AdvertisementApiController;
+use App\Http\Controllers\Api\v1\ReporterApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,12 @@ Route::prefix('v1')->group(function () {
     Route::post('/register', [AuthApiController::class, 'register']);
     Route::post('/auth/login', [AuthApiController::class, 'login']);
     Route::post('/auth/register', [AuthApiController::class, 'register']);
+
+    // Reporter & Citizen Desk APIs
+    Route::post('/reporter/login', [ReporterApiController::class, 'login']);
+    Route::get('/reporter/dashboard', [ReporterApiController::class, 'dashboard']);
+    Route::post('/reporter/submit-news', [ReporterApiController::class, 'submitNews']);
+    Route::post('/reporter/apply', [ReporterApiController::class, 'apply']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthApiController::class, 'logout']);
@@ -47,6 +54,11 @@ Route::prefix('v1')->group(function () {
         // Post Engagements
         Route::post('/news/{id}/bookmark', [NewsApiController::class, 'bookmark']);
         Route::post('/news/{id}/like', [NewsApiController::class, 'like']);
+
+        // Admin Management APIs
+        Route::post('/facebook/posts', [HomeController::class, 'addFacebookPost']);
+        Route::post('/facebook/sync', [HomeController::class, 'syncFacebookPosts']);
+        Route::post('/send-push', [\App\Http\Controllers\PushNotificationController::class, 'sendPush']);
     });
 
     // -------------------------------------------------------------
@@ -57,8 +69,6 @@ Route::prefix('v1')->group(function () {
     Route::get('/ads', [HomeController::class, 'ads']);
     Route::get('/social', [HomeController::class, 'social']);
     Route::get('/facebook/posts', [HomeController::class, 'facebookPosts']);
-    Route::post('/facebook/posts', [HomeController::class, 'addFacebookPost']);
-    Route::post('/facebook/sync', [HomeController::class, 'syncFacebookPosts']);
 
     // Live Widgets
     Route::get('/live-tv', [HomeController::class, 'liveTv']);
@@ -124,6 +134,5 @@ Route::prefix('v1')->group(function () {
     // Push Notification APIs
     Route::post('/push-subscribe', [\App\Http\Controllers\PushNotificationController::class, 'subscribe']);
     Route::post('/push-unsubscribe', [\App\Http\Controllers\PushNotificationController::class, 'unsubscribe']);
-    Route::post('/send-push', [\App\Http\Controllers\PushNotificationController::class, 'sendPush']);
     Route::get('/push/status', [\App\Http\Controllers\PushNotificationController::class, 'status']);
 });

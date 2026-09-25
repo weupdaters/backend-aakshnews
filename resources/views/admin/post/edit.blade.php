@@ -368,15 +368,29 @@
                 </div>
             </div>
 
+            <!-- Input Language Selector & Instant Auto-Translate -->
+            <div class="p-3 mb-3 rounded-3" style="background: linear-gradient(135deg, #EFF6FF 0%, #F5F3FF 100%); border: 1px solid #BFDBFE;">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="font-xs font-bold text-dark text-uppercase" style="letter-spacing: 0.5px;">✍️ Writing Language:</span>
+                        <span class="badge" id="detected-script-badge" style="background: #1769D2; color: #FFF; font-size: 11px; padding: 4px 10px; border-radius: 6px;">Auto-Detect (Any Language)</span>
+                    </div>
+                    <button type="button" class="btn btn-sm text-white fw-bold shadow-sm d-inline-flex align-items-center gap-2" id="btn-quick-translate-all" style="background: #1769D2; border-radius: 8px; font-size: 12px; padding: 6px 14px;">
+                        <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+                        <span>Auto-Translate to English, Hindi & Punjabi</span>
+                    </button>
+                </div>
+            </div>
+
             <!-- Title -->
             <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <label class="font-sm text-dark mb-0" style="font-weight: 600;">Title <span class="text-danger">*</span></label>
+                    <label class="font-sm text-dark mb-0" style="font-weight: 600;">Title (Any Language: Punjabi / Hindi / English) <span class="text-danger">*</span></label>
                     <button type="button" class="btn-ai-pill" id="btn-ai-suggest-title">
                         <i data-lucide="sparkles" style="width: 13px; height: 13px;"></i> AI Suggest Title
                     </button>
                 </div>
-                <input type="text" name="title" id="post-title" class="form-control form-control-modern w-100" required value="{{ $post->title }}" placeholder="Enter a catchy and clear title..." maxlength="200">
+                <input type="text" name="title" id="post-title" class="form-control form-control-modern w-100" required value="{{ $post->title }}" placeholder="Enter headline in Punjabi, Hindi, or English..." maxlength="200">
                 <div class="d-flex justify-content-end mt-1">
                     <span class="text-muted" style="font-size: 11px;" id="title-char-count">0/200</span>
                 </div>
@@ -514,71 +528,100 @@
             </div>
         </div>
 
-        <!-- CARD 2: MULTILINGUAL TRANSLATIONS (OPTIONAL) -->
-        <div class="news-page-card">
-            <div class="card-header-flex">
+        <!-- CARD 2: MULTILINGUAL TRANSLATIONS & AUTO-TRANSLATE -->
+        <div class="news-page-card" id="multilingual-hub-card" style="border: 1.5px solid #BFDBFE; background: #F8FAFC;">
+            <div class="card-header-flex flex-wrap gap-2">
                 <div class="card-header-left">
-                    <div class="icon-squircle icon-squircle-blue">
+                    <div class="icon-squircle icon-squircle-blue" style="background: #1769D2; color: #FFFFFF;">
                         <i data-lucide="languages" style="width: 20px; height: 20px;"></i>
                     </div>
                     <div>
-                        <div class="card-title-main">Multilingual Translations <span class="text-muted font-normal" style="font-size: 13px; font-weight: normal;">(Optional)</span></div>
-                        <div class="card-subtitle-sub">Add translations for a wider audience</div>
+                        <div class="card-title-main d-flex align-items-center gap-2">
+                            <span>Multilingual News Hub (English • हिंदी • ਪੰਜਾਬੀ)</span>
+                            <span class="badge" style="background-color: #22C55E; color: white; font-size: 10px; font-weight: 800; border-radius: 999px; padding: 2px 8px;">Auto-Translate Active</span>
+                        </div>
+                        <div class="card-subtitle-sub">Edit in <strong>any</strong> language (Punjabi, Hindi, or English) — auto-translates instantly with 100% manual edit control!</div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-sm d-inline-flex align-items-center" id="btn-auto-translate" style="background: #EFF6FF; color: #1769D2; border: 1px solid #BFDBFE; border-radius: 8px; font-weight: 600; font-size: 12px; padding: 6px 14px; gap: 6px;">
-                    <i data-lucide="globe" style="width: 14px; height: 14px;"></i> Auto Translate All
-                </button>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn btn-sm d-inline-flex align-items-center gap-1.5 shadow-sm fw-bold text-white" id="btn-auto-translate" style="background: linear-gradient(135deg, #1769D2 0%, #0D56B5 100%); border-radius: 8px; font-size: 12px; padding: 8px 16px;">
+                        <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+                        <span>Auto-Translate All Languages</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Language Tabs -->
-            <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                <button type="button" class="lang-tab-btn active" data-lang="en">
-                    <span>🇬🇧</span> English (Primary)
+            <!-- Language Tabs with Status Pills -->
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-3 p-2 rounded-3 bg-white border" style="border-color: #E2E8F0;">
+                <button type="button" class="lang-tab-btn active d-inline-flex align-items-center gap-2" data-lang="en">
+                    <span>🇬🇧</span>
+                    <strong>English Edition</strong>
+                    <span class="badge bg-light text-muted font-xxs border" id="badge-status-en">Synced</span>
                 </button>
-                <button type="button" class="lang-tab-btn" data-lang="hi">
-                    <span>🇮🇳</span> Hindi
+                <button type="button" class="lang-tab-btn d-inline-flex align-items-center gap-2" data-lang="hi">
+                    <span>🇮🇳</span>
+                    <strong>हिंदी संस्करण (Hindi)</strong>
+                    <span class="badge bg-light text-muted font-xxs border" id="badge-status-hi">Synced</span>
                 </button>
-                <button type="button" class="lang-tab-btn" data-lang="pb">
-                    <span>☬</span> Punjabi
-                </button>
-                <button type="button" class="lang-tab-btn" style="border-style: dashed; color: #1769D2;" onclick="alert('Additional languages can be added via System Settings.');">
-                    <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Add More Language
+                <button type="button" class="lang-tab-btn d-inline-flex align-items-center gap-2" data-lang="pb">
+                    <span>☬</span>
+                    <strong>ਪੰਜਾਬੀ ਸੰਸਕਰਣ (Punjabi)</strong>
+                    <span class="badge bg-light text-muted font-xxs border" id="badge-status-pb">Synced</span>
                 </button>
             </div>
 
             <!-- Language Tab Content Panes -->
-            <div id="lang-pane-en" class="lang-pane">
-                <div class="mb-3">
-                    <label class="font-xs text-muted mb-1" style="font-weight: 600;">Translated Title</label>
-                    <input type="text" name="title_en" id="post-title-en" class="form-control form-control-modern w-100" value="{{ $post->title_en }}" placeholder="Enter title in English...">
+            <div id="lang-pane-en" class="lang-pane bg-white p-3 rounded-3 border" style="border-color: #E2E8F0;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="font-xs text-dark mb-0 fw-bold">🇬🇧 English Headline / Title</label>
+                    <button type="button" class="btn btn-xs btn-outline-primary py-0.5 px-2 font-xxs fw-bold rounded" onclick="translateSpecificField('en')">
+                        <i data-lucide="refresh-cw" style="width: 11px; height: 11px;"></i> Re-translate English
+                    </button>
                 </div>
-                <div>
-                    <label class="font-xs text-muted mb-1" style="font-weight: 600;">Translated Content</label>
-                    <textarea name="content_en" id="post-content-en" class="form-control form-control-modern w-100" rows="4" placeholder="Enter content in English...">{{ $post->content_en }}</textarea>
+                <input type="text" name="title_en" id="post-title-en" class="form-control form-control-modern w-100 mb-3" value="{{ $post->title_en }}" placeholder="Enter headline in English (or auto-translated)...">
+                
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="font-xs text-dark mb-0 fw-bold">🇬🇧 English Article Body</label>
+                    <span class="text-muted font-xxs">Fully editable — refine or format as desired</span>
                 </div>
+                <textarea name="content_en" id="post-content-en" class="form-control form-control-modern w-100" rows="5" placeholder="Enter full story in English (or auto-translated)...">{{ $post->content_en }}</textarea>
             </div>
 
-            <div id="lang-pane-hi" class="lang-pane d-none">
-                <div class="mb-3">
-                    <label class="font-xs text-muted mb-1" style="font-weight: 600;">Translated Title (Hindi)</label>
-                    <input type="text" name="title_hi" id="post-title-hi" class="form-control form-control-modern w-100" value="{{ $post->title_hi }}" placeholder="हिंदी में शीर्षक दर्ज करें...">
+            <div id="lang-pane-hi" class="lang-pane d-none bg-white p-3 rounded-3 border" style="border-color: #E2E8F0;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="font-xs text-dark mb-0 fw-bold">🇮🇳 हिंदी शीर्षक (Hindi Headline)</label>
+                    <button type="button" class="btn btn-xs btn-outline-primary py-0.5 px-2 font-xxs fw-bold rounded" onclick="translateSpecificField('hi')">
+                        <i data-lucide="refresh-cw" style="width: 11px; height: 11px;"></i> Re-translate Hindi
+                    </button>
                 </div>
-                <div>
-                    <label class="font-xs text-muted mb-1" style="font-weight: 600;">Translated Content (Hindi)</label>
-                    <textarea name="content_hi" id="post-content-hi" class="form-control form-control-modern w-100" rows="4" placeholder="हिंदी में विस्तृत सामग्री दर्ज करें...">{{ $post->content_hi }}</textarea>
+                <input type="text" name="title_hi" id="post-title-hi" class="form-control form-control-modern w-100 mb-3" value="{{ $post->title_hi }}" placeholder="हिंदी में शीर्षक दर्ज करें (या ऑटो-ट्रांसलेट होगा)...">
+                
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="font-xs text-dark mb-0 fw-bold">🇮🇳 हिंदी समाचार विवरण (Hindi Content)</label>
+                    <span class="text-muted font-xxs">पूरी तरह संपादन योग्य — आप अपनी इच्छानुसार सुधार सकते हैं</span>
                 </div>
+                <textarea name="content_hi" id="post-content-hi" class="form-control form-control-modern w-100" rows="5" placeholder="हिंदी में समाचार का पूरा विवरण दर्ज करें...">{{ $post->content_hi }}</textarea>
             </div>
 
-            <div id="lang-pane-pb" class="lang-pane d-none">
-                <div class="mb-3">
-                    <label class="font-xs text-muted mb-1" style="font-weight: 600;">Translated Title (Punjabi)</label>
-                    <input type="text" name="title_pb" id="post-title-pb" class="form-control form-control-modern w-100" value="{{ $post->title_pb }}" placeholder="ਪੰਜਾਬੀ ਵਿੱਚ ਸਿਰਲੇਖ ਦਰਜ ਕਰੋ...">
+            <div id="lang-pane-pb" class="lang-pane d-none bg-white p-3 rounded-3 border" style="border-color: #E2E8F0;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="font-xs text-dark mb-0 fw-bold">☬ ਪੰਜਾਬੀ ਸਿਰਲੇਖ (Punjabi Headline)</label>
+                    <button type="button" class="btn btn-xs btn-outline-primary py-0.5 px-2 font-xxs fw-bold rounded" onclick="translateSpecificField('pa')">
+                        <i data-lucide="refresh-cw" style="width: 11px; height: 11px;"></i> Re-translate Punjabi
+                    </button>
                 </div>
-                <div>
-                    <label class="font-xs text-muted mb-1" style="font-weight: 600;">Translated Content (Punjabi)</label>
-                    <textarea name="content_pb" id="post-content-pb" class="form-control form-control-modern w-100" rows="4" placeholder="ਪੰਜਾਬੀ ਵਿੱਚ ਖ਼ਬਰ ਦਾ ਵੇਰਵਾ ਦਰਜ ਕਰੋ...">{{ $post->content_pb }}</textarea>
+                <input type="text" name="title_pb" id="post-title-pb" class="form-control form-control-modern w-100 mb-3" value="{{ $post->title_pb }}" placeholder="ਪੰਜਾਬੀ ਵਿੱਚ ਸਿਰਲੇਖ ਦਰਜ ਕਰੋ (ਜਾਂ ਆਟੋ-ਟਰਾਂਸਲੇਟ ਹੋਵੇਗਾ)...">
+                
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="font-xs text-dark mb-0 fw-bold">☬ ਪੰਜਾਬੀ ਖ਼ਬਰ ਦਾ ਵੇਰਵਾ (Punjabi Content)</label>
+                    <span class="text-muted font-xxs">ਪੂਰੀ ਤਰ੍ਹਾਂ ਸੰਪਾਦਨ ਯੋਗ — ਤੁਸੀਂ ਆਪਣੀ ਮਰਜ਼ੀ ਮੁਤਾਬਕ ਬਦਲ ਸਕਦੇ ਹੋ</span>
                 </div>
+                <textarea name="content_pb" id="post-content-pb" class="form-control form-control-modern w-100" rows="5" placeholder="ਪੰਜਾਬੀ ਵਿੱਚ ਖ਼ਬਰ ਦਾ ਪੂਰਾ ਵੇਰਵਾ ਦਰਜ ਕਰੋ...">{{ $post->content_pb }}</textarea>
+            </div>
+
+            <div class="mt-3 p-2 rounded-2 d-flex align-items-center gap-2 font-xs" style="background: #EFF6FF; color: #1E40AF; border: 1px solid #DBEAFE;">
+                <i data-lucide="check-circle" style="width: 15px; height: 15px; flex-shrink: 0; color: #16A34A;"></i>
+                <span><strong>Guarantee:</strong> Even if you leave any language tab blank, the system automatically detects your input and translates it before updating so the news appears in English, Hindi, and Punjabi across the website!</span>
             </div>
         </div>
 
@@ -1280,6 +1323,66 @@
             $('#btn-auto-translate').click();
         });
 
+        // Live Script Detector for Title
+        $('#post-title').on('input', function() {
+            var val = $(this).val();
+            var $badge = $('#detected-script-badge');
+            if (val) {
+                if (/[\u0A00-\u0A7F]/.test(val)) {
+                    $badge.text('☬ Punjabi (ਪੰਜਾਬੀ) Detected').css('background', '#D97706');
+                } else if (/[\u0900-\u097F]/.test(val)) {
+                    $badge.text('🇮🇳 Hindi (हिंदी) Detected').css('background', '#E53935');
+                } else {
+                    $badge.text('🇬🇧 English Detected').css('background', '#1769D2');
+                }
+            } else {
+                $badge.text('Auto-Detect (Any Language)').css('background', '#1769D2');
+            }
+        });
+        if ($('#post-title').val()) {
+            $('#post-title').trigger('input');
+        }
+
+        // Quick Translate Button Hook
+        $('#btn-quick-translate-all').on('click', function() {
+            $('#btn-auto-translate').click();
+            $('html, body').animate({
+                scrollTop: $("#multilingual-hub-card").offset().top - 100
+            }, 400);
+        });
+
+        // Function to translate specific single edition
+        window.translateSpecificField = function(targetLang) {
+            var title = $('#post-title').val();
+            var content = $('#post-content').val() || $('#post-short-desc').val();
+            if (!title && !content) {
+                alert('Please enter a Title or Content first.');
+                return;
+            }
+
+            var targetGtx = (targetLang === 'pb' || targetLang === 'pa') ? 'pa' : targetLang;
+            var targetFieldTitle = '#post-title-' + (targetLang === 'pa' ? 'pb' : targetLang);
+            var targetFieldContent = '#post-content-' + (targetLang === 'pa' ? 'pb' : targetLang);
+            var badgeId = '#badge-status-' + (targetLang === 'pa' ? 'pb' : targetLang);
+
+            $(badgeId).text('Translating...').removeClass('bg-light').addClass('bg-warning text-dark');
+
+            var p1 = title ? $.post('/api/translate', { text: title, target: targetGtx }).done(function(res) {
+                if (res.success) $(targetFieldTitle).val(res.translated);
+            }) : Promise.resolve();
+
+            var p2 = content ? $.post('/api/translate', { text: content, target: targetGtx }).done(function(res) {
+                if (res.success) $(targetFieldContent).val(res.translated);
+            }) : Promise.resolve();
+
+            $.when(p1, p2).always(function() {
+                $(badgeId).text('Updated').removeClass('bg-warning text-dark').addClass('bg-success text-white');
+                setTimeout(function() {
+                    $(badgeId).text('Synced').removeClass('bg-success text-white').addClass('bg-light text-muted');
+                }, 3000);
+            });
+        };
+
         // 4. Multilingual Auto-Translate All
         $('#btn-auto-translate').on('click', function() {
             var title = $('#post-title').val();
@@ -1292,8 +1395,10 @@
 
             var $btn = $(this);
             var originalHtml = $btn.html();
-            $btn.html('<i data-lucide="loader-2" class="lucide-spin" style="width:13px;height:13px;"></i> Translating...').prop('disabled', true);
+            $btn.html('<i data-lucide="loader-2" class="lucide-spin" style="width:13px;height:13px;"></i> Translating to all languages...').prop('disabled', true);
             if (window.lucide) lucide.createIcons();
+
+            $('#badge-status-en, #badge-status-hi, #badge-status-pb').text('Translating...').removeClass('bg-light text-muted').addClass('bg-warning text-dark');
 
             var promises = [];
 
@@ -1348,7 +1453,10 @@
             $.when.apply($, promises).always(function() {
                 $btn.html(originalHtml).prop('disabled', false);
                 if (window.lucide) lucide.createIcons();
-                alert('Translations updated for English, Hindi, and Punjabi!');
+                $('#badge-status-en, #badge-status-hi, #badge-status-pb').text('Auto-Generated (Editable)').removeClass('bg-warning text-dark').addClass('bg-success text-white');
+                setTimeout(function() {
+                    $('#badge-status-en, #badge-status-hi, #badge-status-pb').text('Ready').removeClass('bg-success text-white').addClass('bg-light text-dark');
+                }, 4000);
             });
         });
 

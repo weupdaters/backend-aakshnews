@@ -42,12 +42,35 @@ class BreakingNewsController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        $title = $request->input('title');
+        $titleEn = $request->input('title_en');
+        $titleHi = $request->input('title_hi');
+        $titlePb = $request->input('title_pb');
+
+        $detectedLang = \App\Services\TranslationService::detectLanguage($title);
+        if ($detectedLang === 'pb') {
+            $titlePb = $titlePb ?: $title;
+            $titleHi = $titleHi ?: \App\Services\TranslationService::translateText($title, 'hi');
+            $titleEn = $titleEn ?: \App\Services\TranslationService::translateText($title, 'en');
+        } elseif ($detectedLang === 'hi') {
+            $titleHi = $titleHi ?: $title;
+            $titlePb = $titlePb ?: \App\Services\TranslationService::translateText($title, 'pa');
+            $titleEn = $titleEn ?: \App\Services\TranslationService::translateText($title, 'en');
+        } else {
+            $titleEn = $titleEn ?: $title;
+            $titleHi = $titleHi ?: \App\Services\TranslationService::translateText($title, 'hi');
+            $titlePb = $titlePb ?: \App\Services\TranslationService::translateText($title, 'pa');
+        }
+
         BreakingNews::create([
-            'title' => $request->input('title'),
+            'title' => $title,
+            'title_en' => $titleEn,
+            'title_hi' => $titleHi,
+            'title_pb' => $titlePb,
             'is_active' => (bool) $request->input('is_active'),
         ]);
 
-        return redirect('/admin/breaking-news')->with('success', 'Breaking News added successfully!');
+        return redirect('/admin/breaking-news')->with('success', 'Breaking News added successfully with automatic multi-language translations!');
     }
 
     public function edit($id)
@@ -84,12 +107,35 @@ class BreakingNewsController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        $title = $request->input('title');
+        $titleEn = $request->input('title_en');
+        $titleHi = $request->input('title_hi');
+        $titlePb = $request->input('title_pb');
+
+        $detectedLang = \App\Services\TranslationService::detectLanguage($title);
+        if ($detectedLang === 'pb') {
+            $titlePb = $titlePb ?: $title;
+            $titleHi = $titleHi ?: \App\Services\TranslationService::translateText($title, 'hi');
+            $titleEn = $titleEn ?: \App\Services\TranslationService::translateText($title, 'en');
+        } elseif ($detectedLang === 'hi') {
+            $titleHi = $titleHi ?: $title;
+            $titlePb = $titlePb ?: \App\Services\TranslationService::translateText($title, 'pa');
+            $titleEn = $titleEn ?: \App\Services\TranslationService::translateText($title, 'en');
+        } else {
+            $titleEn = $titleEn ?: $title;
+            $titleHi = $titleHi ?: \App\Services\TranslationService::translateText($title, 'hi');
+            $titlePb = $titlePb ?: \App\Services\TranslationService::translateText($title, 'pa');
+        }
+
         $breakingNews->update([
-            'title' => $request->input('title'),
+            'title' => $title,
+            'title_en' => $titleEn,
+            'title_hi' => $titleHi,
+            'title_pb' => $titlePb,
             'is_active' => (bool) $request->input('is_active'),
         ]);
 
-        return redirect('/admin/breaking-news')->with('success', 'Breaking News updated successfully!');
+        return redirect('/admin/breaking-news')->with('success', 'Breaking News updated successfully with multi-language translations!');
     }
 
     public function destroy($id)

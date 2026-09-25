@@ -26,7 +26,7 @@ class PushNotificationController extends Controller
                 ['id' => 3, 'endpoint' => 'client-desktop-win', 'device' => 'Windows / Edge', 'status' => 'active', 'subscribed_at' => '2026-03-22 09:05:43'],
                 ['id' => 4, 'endpoint' => 'client-iphone-safari', 'device' => 'iOS / Safari WebPush', 'status' => 'active', 'subscribed_at' => '2026-03-22 18:40:12'],
             ];
-            @file_put_contents($path, json_encode($default, JSON_PRETTY_PRINT));
+            @file_put_contents($path, json_encode($default, JSON_PRETTY_PRINT), LOCK_EX);
             return $default;
         }
         $data = json_decode(@file_get_contents($path), true);
@@ -59,7 +59,7 @@ class PushNotificationController extends Controller
                     'clicks' => 685
                 ]
             ];
-            @file_put_contents($path, json_encode($default, JSON_PRETTY_PRINT));
+            @file_put_contents($path, json_encode($default, JSON_PRETTY_PRINT), LOCK_EX);
             return $default;
         }
         $data = json_decode(@file_get_contents($path), true);
@@ -84,7 +84,7 @@ class PushNotificationController extends Controller
             'subscribed_at' => date('Y-m-d H:i:s'),
         ];
 
-        @file_put_contents($this->getStoragePath(), json_encode($subscribers, JSON_PRETTY_PRINT));
+        @file_put_contents($this->getStoragePath(), json_encode($subscribers, JSON_PRETTY_PRINT), LOCK_EX);
 
         return response()->json([
             'success' => true,
@@ -136,7 +136,7 @@ class PushNotificationController extends Controller
         ];
 
         array_unshift($history, $newEntry);
-        @file_put_contents($this->getHistoryPath(), json_encode($history, JSON_PRETTY_PRINT));
+        @file_put_contents($this->getHistoryPath(), json_encode($history, JSON_PRETTY_PRINT), LOCK_EX);
 
         return response()->json([
             'success' => true,

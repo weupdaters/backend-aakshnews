@@ -10,20 +10,32 @@ class ReelResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $rawUrl = $this->url ?? $this->embed_url ?? '';
+        $youtubeId = null;
+        if (preg_match('/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/))([\w-]{11})/', $rawUrl, $matches)) {
+            $youtubeId = $matches[1];
+        }
+
+        $fallbackId = '9GydBxsBcsI';
+        $actualId = $youtubeId ?: $fallbackId;
+        $videoUrl = $youtubeId ? "https://www.youtube.com/watch?v={$youtubeId}" : $rawUrl;
+        $embedUrl = $youtubeId ? "https://www.youtube.com/embed/{$youtubeId}?autoplay=1" : ($this->embed_url ?? "https://www.youtube.com/embed/{$actualId}?autoplay=1");
+        $thumb = "https://i.ytimg.com/vi/{$actualId}/hq720.jpg";
+
         return [
             'id'           => (string) $this->id,
-            'title'        => $this->title ?? 'Short Reel',
+            'title'        => $this->title ?? 'AAKSH News Short',
             'slug'         => Str::slug($this->title ?? 'reel') . '-' . $this->id,
-            'url'          => $this->url,
-            'videoUrl'     => $this->url,
-            'video_url'    => $this->url,
-            'embed_url'    => $this->embed_url,
-            'thumbnailUrl' => 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?q=80&w=400&auto=format&fit=crop',
-            'duration'     => '0:30',
-            'views'        => '12.4K',
-            'category'     => 'REELS',
-            'likes'        => '3.2K',
-            'shares'       => '1.1K',
+            'url'          => $videoUrl,
+            'videoUrl'     => $videoUrl,
+            'video_url'    => $videoUrl,
+            'embed_url'    => $embedUrl,
+            'thumbnailUrl' => $thumb,
+            'duration'     => '0:45',
+            'views'        => '18.4K',
+            'category'     => 'ਸ਼ਾਰਟਸ',
+            'likes'        => '4.2K',
+            'shares'       => '1.5K',
             'created_at'   => $this->created_at?->toIso8601String(),
         ];
     }

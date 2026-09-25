@@ -695,7 +695,6 @@
             align-items: center;
             text-align: center;
         }
-    }
         .nr-headline-link {
             font-size: 14px;
         }

@@ -10,17 +10,69 @@ class TranslationService
     {
         $categoryMap = [
             'hi' => [
-                'National' => 'National', 'State' => 'State', 'Politics' => 'Politics', 'Sports' => 'Sports', 'Business' => 'Business', 'Technology' => 'Technology', 'Entertainment' => 'Entertainment', 'Lifestyle' => 'Lifestyle', 'Education' => 'Education', 'World' => 'World', 'Photo Gallery' => 'Photo Gallery', 'Breaking News' => 'Breaking News'
+                'National' => 'राष्ट्रीय',
+                'State' => 'राज्य',
+                'Politics' => 'राजनीति',
+                'Sports' => 'खेल',
+                'Business' => 'व्यापार',
+                'Technology' => 'तकनीक',
+                'Entertainment' => 'मनोरंजन',
+                'Lifestyle' => 'जीवन शैली',
+                'Education' => 'शिक्षा',
+                'World' => 'विदेश',
+                'Photo Gallery' => 'फ़ोटो गैलरी',
+                'Breaking News' => 'ताज़ा समाचार',
+                'Punjab' => 'पंजाब',
+                'Crime' => 'क्राइम'
             ],
             'en' => [
-                'National' => 'National', 'State' => 'State', 'Politics' => 'Politics', 'Sports' => 'Sports', 'Business' => 'Business', 'Technology' => 'Technology', 'Entertainment' => 'Entertainment', 'Lifestyle' => 'Lifestyle', 'Education' => 'Education', 'World' => 'World', 'Photo Gallery' => 'Photo Gallery', 'Breaking News' => 'Breaking News'
+                'National' => 'National',
+                'State' => 'State',
+                'Politics' => 'Politics',
+                'Sports' => 'Sports',
+                'Business' => 'Business',
+                'Technology' => 'Technology',
+                'Entertainment' => 'Entertainment',
+                'Lifestyle' => 'Lifestyle',
+                'Education' => 'Education',
+                'World' => 'World',
+                'Photo Gallery' => 'Photo Gallery',
+                'Breaking News' => 'Breaking News',
+                'Punjab' => 'Punjab',
+                'Crime' => 'Crime'
             ],
             'pb' => [
-                'National' => 'ਦੇਸ਼', 'State' => 'ਰਾਜ', 'Politics' => 'ਰਾਜਨੀਤੀ', 'Sports' => 'ਖੇਡਾਂ', 'Business' => 'ਵਪਾਰ', 'Technology' => 'ਤਕਨਾਲੋਜੀ', 'Entertainment' => 'ਮਨੋਰੰਜਨ', 'Lifestyle' => 'ਜੀਵਨ ਸ਼ੈਲੀ', 'Education' => 'ਸਿੱਖਿਆ', 'World' => 'ਦੁਨੀਆ', 'Photo Gallery' => 'ਫੋਟੋ ਗੈਲਰੀ', 'Breaking News' => 'ਤਾਜ਼ਾ ਖ਼ਬਰਾਂ'
+                'National' => 'ਦੇਸ਼',
+                'State' => 'ਰਾਜ',
+                'Politics' => 'ਰਾਜਨੀਤੀ',
+                'Sports' => 'ਖੇਡਾਂ',
+                'Business' => 'ਵਪਾਰ',
+                'Technology' => 'ਤਕਨਾਲੋਜੀ',
+                'Entertainment' => 'ਮਨੋਰੰਜਨ',
+                'Lifestyle' => 'ਜੀਵਨ ਸ਼ੈਲੀ',
+                'Education' => 'ਸਿੱਖਿਆ',
+                'World' => 'ਦੁਨੀਆ',
+                'Photo Gallery' => 'ਫੋਟੋ ਗੈਲਰੀ',
+                'Breaking News' => 'ਤਾਜ਼ਾ ਖ਼ਬਰਾਂ',
+                'Punjab' => 'ਪੰਜਾਬ',
+                'Crime' => 'ਅਪਰਾਧ'
             ]
         ];
 
-        return $categoryMap[$lang][$category] ?? $category;
+        $langKey = strtolower($lang);
+        if ($langKey === 'pa') {
+            $langKey = 'pb';
+        }
+
+        return $categoryMap[$langKey][$category] ?? $category;
+    }
+
+    public static function detectLanguage($text)
+    {
+        if (empty($text)) return 'en';
+        if (preg_match('/\p{Gurmukhi}/u', $text)) return 'pb';
+        if (preg_match('/\p{Devanagari}/u', $text)) return 'hi';
+        return 'en';
     }
 
     public static function translateText($text, $targetLang)
@@ -96,31 +148,47 @@ class TranslationService
         if (isset($dictionary[$text][$targetLangClean])) {
             return $dictionary[$text][$targetLangClean];
         }
+        if (($targetLangClean === 'pa' || $targetLangClean === 'pb') && isset($dictionary[$text]['pb'])) {
+            return $dictionary[$text]['pb'];
+        }
 
-        $cacheKey = "trans_" . md5($text . "_" . $targetLangClean);
-        return Cache::remember($cacheKey, 86400, function () use ($text, $targetLangClean) {
+        $gtxLang = ($targetLangClean === 'pb' || $targetLangClean === 'pa') ? 'pa' : $targetLangClean;
+        $fetchTranslation = function () use ($text, $gtxLang) {
             try {
-                $url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" . $targetLangClean . "&dt=t&q=" . urlencode($text);
+                $url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" . $gtxLang . "&dt=t&q=" . urlencode($text);
                 $ch = curl_init($url);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
-                curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+                curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)');
+                curl_setopt($ch, CURLOPT_TIMEOUT, 6);
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
                 $response = curl_exec($ch);
                 curl_close($ch);
                 if ($response) {
                     $json = json_decode($response, true);
-                    if (isset($json[0])) {
+                    if (isset($json[0]) && is_array($json[0])) {
                         $translated = '';
                         foreach ($json[0] as $sentence) {
-                            $translated .= $sentence[0];
+                            if (isset($sentence[0])) {
+                                $translated .= $sentence[0];
+                            }
                         }
-                        return $translated;
+                        if (!empty(trim($translated))) {
+                            return $translated;
+                        }
                     }
                 }
-            } catch (\Exception $e) {
-                // ignore
+            } catch (\Throwable $e) {
+                // Ignore network errors gracefully
             }
             return $text;
-        });
+        };
+
+        // Cache safely - don't crash if database cache has connection error
+        try {
+            $cacheKey = "trans_" . md5($text . "_" . $gtxLang);
+            return Cache::remember($cacheKey, 86400, $fetchTranslation);
+        } catch (\Throwable $e) {
+            return $fetchTranslation();
+        }
     }
 }

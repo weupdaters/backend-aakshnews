@@ -30,8 +30,8 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="section-box">
-            <div class="container">
-                <div class="panel-white mb-30">
+            <div class="container-fluid px-0">
+                <div class="panel-white mb-30" style="border: 1px solid var(--border-color); border-radius: 16px; background: var(--card-bg); padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
                     <div class="box-padding">
                         <div class="row display-list" id="breaking-list">
                             @forelse($breakingNews as $news)
@@ -50,7 +50,12 @@
                                             <span class="text-muted font-xs d-block">{{ $news->created_at ? $news->created_at->format('M d, Y h:i A') : 'N/A' }}</span>
                                         </div>
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3 d-flex align-items-center justify-content-between flex-wrap gap-1">
+                                        <div class="d-flex gap-1">
+                                            <span class="badge" style="background-color: {{ $news->title_en ? '#EFF6FF' : '#F1F5F9' }}; color: {{ $news->title_en ? '#1D4ED8' : '#94A3B8' }}; font-size: 9px; padding: 3px 6px;">EN</span>
+                                            <span class="badge" style="background-color: {{ $news->title_hi ? '#FEF2F2' : '#F1F5F9' }}; color: {{ $news->title_hi ? '#B91C1C' : '#94A3B8' }}; font-size: 9px; padding: 3px 6px;">HI</span>
+                                            <span class="badge" style="background-color: {{ $news->title_pb ? '#FFFBEB' : '#F1F5F9' }}; color: {{ $news->title_pb ? '#B45309' : '#94A3B8' }}; font-size: 9px; padding: 3px 6px;">PB</span>
+                                        </div>
                                         @if($news->is_active)
                                             <span class="badge" style="background-color: #d1fae5; color: #065f46; font-size: 10px; padding: 4px 8px; border-radius: 20px; font-weight: 600;">Active</span>
                                         @else

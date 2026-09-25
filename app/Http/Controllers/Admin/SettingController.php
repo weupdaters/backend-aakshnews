@@ -77,4 +77,29 @@ class SettingController extends Controller
 
         return redirect()->back()->with('success', 'Settings updated successfully! Changes are live on the website.');
     }
+
+    /**
+     * Display the website specific configuration page.
+     */
+    public function websiteSettings(Request $request)
+    {
+        $lang = session('lang', 'en');
+        $settings = Setting::getAllSettings();
+
+        return view('admin.settings.website', compact('settings', 'lang'));
+    }
+
+    /**
+     * Update website specific settings.
+     */
+    public function updateWebsiteSettings(Request $request)
+    {
+        $data = $request->except(['_token', '_method']);
+
+        foreach ($data as $key => $value) {
+            Setting::set($key, is_string($value) ? trim($value) : $value, 'website');
+        }
+
+        return redirect()->back()->with('success', 'Website settings updated successfully! Changes are live immediately.');
+    }
 }

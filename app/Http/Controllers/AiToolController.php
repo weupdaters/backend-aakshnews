@@ -228,14 +228,31 @@ class AiToolController extends Controller
             return response()->json(['success' => false, 'message' => 'Invalid image URL provided.'], 400);
         }
 
+        $parsed = parse_url($imageUrl);
+        $scheme = strtolower($parsed['scheme'] ?? '');
+        if (!in_array($scheme, ['http', 'https'])) {
+            return response()->json(['success' => false, 'message' => 'Only HTTP and HTTPS URLs are allowed.'], 400);
+        }
+
+        $host = $parsed['host'] ?? '';
+        if (empty($host) || in_array(strtolower($host), ['localhost', '127.0.0.1', '::1'])) {
+            return response()->json(['success' => false, 'message' => 'Access to internal resources is prohibited.'], 403);
+        }
+
+        $ip = gethostbyname($host);
+        if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+            return response()->json(['success' => false, 'message' => 'Access to private or local networks is blocked.'], 403);
+        }
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $imageUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (compatible; AakshNewsBot/1.0)");
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
         $data = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
@@ -245,19 +262,29 @@ class AiToolController extends Controller
             return response()->json(['success' => false, 'message' => 'Failed to download image from source.'], 500);
         }
 
-        $ext = 'jpg';
-        if (strpos($contentType, 'image/png') !== false) {
-            $ext = 'png';
-        } elseif (strpos($contentType, 'image/webp') !== false) {
-            $ext = 'webp';
-        } elseif (strpos($contentType, 'image/jpeg') !== false) {
-            $ext = 'jpg';
+        $allowedMimes = [
+            'image/jpeg' => 'jpg',
+            'image/png'  => 'png',
+            'image/webp' => 'webp',
+            'image/gif'  => 'gif',
+        ];
+
+        $ext = null;
+        foreach ($allowedMimes as $mime => $extension) {
+            if (str_contains(strtolower($contentType), $mime)) {
+                $ext = $extension;
+                break;
+            }
         }
 
-        $filename = 'news_real_' . time() . '_' . substr(md5(uniqid()), 0, 6) . '.' . $ext;
+        if (!$ext) {
+            return response()->json(['success' => false, 'message' => 'Downloaded file is not a supported image.'], 422);
+        }
+
+        $filename = 'news_real_' . time() . '_' . substr(md5(uniqid()), 0, 8) . '.' . $ext;
         $uploadsDir = public_path('uploads');
         if (!file_exists($uploadsDir)) {
-            mkdir($uploadsDir, 0777, true);
+            mkdir($uploadsDir, 0755, true);
         }
 
         $filepath = $uploadsDir . DIRECTORY_SEPARATOR . $filename;

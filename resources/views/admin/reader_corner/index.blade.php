@@ -35,12 +35,12 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="section-box">
-            <div class="container">
+            <div class="container-fluid px-0">
                 <div class="panel-white mb-30">
                     <div class="box-padding">
-                        <div class="panel-head d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom">
+                        <div class="panel-head d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 mb-4 border-bottom">
                             <h5>Reader Submissions</h5>
-                            <div class="box-search" style="width: 280px; margin: 0;">
+                            <div class="box-search" style="min-width: 240px; max-width: 100%; margin: 0;">
                                 <input type="text" id="post-search-input" placeholder="Search reader posts..." class="form-control py-1 px-3 border rounded-3 font-sm" style="height: 34px;">
                             </div>
                         </div>

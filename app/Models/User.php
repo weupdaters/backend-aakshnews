@@ -25,6 +25,14 @@ class User extends Authenticatable
         'password',
         'avatar',
         'bio',
+        'role',
+        'phone',
+        'district',
+        'state',
+        'points',
+        'badge',
+        'reporter_id',
+        'is_verified_reporter',
     ];
 
     /**

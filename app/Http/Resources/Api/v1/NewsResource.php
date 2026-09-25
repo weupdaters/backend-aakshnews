@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Api\v1;
 
+use App\Services\TranslationService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
@@ -28,16 +29,16 @@ class NewsResource extends JsonResource
         }
 
         $title = match ($lang) {
-            'en' => $this->title_en ?: $this->title,
-            'hi' => $this->title_hi ?: ($this->title_en ?: $this->title),
-            'pb' => $this->title_pb ?: $this->title,
+            'en' => $this->title_en ?: TranslationService::translateText($this->title, 'en'),
+            'hi' => $this->title_hi ?: TranslationService::translateText($this->title, 'hi'),
+            'pb' => $this->title_pb ?: TranslationService::translateText($this->title, 'pa'),
             default => $this->title,
         };
 
         $content = match ($lang) {
-            'en' => $this->content_en ?: $this->content,
-            'hi' => $this->content_hi ?: ($this->content_en ?: $this->content),
-            'pb' => $this->content_pb ?: $this->content,
+            'en' => $this->content_en ?: TranslationService::translateText($this->content, 'en'),
+            'hi' => $this->content_hi ?: TranslationService::translateText($this->content, 'hi'),
+            'pb' => $this->content_pb ?: TranslationService::translateText($this->content, 'pa'),
             default => $this->content,
         };
 
@@ -96,10 +97,10 @@ class NewsResource extends JsonResource
             'comments_count' => isset($this->comments) ? $this->comments->count() : 0,
             'likes_count'    => isset($this->likes) ? $this->likes->count() : 0,
             'translations'   => [
-                'en' => ['title' => $this->title_en ?: $this->title, 'content' => $this->content_en ?: $this->content],
-                'hi' => ['title' => $this->title_hi ?: $this->title, 'content' => $this->content_hi ?: $this->content],
-                'pa' => ['title' => $this->title_pb ?: $this->title, 'content' => $this->content_pb ?: $this->content],
-                'pb' => ['title' => $this->title_pb ?: $this->title, 'content' => $this->content_pb ?: $this->content],
+                'en' => ['title' => $this->title_en ?: TranslationService::translateText($this->title, 'en'), 'content' => $this->content_en ?: TranslationService::translateText($this->content, 'en')],
+                'hi' => ['title' => $this->title_hi ?: TranslationService::translateText($this->title, 'hi'), 'content' => $this->content_hi ?: TranslationService::translateText($this->content, 'hi')],
+                'pa' => ['title' => $this->title_pb ?: TranslationService::translateText($this->title, 'pa'), 'content' => $this->content_pb ?: TranslationService::translateText($this->content, 'pa')],
+                'pb' => ['title' => $this->title_pb ?: TranslationService::translateText($this->title, 'pa'), 'content' => $this->content_pb ?: TranslationService::translateText($this->content, 'pa')],
             ],
             'tags'           => [$this->category ?? 'News', 'AakashNews', 'Latest'],
             'created_at'     => $this->created_at?->toIso8601String(),

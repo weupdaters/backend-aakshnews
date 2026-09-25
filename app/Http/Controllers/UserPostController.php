@@ -124,13 +124,44 @@ class UserPostController extends Controller
             ], JSON_UNESCAPED_UNICODE);
         }
 
-        $titleEn = $request->input('title_en') ?: TranslationService::translateText($title, 'en');
-        $titleHi = $request->input('title_hi') ?: TranslationService::translateText($title, 'hi');
-        $titlePb = $request->input('title_pb') ?: TranslationService::translateText($title, 'pa');
+        $titleEn = $request->input('title_en');
+        $titleHi = $request->input('title_hi');
+        $titlePb = $request->input('title_pb');
 
-        $contentEn = $request->input('content_en') ?: TranslationService::translateText($content, 'en');
-        $contentHi = $request->input('content_hi') ?: TranslationService::translateText($content, 'hi');
-        $contentPb = $request->input('content_pb') ?: TranslationService::translateText($content, 'pa');
+        $contentEn = $request->input('content_en');
+        $contentHi = $request->input('content_hi');
+        $contentPb = $request->input('content_pb');
+
+        // Detect input script: Gurmukhi (Punjabi), Devanagari (Hindi), or Latin (English)
+        $detectedTitleLang = TranslationService::detectLanguage($title);
+        if ($detectedTitleLang === 'pb') {
+            $titlePb = $titlePb ?: $title;
+            $titleHi = $titleHi ?: TranslationService::translateText($title, 'hi');
+            $titleEn = $titleEn ?: TranslationService::translateText($title, 'en');
+        } elseif ($detectedTitleLang === 'hi') {
+            $titleHi = $titleHi ?: $title;
+            $titlePb = $titlePb ?: TranslationService::translateText($title, 'pa');
+            $titleEn = $titleEn ?: TranslationService::translateText($title, 'en');
+        } else {
+            $titleEn = $titleEn ?: $title;
+            $titleHi = $titleHi ?: TranslationService::translateText($title, 'hi');
+            $titlePb = $titlePb ?: TranslationService::translateText($title, 'pa');
+        }
+
+        $detectedContentLang = TranslationService::detectLanguage($content);
+        if ($detectedContentLang === 'pb') {
+            $contentPb = $contentPb ?: $content;
+            $contentHi = $contentHi ?: TranslationService::translateText($content, 'hi');
+            $contentEn = $contentEn ?: TranslationService::translateText($content, 'en');
+        } elseif ($detectedContentLang === 'hi') {
+            $contentHi = $contentHi ?: $content;
+            $contentPb = $contentPb ?: TranslationService::translateText($content, 'pa');
+            $contentEn = $contentEn ?: TranslationService::translateText($content, 'en');
+        } else {
+            $contentEn = $contentEn ?: $content;
+            $contentHi = $contentHi ?: TranslationService::translateText($content, 'hi');
+            $contentPb = $contentPb ?: TranslationService::translateText($content, 'pa');
+        }
 
         $post = UserPost::create([
             'user_id' => Auth::id(),
@@ -216,13 +247,44 @@ class UserPostController extends Controller
         $title = $request->input('title');
         $content = $request->input('content');
 
-        $titleEn = $request->input('title_en') ?: TranslationService::translateText($title, 'en');
-        $titleHi = $request->input('title_hi') ?: TranslationService::translateText($title, 'hi');
-        $titlePb = $request->input('title_pb') ?: TranslationService::translateText($title, 'pa');
+        $titleEn = $request->input('title_en');
+        $titleHi = $request->input('title_hi');
+        $titlePb = $request->input('title_pb');
 
-        $contentEn = $request->input('content_en') ?: TranslationService::translateText($content, 'en');
-        $contentHi = $request->input('content_hi') ?: TranslationService::translateText($content, 'hi');
-        $contentPb = $request->input('content_pb') ?: TranslationService::translateText($content, 'pa');
+        $contentEn = $request->input('content_en');
+        $contentHi = $request->input('content_hi');
+        $contentPb = $request->input('content_pb');
+
+        // Detect input script
+        $detectedTitleLang = TranslationService::detectLanguage($title);
+        if ($detectedTitleLang === 'pb') {
+            $titlePb = $titlePb ?: $title;
+            $titleHi = $titleHi ?: TranslationService::translateText($title, 'hi');
+            $titleEn = $titleEn ?: TranslationService::translateText($title, 'en');
+        } elseif ($detectedTitleLang === 'hi') {
+            $titleHi = $titleHi ?: $title;
+            $titlePb = $titlePb ?: TranslationService::translateText($title, 'pa');
+            $titleEn = $titleEn ?: TranslationService::translateText($title, 'en');
+        } else {
+            $titleEn = $titleEn ?: $title;
+            $titleHi = $titleHi ?: TranslationService::translateText($title, 'hi');
+            $titlePb = $titlePb ?: TranslationService::translateText($title, 'pa');
+        }
+
+        $detectedContentLang = TranslationService::detectLanguage($content);
+        if ($detectedContentLang === 'pb') {
+            $contentPb = $contentPb ?: $content;
+            $contentHi = $contentHi ?: TranslationService::translateText($content, 'hi');
+            $contentEn = $contentEn ?: TranslationService::translateText($content, 'en');
+        } elseif ($detectedContentLang === 'hi') {
+            $contentHi = $contentHi ?: $content;
+            $contentPb = $contentPb ?: TranslationService::translateText($content, 'pa');
+            $contentEn = $contentEn ?: TranslationService::translateText($content, 'en');
+        } else {
+            $contentEn = $contentEn ?: $content;
+            $contentHi = $contentHi ?: TranslationService::translateText($content, 'hi');
+            $contentPb = $contentPb ?: TranslationService::translateText($content, 'pa');
+        }
 
         $post->update([
             'author_name' => $request->input('author_name', $post->author_name),
@@ -263,6 +325,9 @@ class UserPostController extends Controller
 
     public function destroy($id)
     {
+        if (!Auth::check()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized access'], 401);
+        }
         $post = UserPost::find($id);
         if (!$post) {
             return response()->json(['success' => false, 'message' => 'Post not found.'], 404);

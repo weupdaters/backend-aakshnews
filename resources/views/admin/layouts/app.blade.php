@@ -1092,9 +1092,133 @@
         .icon-float {
             animation: iconFloat 3s ease-in-out infinite;
         }
+
+        /* Mobile Off-Canvas Drawer & Responsive Admin Styles */
+        #admin-sidebar-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(3, 20, 47, 0.65);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 1055;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        body.sidebar-open #admin-sidebar-backdrop {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 991.98px) {
+            .nav-sidebar {
+                position: fixed !important;
+                top: 0 !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                width: 290px !important;
+                max-width: 85vw !important;
+                height: 100vh !important;
+                z-index: 1060 !important;
+                transform: translateX(-100%);
+                transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                box-shadow: none !important;
+                overflow-y: auto !important;
+            }
+
+            body.sidebar-open {
+                overflow: hidden !important;
+            }
+
+            body.sidebar-open .nav-sidebar {
+                transform: translateX(0) !important;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+            }
+
+            .main {
+                flex-direction: column !important;
+                min-height: auto !important;
+            }
+
+            .box-content {
+                max-width: 100% !important;
+                width: 100% !important;
+                padding: 16px 12px !important;
+                gap: 18px !important;
+            }
+
+            .header.sticky-bar {
+                height: auto !important;
+                padding: 8px 0 !important;
+            }
+
+            .main-header {
+                padding: 0 12px !important;
+                gap: 8px;
+            }
+
+            .brand-logo-text {
+                font-size: 1.05rem !important;
+            }
+
+            .box-heading {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 8px;
+            }
+
+            .box-title h3 {
+                font-size: 20px !important;
+            }
+
+            /* Responsive tables across all admin pages */
+            .table-responsive {
+                width: 100% !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                border-radius: 8px;
+            }
+
+            .table-responsive table {
+                min-width: 600px;
+            }
+
+            /* Form responsiveness on mobile */
+            .form-control-modern {
+                font-size: 13.5px !important;
+            }
+
+            /* Metric cards spacing on mobile */
+            .card-style-1 {
+                padding: 16px !important;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .main-header {
+                padding: 0 8px !important;
+            }
+            .brand-logo-text {
+                font-size: 0.95rem !important;
+            }
+            .lang-controls a {
+                padding: 2px 6px !important;
+                font-size: 10px !important;
+            }
+            .box-content {
+                padding: 12px 8px !important;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Mobile Drawer Backdrop -->
+    <div id="admin-sidebar-backdrop"></div>
+
     <!-- Top Loading Progress Line -->
     <div id="admin-top-loading-line" style="position: fixed; top: 0; left: 0; right: 0; height: 3.5px; z-index: 9999999; pointer-events: none; opacity: 0; transition: opacity 0.2s ease;">
         <div id="admin-top-loading-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #7C3AED 0%, #2563EB 50%, #06B6D4 100%); box-shadow: 0 0 12px rgba(124, 58, 237, 0.8), 0 0 6px rgba(37, 99, 235, 0.6); transition: width 0.2s cubic-bezier(0.12, 0.45, 0.25, 1);"></div>
@@ -1205,6 +1329,57 @@
                 el.setAttribute('data-lucide', name);
             }
         });
+
+        // Mobile Sidebar Drawer Toggle & Backdrop Logic
+        (function() {
+            const toggleBtn = document.getElementById('sidebar-toggle-btn');
+            const closeBtn = document.getElementById('sidebar-close-btn');
+            const backdrop = document.getElementById('admin-sidebar-backdrop');
+
+            function toggleSidebar(open) {
+                if (open === undefined) {
+                    document.body.classList.toggle('sidebar-open');
+                } else if (open) {
+                    document.body.classList.add('sidebar-open');
+                } else {
+                    document.body.classList.remove('sidebar-open');
+                }
+            }
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    toggleSidebar();
+                });
+            }
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    toggleSidebar(false);
+                });
+            }
+            if (backdrop) {
+                backdrop.addEventListener('click', function() {
+                    toggleSidebar(false);
+                });
+            }
+
+            // Close sidebar when clicking any navigation link on mobile
+            document.querySelectorAll('.nav-sidebar a').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 992) {
+                        toggleSidebar(false);
+                    }
+                });
+            });
+
+            // Close drawer on ESC key
+            window.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && document.body.classList.contains('sidebar-open')) {
+                    toggleSidebar(false);
+                }
+            });
+        })();
 
         // Render Lucide Icons with smooth transitions
         if (typeof lucide !== 'undefined') {

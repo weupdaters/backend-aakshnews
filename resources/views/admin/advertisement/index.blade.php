@@ -37,8 +37,8 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="section-box">
-            <div class="container">
-                <div class="panel-white mb-30">
+            <div class="container-fluid px-0">
+                <div class="panel-white mb-30" style="border: 1px solid var(--border-color); border-radius: 16px; background: var(--card-bg); padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
                     <div class="box-padding">
                         <div class="panel-head d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom">
                             <h5>All Advertisements</h5>

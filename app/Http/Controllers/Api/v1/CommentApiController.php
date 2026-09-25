@@ -55,14 +55,27 @@ class CommentApiController extends Controller
             $authorName = Auth::check() ? Auth::user()->name : 'Reader';
         }
 
+        $rawComment = trim(strip_tags($request->input('comment', '')));
+        if (empty($rawComment)) {
+            return $this->errorResponse('Comment cannot be empty.', [], 422);
+        }
+
+        // Check for spam links or prohibited terms
+        $containsLink = (bool) preg_match('/(https?:\/\/|www\.|\.com|\.net|\.org|\.ru|\.xyz)/i', $rawComment);
+        $status = $containsLink ? 'pending' : 'approved';
+
         $comment = Comment::create([
             'user_id'      => Auth::id(),
             'user_post_id' => $id,
-            'author_name'  => $authorName,
-            'comment'      => $request->input('comment'),
-            'status'       => 'approved',
+            'author_name'  => htmlspecialchars($authorName, ENT_QUOTES, 'UTF-8'),
+            'comment'      => $rawComment,
+            'status'       => $status,
         ]);
 
-        return $this->successResponse(new CommentResource($comment), 'Comment added successfully.', [], 201);
+        $message = $status === 'pending'
+            ? 'Comment submitted and awaiting editorial review.'
+            : 'Comment added successfully.';
+
+        return $this->successResponse(new CommentResource($comment), $message, [], 201);
     }
 }
